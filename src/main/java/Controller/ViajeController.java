@@ -1,13 +1,10 @@
 package Controller;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 import Model.DAO.CalleDAO;
 import Model.DAO.ViajeDAO;
-import Model.Entity.Calle;
-import Model.Entity.Ruta;
 import Model.Entity.Viaje;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -43,10 +40,23 @@ public class ViajeController extends HttpServlet {
         setOrigenYDestino(req,callesYCoordenadas);
         RequestDispatcher dispatcher = req.getRequestDispatcher("View/detallesViaje.jsp");
         dispatcher.forward(req, resp);
-
-
     }
 
+    public void consultarViajesConductor(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Obtener el ID del conductor desde la sesión
+        String conductorId = (String) req.getSession().getAttribute("conductorId");
+    
+        if (conductorId != null) {
+            // Obtener la lista de viajes del conductor desde el DAO
+            List<Viaje> viajesConductor = viajeDAO.obtenerViajesPorConductor(conductorId);
+            req.setAttribute("viajesConductor", viajesConductor);
+        } else {
+            req.setAttribute("error", "No se encontró el ID del conductor en la sesión.");
+        }
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/listarViajesConductor.jsp");
+        dispatcher.forward(req, resp);
+    }
+    
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         this.ruteador(req, resp);
@@ -65,6 +75,8 @@ public class ViajeController extends HttpServlet {
             case "verDetalles":
                 this.verDetallesViaje(req, resp);
                 break;
+            case "consultarViajesConductor":
+                this.consultarViajesConductor(req, resp);
             default:
                 break;
 

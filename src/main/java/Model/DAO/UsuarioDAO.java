@@ -70,6 +70,23 @@ public class UsuarioDAO extends GenericDAO{
         return tipoUsuario;
     }
 
+    /*Obtener el id del Usuario basado en el email*/
+
+    public String obtenerIdUsuario(String email) {
+        String idUsuario = null;
+        try {
+            String sql = "SELECT id FROM usuarios WHERE email = :email";
+            
+            Query query = em.createNativeQuery(sql);
+            query.setParameter("email", email);
+            
+            idUsuario = (String) query.getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return idUsuario;
+    }
+    
 
    /* public Usuario buscarUsuarioPorEmail(String email) {
         for (Usuario usuario : usuarios.values()) {
@@ -79,6 +96,4 @@ public class UsuarioDAO extends GenericDAO{
         }
         return null;
     }*/
-
-
 }

@@ -161,12 +161,14 @@ public class GestionController extends HttpServlet {
 
         if (usuarioDAO.validarCredenciales(email, password)) {
             String tipoUsuario = usuarioDAO.obtenerTipoDeUsuario(email);
+            String idUsuario = usuarioDAO.obtenerIdUsuario(email); // Obtener el ID del usuario
 
             if ("U_Administrador".equals(tipoUsuario)) {
                 resp.sendRedirect(req.getContextPath() + "/View/dashboardAdmin.jsp");
             } else if ("U_Estudiante".equals(tipoUsuario)) {
                 resp.sendRedirect(req.getContextPath() + "/View/listarViajes.jsp");
             } else if ("U_Conductor".equals(tipoUsuario)) {
+                req.getSession().setAttribute("conductorId", idUsuario); // Guardar el ID del conductor en la sesión
                 resp.sendRedirect(req.getContextPath() + "/View/dashboardConductor.jsp");
             }
         } else {

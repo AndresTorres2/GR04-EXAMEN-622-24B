@@ -37,7 +37,7 @@ public class Viaje implements Serializable {
     private int asientosOcupados;
 
     @ManyToOne
-    @JoinColumn(name = "conductorId")
+    @JoinColumn(name = "conductorId", referencedColumnName = "id", nullable = false)
     private Conductor conductor;
 
     public Viaje() {

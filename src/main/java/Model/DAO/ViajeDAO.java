@@ -1,7 +1,6 @@
 package Model.DAO;
 
 import Model.Entity.Viaje;
-import Model.Entity.Ruta;
 import jakarta.persistence.Query;
 
 import java.util.ArrayList;
@@ -177,4 +176,22 @@ public class ViajeDAO extends GenericDAO{
 
         return viajesList;
     }
+
+    public List<Viaje> obtenerViajesPorConductor(String conductorId) {
+        List<Viaje> viajes = new ArrayList<>();
+        try {
+            em.getTransaction().begin();
+            Query query = em.createQuery("SELECT v FROM Viaje v WHERE v.conductor.id = :conductorId", Viaje.class);
+            query.setParameter("conductorId", conductorId);
+            viajes = query.getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        }
+        return viajes;
+    }
+    
 }
