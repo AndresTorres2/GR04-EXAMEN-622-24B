@@ -39,12 +39,13 @@ public class NotificacionController extends HttpServlet {
         }
     }
     public void notificar(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String destinatario = req.getParameter("email");
+        String destinatario = req.getParameter("destinatario");
         String asunto = req.getParameter("asunto");
         String mensaje = req.getParameter("mensaje");
 
         try {
             System.out.println("Enviadoo");
+            System.out.println(destinatario);
             emailDAO.enviarCorreo(destinatario, asunto, mensaje);
             resp.getWriter().write("Notificación enviada exitosamente.");
         } catch (MessagingException e) {

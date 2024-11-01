@@ -49,22 +49,8 @@
     <br>
     <div class="menu">
         <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=consultarViajesConductor&conductorId=${conductor.id}">Ver mis Viajes</a>
-        <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=compartirUbicacion">Compartir Ubicación</a>
     </div>
 </div>
-
-
-<%--
-<!-- Botón para Ver Mis Viajes -->
-<form action="verMisViajes" method="get">
-    <button type="submit">Ver mis viajes</button>
-</form>
---%>
-
-<%--<!-- Botón para Compartir Ubicación -->
-<form action="compartirUbicacion" method="post">
-    <button type="submit">Compartir ubicación</button>
-</form>--%>
 
 </body>
 </html>

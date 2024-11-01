@@ -16,6 +16,9 @@ public class EmailDAO {
     private static final String APP_PASSWORD = "uzil faou nwsr blhk";
 
     public void enviarCorreo(String destinatario, String asunto, String mensaje) throws MessagingException {
+        if (destinatario == null || destinatario.isEmpty()) {
+            throw new IllegalArgumentException("El destinatario no puede ser nulo o vacío");
+        }
         Message emailMessage = new MimeMessage(getEmailSession());
         emailMessage.setFrom(new InternetAddress(EMAIL_FROM));
         emailMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
@@ -24,6 +27,7 @@ public class EmailDAO {
 
         Transport.send(emailMessage);
     }
+
 
     private Session getEmailSession() {
         return Session.getInstance(getGmailProperties(), new Authenticator() {

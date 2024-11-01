@@ -1,8 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <html>
 <head>
-    <title>Lista de viajes del Conductor</title>
+    <title>Title</title>
     <style>
         body {
             background: #100f0f;
@@ -69,26 +68,24 @@
     </style>
 </head>
 <body>
-
-<div class="header">
-    <h1>Lista de Viajes del Conductor</h1>
-</div>
-
 <div class="card-container">
-    <c:forEach var="viaje" items="${viajes}">
         <div class="card">
             <div>
                 <h3>Viaje Programado</h3>
                 <p><strong>Fecha:</strong> ${viaje.fecha}</p>
                 <p><strong>Hora de Salida:</strong> ${viaje.horaDeSalida}</p>
+                <p><strong>Jornada:</strong> ${viaje.jornada}</p>
+                <p><strong>Número del Bus:</strong> ${viaje.bus.busId}</p>
+                <p><strong>Asientos Ocupados:</strong> ${viaje.asientosOcupados}</p>
                 <p><strong>Ruta:</strong> ${viaje.ruta.origen} ➔ ${viaje.ruta.destino}</p>
             </div>
-            <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=consultarViajesDetallesConductor&viajeId=${viaje.id}">
-                Ver detalles
-            </a>
-
+            </div>
+            <div class="button-group">
+                <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=compartirUbicacion&viajeId=${viaje.id}">Iniciar y Compartir Ubicación</a>
+                <a href="${pageContext.request.contextPath}/ViajeServlet?ruta=verPasajeros&viajeId=${viaje.id}">Ver listado de Pasajeros</a>
+            </div>
         </div>
-    </c:forEach>
 </div>
+
 </body>
 </html>
