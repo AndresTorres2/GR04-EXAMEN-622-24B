@@ -1,5 +1,5 @@
-# Usar una imagen base de Maven con OpenJDK
-FROM maven:3.8.6-openjdk-11-slim AS build
+# Etapa 1: Construcción de la aplicación
+FROM maven:3.8.4-openjdk-17-slim AS build
 
 # Crear directorio de trabajo para la aplicación
 WORKDIR /app
@@ -10,19 +10,22 @@ RUN mvn dependency:resolve
 
 # Copiar el resto de los archivos del proyecto y compilarlo
 COPY src /app/src
-RUN mvn clean package
+RUN mvn clean test package
 
-# Crear directorio para la base de datos Derby
+# Etapa 2: Configuración de Tomcat para ejecutar la aplicación
+FROM tomcat:10.1.8-jdk17
+
+# Crear un directorio para almacenar los datos de Derby
 RUN mkdir /data
 
-# Especificar el archivo .war como variable
-ARG JAR_FILE=target/demo-java-web-1.0-SNAPSHOT.war
+# Copiar el archivo WAR generado en la etapa de construcción
+COPY --from=build /app/target/demo-java-web-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
 
-# Copiar el archivo .war generado al contenedor
-COPY ${JAR_FILE} /app/app.war
+# Configurar Derby como base de datos embebida y especificar el directorio de almacenamiento
+ENV DERBY_HOME=/data
 
-# Exponer el puerto del servidor (asegúrate de usar el puerto de tu aplicación web)
+# Exponer el puerto en el que correrá Tomcat
 EXPOSE 8080
 
-# Iniciar la aplicación y Apache Derby
-CMD ["java", "-Dderby.system.home=/data", "-jar", "/app/app.war"]
+# Comando para iniciar Tomcat
+CMD ["catalina.sh", "run"]
