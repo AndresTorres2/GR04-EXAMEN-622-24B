@@ -169,15 +169,9 @@ public class GestionController extends HttpServlet {
             case "obtenerUbicacion":
                 obtenerUbicacion(req, resp);
                 break;
-            case "cerrarSesion":
-                cerrarSesion(req, resp);
-                break;
             default:
                 break;
         }
-    }
-    public void cerrarSesion(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.sendRedirect(req.getContextPath() + "/View/login.jsp"); // Redirige al login
     }
 
     private void compartirUbicacion(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

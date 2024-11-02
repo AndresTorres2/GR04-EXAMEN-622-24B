@@ -40,22 +40,6 @@
         .menu-item:hover {
             background-color: #71a8df;
         }
-
-        .logout-button {
-            background-color: #a94442;
-            padding: 10px 20px;
-            color: white;
-            border-radius: 5px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            margin-top: 20px;
-        }
-        .logout-button:hover {
-            background-color: #d9534f;
-        }
     </style>
 </head>
 <body>
@@ -66,9 +50,7 @@
     <div class="menu">
         <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=consultarViajesConductor&conductorId=${conductor.id}">Ver mis Viajes</a>
     </div>
-    <div style="text-align: right;">
-        <a class="logout-button" href="${pageContext.request.contextPath}/GestionServlet?action=cerrarSesion">Cerrar Sesión</a>
-    </div>
 </div>
+
 </body>
 </html>

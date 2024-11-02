@@ -20,27 +20,14 @@
 
         .button-group {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .button-group a {
-            text-decoration: none;
-            padding: 10px 20px;
-            background-color: #48578e;
-            color: white;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        .button-group a:hover {
-            background-color: #71a8df;
+            gap: 0.75rem;
         }
 
         .card-container {
             display: flex;
             flex-direction: column;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 20px;
             width: 100%;
         }
@@ -67,7 +54,7 @@
             margin: 5px 0;
         }
 
-        .menu-item {
+        a {
             text-decoration: none;
             padding: 10px 20px;
             background-color: #48578e;
@@ -76,31 +63,12 @@
             display: inline-block;
         }
 
-        .menu-item:hover {
+        a:hover {
             background-color: #71a8df;
-        }
-        .logout-button {
-            background-color: #a94442;
-            padding: 10px 20px;
-            color: white;
-            border-radius: 5px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            margin-top: 20px;
-        }
-        .logout-button:hover {
-            background-color: #d9534f;
         }
     </style>
 </head>
 <body>
-
-<div style="text-align: right;">
-    <a class="logout-button" href="${pageContext.request.contextPath}/GestionServlet?action=cerrarSesion">Cerrar Sesión</a>
-</div>
 
 <div class="header">
     <h1>Lista de Viajes del Conductor</h1>
@@ -118,6 +86,7 @@
             <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=consultarViajesDetallesConductor&viajeId=${viaje.id}">
                 Ver detalles
             </a>
+
         </div>
     </c:forEach>
 </div>
