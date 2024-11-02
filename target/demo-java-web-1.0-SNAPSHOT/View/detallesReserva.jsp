@@ -1,0 +1,206 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detalles de la Reserva</title>
+    <style>
+        body {
+            background: #100f0f;
+            color: #dcdcdc;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background: #1c1c1c;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+
+        button {
+            all: unset;
+            cursor: pointer;
+            background-color: #48578e;
+            border-radius: 5px;
+            padding: 0.75rem 1.5rem;
+            margin: 0;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            padding: 10px;
+            background-color: #48578e;
+            color: white;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        a:hover {
+            background-color: #71a8df;
+        }
+
+        .leaflet-top, .leaflet-bottom {
+            display: none;
+        }
+
+        #map {
+            height: 600px;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
+</head>
+<body>
+<div class="container">
+    <h1>Detalles de la Reserva</h1>
+    <h2>Bus #${reserva.viaje.bus.busId}</h2>
+    <h3>${reserva.viaje.ruta.origen} ➜ ${reserva.viaje.ruta.destino}</h3>
+    <p><strong>Fecha de viaje:</strong> <fmt:formatDate value="${reserva.viaje.fecha}"
+                                                        pattern="EEEE"/>, ${reserva.viaje.fecha}</p>
+    <p><strong>Fecha de la reserva:</strong> <fmt:formatDate value="${reserva.fecha}" pattern="EEEE"/>, ${reserva.fecha}
+    </p>
+    <p><strong>Horario:</strong> ${reserva.viaje.horaDeSalida} (${reserva.viaje.jornada})</p>
+    <p><strong>Recorrido:</strong>
+        <c:forEach var="calle" items="${reserva.viaje.ruta.calles}" varStatus="status">
+            ${calle.nombre}
+            <c:if test="${!status.last}">, </c:if>
+        </c:forEach>
+    </p>
+    <p><strong>Nombre del estudiante:</strong> ${reserva.estudiante.nombre} ${reserva.estudiante.apellido}</p>
+    <p><strong>Ubicacion del conductor:</strong></p>
+    <p id="coordenadas-conductor">Esperando ubicación del conductor...</p>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%">
+        <button id="add-waypoint" style="align-items: center; display: block;">Establecer Parada</button>
+        <div style="display: flex; gap: 1rem">
+            <p>Notificar proximidad del bus</p>
+            <input type="checkbox">
+        </div>
+    </div>
+
+    <div id="map"></div>
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem">
+        <a href="javascript:history.back();" class="tab">Regresar a Reservas</a>
+        <a style="background: #501d1b"
+           href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=cancelarReserva&reservaId=${reserva.id}"
+           onclick="return confirm('¿Está seguro de que desea cancelar la reserva?');">
+            Cancelar Reserva
+        </a>
+    </div>
+</div>
+<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<script>
+    function actualizarUbicacionBus() {
+        fetch('${pageContext.request.contextPath}/GestionServlet?action=obtenerUbicacion')
+            .then(response => response.text())
+            .then(data => {
+                if (data === "Ubicación no disponible") {
+                    document.getElementById('coordenadas-conductor').textContent = data;
+                } else {
+                    const [latitud, longitud] = data.split(",");
+                    document.getElementById('coordenadas-conductor').textContent =
+                        "Latitud: " + latitud + ", Longitud: " + longitud;
+                }
+            })
+            .catch(error => console.error("Error al obtener la ubicación:", error));
+    }
+
+    setInterval(actualizarUbicacionBus, 5000);
+</script>
+<script>
+    var map = L.map('map').setView([-0.210194, -78.489326], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 20,
+    }).addTo(map);
+
+    var waypoints = [];
+    var waypointAvailable = false;
+
+    <c:forEach var="calle" items="${callesYCoordenadas}">
+    var latitud = ${calle[2]};
+    var longitud = ${calle[3]};
+    waypoints.push(L.latLng(latitud, longitud));
+    L.marker([latitud, longitud]).addTo(map).bindPopup('${calle[1]}');
+    </c:forEach>
+
+    var routingControl = L.Routing.control({
+        waypoints: waypoints,
+        routeWhileDragging: false,
+        draggableWaypoints: false,
+        autoRoute: false,
+        editable: false,
+    }).addTo(map);
+
+    routingControl.getPlan().on('click', function (e) {
+        e.preventDefault();
+    });
+
+    routingControl.route();
+
+    var paradaIcon = L.icon({
+        iconUrl: "${pageContext.request.contextPath}/assets/paradaIcon.png",
+        iconSize: [25, 41],
+    });
+
+    var busIcon = L.icon({
+        iconUrl: "${pageContext.request.contextPath}/assets/busIcon.png",
+        iconSize: [40, 40],
+    });
+
+    var busMarker;
+
+    function actualizarUbicacionBus() {
+        fetch('${pageContext.request.contextPath}/GestionServlet?action=obtenerUbicacion')
+            .then(response => response.text())
+            .then(data => {
+                if (data === "Ubicación no disponible") {
+                    document.getElementById('coordenadas-conductor').textContent = data;
+                    if (busMarker) {
+                        map.removeLayer(busMarker);
+                        busMarker = null;
+                    }
+                } else {
+                    const [latitud, longitud] = data.split(",");
+                    document.getElementById('coordenadas-conductor').textContent =
+                        "Latitud: " + latitud + ", Longitud: " + longitud;
+
+                    if (busMarker) {
+                        map.removeLayer(busMarker);
+                    }
+
+                    busMarker = L.marker([latitud, longitud], { icon: busIcon }).addTo(map);
+                    map.setView([latitud, longitud], 13);
+                }
+            })
+            .catch(error => console.error("Error al obtener la ubicación:", error));
+    }
+
+    setInterval(actualizarUbicacionBus, 5000);
+</script>
+
+</body>
+</html>

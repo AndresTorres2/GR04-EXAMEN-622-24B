@@ -1,0 +1,14 @@
+Prueba1B2024B\ReservaDAOTest.class
+Prueba1B2024B\ViajeDAOAdditionalTest.class
+Model\DAO\UsuarioDAOParametersTest.class
+Model\DAO\ConductorDAODeleteTest.class
+Model\DAO\RutaDAOParametersTest.class
+Model\DAO\RutaDAOTest.class
+Model\DAO\BusDAOTest.class
+Model\DAO\ViajeDAOMockTest.class
+Model\DAO\BusDAOMockTest.class
+Prueba1B2024B\ViajeDAOAdditionalMockTest.class
+Prueba1B2024B\ReservaDAOParametersTest.class
+Model\DAO\ConductorDAOCreateTest.class
+Prueba1B2024B\ReservaDAOMockTest.class
+Model\DAO\ViajeDAOTest.class
