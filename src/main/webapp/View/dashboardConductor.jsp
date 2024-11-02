@@ -40,6 +40,7 @@
         .menu-item:hover {
             background-color: #71a8df;
         }
+
         .logout-button {
             background-color: #a94442;
             padding: 10px 20px;
@@ -69,6 +70,5 @@
         <a class="logout-button" href="${pageContext.request.contextPath}/GestionServlet?action=cerrarSesion">Cerrar Sesión</a>
     </div>
 </div>
-
 </body>
 </html>
