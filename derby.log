@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Fri Nov 01 08:39:38 ECT 2024:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.16.1.1 - (1901046): instance a816c00e-0192-e7f3-efcf-000001d63268 
-on database directory C:\Users\tandr\OneDrive\Documentos\GitHub\GR04_1BP2_622_24B\polibus with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@c387f44 
+Sat Nov 02 16:41:14 ECT 2024:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.16.1.1 - (1901046): instance a816c00e-0192-eed3-395d-00000af51ed8 
+on database directory C:\Users\tandr\OneDrive\Documentos\GitHub\GR04_PRUEBA_622_24B\Prueba-Agiles\polibus with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@60e53b93 
 Loaded from file:/C:/Users/tandr/.m2/repository/org/apache/derby/derby/10.16.1.1/derby-10.16.1.1.jar
-java.vendor=JetBrains s.r.o.
-java.runtime.version=17.0.12+1-b1207.37
-user.dir=C:\Users\tandr\OneDrive\Documentos\GitHub\GR04_1BP2_622_24B
+java.vendor=Amazon.com Inc.
+java.runtime.version=17.0.13+11-LTS
+user.dir=C:\Users\tandr\OneDrive\Documentos\GitHub\GR04_PRUEBA_622_24B\Prueba-Agiles
 os.name=Windows 11
 os.arch=amd64
 os.version=10.0
