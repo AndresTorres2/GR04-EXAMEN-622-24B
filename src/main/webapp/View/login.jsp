@@ -13,16 +13,21 @@
         }
 
         input[type="submit"] {
-        text-decoration: none;
-        padding: 10px 20px;
-        background-color: #48578e;
-        color: white;
-        border-radius: 5px;
-        display: inline-block;
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #48578e;
+            color: white;
+            border-radius: 5px;
+            display: inline-block;
         }
 
         input[type="submit"]:hover {
-        background-color: #71a8df;
+            background-color: #71a8df;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -38,6 +43,10 @@
 
     <input type="submit" value="Iniciar Sesión" />
 </form>
+
+<c:if test="${not empty error}">
+    <div class="error-message">${error}</div>
+</c:if>
 
 </body>
 </html>
