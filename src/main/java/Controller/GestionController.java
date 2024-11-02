@@ -157,20 +157,47 @@ public class GestionController extends HttpServlet {
             case "consultarViajesConductor":
                 consultarViajesDelConductor(req,resp);
                 break;
-
+            case "notificarPasajeros":
+                notificarPasajeros(req,resp);
+                break;
             case "consultarViajesDetallesConductor":
                 consultarViajesDetallesConductor(req,resp);
                 break;
-
             case "compartirUbicacion":
                 compartirUbicacion(req, resp);
                 break;
-
+            case "obtenerUbicacion":
+                obtenerUbicacion(req, resp);
+                break;
             default:
                 break;
         }
     }
-    private void compartirUbicacion(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, MessagingException {
+
+    private void compartirUbicacion(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String latitud = req.getParameter("latitud");
+        String longitud = req.getParameter("longitud");
+
+        req.getSession().setAttribute("latitud", latitud);
+        req.getSession().setAttribute("longitud", longitud);
+
+        resp.setStatus(HttpServletResponse.SC_OK);
+    }
+    private void obtenerUbicacion(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String latitud = (String) req.getSession().getAttribute("latitud");
+        String longitud = (String) req.getSession().getAttribute("longitud");
+
+        resp.setContentType("text/plain");
+        resp.setCharacterEncoding("UTF-8");
+
+        if (latitud != null && longitud != null) {
+            resp.getWriter().write(latitud + "," + longitud);
+        } else {
+            resp.getWriter().write("Ubicación no disponible");
+        }
+    }
+
+    private void notificarPasajeros(HttpServletRequest req, HttpServletResponse resp) throws MessagingException {
         int viajeId = Integer.parseInt(req.getParameter("viajeId"));
 
         Viaje viaje = viajeDAO.obtenerViajePorCodigo(viajeId);
@@ -198,8 +225,9 @@ public class GestionController extends HttpServlet {
         }
 
         System.out.println("Notificaciones enviadas a los pasajeros.");
-        resp.getWriter().write("Notificación enviada exitosamente.");
     }
+
+
 
 
     public void mostrarLogin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

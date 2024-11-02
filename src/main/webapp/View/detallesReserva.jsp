@@ -82,16 +82,15 @@
     <p><strong>Fecha de la reserva:</strong> <fmt:formatDate value="${reserva.fecha}" pattern="EEEE"/>, ${reserva.fecha}
     </p>
     <p><strong>Horario:</strong> ${reserva.viaje.horaDeSalida} (${reserva.viaje.jornada})</p>
-
-
     <p><strong>Recorrido:</strong>
         <c:forEach var="calle" items="${reserva.viaje.ruta.calles}" varStatus="status">
             ${calle.nombre}
             <c:if test="${!status.last}">, </c:if>
         </c:forEach>
     </p>
-
     <p><strong>Nombre del estudiante:</strong> ${reserva.estudiante.nombre} ${reserva.estudiante.apellido}</p>
+    <p><strong>Ubicacion del conductor:</strong></p>
+    <p id="coordenadas-conductor">Esperando ubicación del conductor...</p>
 
     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%">
         <button id="add-waypoint" style="align-items: center; display: block;">Establecer Parada</button>
@@ -113,6 +112,24 @@
 </div>
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<script>
+    function actualizarUbicacionBus() {
+        fetch('${pageContext.request.contextPath}/GestionServlet?action=obtenerUbicacion')
+            .then(response => response.text())
+            .then(data => {
+                if (data === "Ubicación no disponible") {
+                    document.getElementById('coordenadas-conductor').textContent = data;
+                } else {
+                    const [latitud, longitud] = data.split(",");
+                    document.getElementById('coordenadas-conductor').textContent =
+                        "Latitud: " + latitud + ", Longitud: " + longitud;
+                }
+            })
+            .catch(error => console.error("Error al obtener la ubicación:", error));
+    }
+
+    setInterval(actualizarUbicacionBus, 5000);
+</script>
 <script>
     var map = L.map('map').setView([-0.210194, -78.489326], 13);
 
@@ -149,27 +166,41 @@
         iconSize: [25, 41],
     });
 
-
     var busIcon = L.icon({
         iconUrl: "${pageContext.request.contextPath}/assets/busIcon.png",
         iconSize: [40, 40],
     });
-    L.marker([-0.332250, -78.553271], {icon: busIcon}).addTo(map);
 
-    map.on('click', function (e) {
-        if (waypointAvailable) {
-            var newWaypoint = L.latLng(e.latlng.lat, e.latlng.lng);
-            L.marker(newWaypoint, {icon: paradaIcon}).addTo(map);
-            waypointAvailable = false;
-        }
-    });
+    var busMarker;
 
-    document.getElementById('add-waypoint').addEventListener('click', function () {
-        alert('Haz clic en el mapa para agregar un nuevo waypoint. Solo se podrá agregar uno.');
-        waypointAvailable = true;
-    });
+    function actualizarUbicacionBus() {
+        fetch('${pageContext.request.contextPath}/GestionServlet?action=obtenerUbicacion')
+            .then(response => response.text())
+            .then(data => {
+                if (data === "Ubicación no disponible") {
+                    document.getElementById('coordenadas-conductor').textContent = data;
+                    if (busMarker) {
+                        map.removeLayer(busMarker);
+                        busMarker = null;
+                    }
+                } else {
+                    const [latitud, longitud] = data.split(",");
+                    document.getElementById('coordenadas-conductor').textContent =
+                        "Latitud: " + latitud + ", Longitud: " + longitud;
 
+                    if (busMarker) {
+                        map.removeLayer(busMarker);
+                    }
 
+                    busMarker = L.marker([latitud, longitud], { icon: busIcon }).addTo(map);
+                    map.setView([latitud, longitud], 13);
+                }
+            })
+            .catch(error => console.error("Error al obtener la ubicación:", error));
+    }
+
+    setInterval(actualizarUbicacionBus, 5000);
 </script>
+
 </body>
 </html>
