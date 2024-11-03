@@ -88,7 +88,49 @@ public class ReservaDAOTest {
     }
 
     // Pruebas para isViajeEmpty y listPassengersByViaje
+    @Test
+    public void given_Viaje_when_CheckIfEmpty_then_ReturnsTrueIfNoReservations() {
+        Bus bus = new Bus("BUS-003", 40);
+        Ruta ruta = new Ruta(2, "Ciudad C", "Ciudad D", new ArrayList<>());
+        Viaje viaje3 = new Viaje(3, bus, null, Time.valueOf("10:00:00"), ruta, "matutino", 20, null);
 
+        boolean isEmpty = reservaDAO.isViajeEmpty(viaje3);
+        System.out.println("Viaje 3 is empty: " + isEmpty);
+        assertTrue(isEmpty); // Debe ser verdadero, ya que no hay reservas
+    }
+
+    @Test
+    public void given_Viaje_when_CheckIfNotEmpty_then_ReturnsFalseIfHasReservations() {
+        List<Reserva> reservas = reservaDAO.getAllReservas(false);
+        Viaje viaje2 = reservas.get(1).getViaje();
+
+        boolean isEmpty = reservaDAO.isViajeEmpty(viaje2);
+        System.out.println("Viaje 2 is empty: " + isEmpty);
+        assertFalse(isEmpty); // Debe ser falso, ya que hay reservas
+    }
+
+    @Test
+    public void given_Viaje_when_ListPassengers_then_ReturnsCorrectPassengers() {
+        List<Reserva> reservas = reservaDAO.getAllReservas(false);
+        Viaje viaje2 = reservas.get(1).getViaje();
+
+        List<Estudiante> pasajeros = reservaDAO.listPassengersByViaje(viaje2);
+        System.out.println("Pasajeros en viaje 2: " + pasajeros);
+        assertEquals(2, pasajeros.size()); // Debería devolver 2 pasajeros
+        assertTrue(pasajeros.contains(reservas.get(1).getEstudiante())); // Verifica que el primer estudiante esté en la lista
+        assertTrue(pasajeros.contains(reservas.get(2).getEstudiante())); // Verifica que el segundo estudiante esté en la lista
+    }
+
+    @Test
+    public void given_Viaje_when_ListPassengersOnEmptyViaje_then_ReturnsEmptyList() {
+        Bus bus = new Bus("BUS-003", 40);
+        Ruta ruta = new Ruta(2, "Ciudad C", "Ciudad D", new ArrayList<>());
+        Viaje viaje3 = new Viaje(3, bus, null, Time.valueOf("10:00:00"), ruta, "matutino", 20, null);
+
+        List<Estudiante> pasajeros = reservaDAO.listPassengersByViaje(viaje3);
+        System.out.println("Pasajeros en viaje 3: " + pasajeros); // Mensaje de consola
+        assertTrue(pasajeros.isEmpty()); // Debe devolver una lista vacía
+    }
 
 
 
