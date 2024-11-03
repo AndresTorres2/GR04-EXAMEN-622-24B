@@ -296,6 +296,9 @@ public class GestionController extends HttpServlet {
     public void cancelarReservas(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         reservaDAO.cancelarReserva(Integer.parseInt(req.getParameter("reservaId")),
                 reservaDAO.obtenerReservaPorId(Integer.parseInt(req.getParameter("reservaId"))).getViaje());
+        req.setAttribute("reservas", reservaDAO.obtenerTodasLasReservas());
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionReservas.jsp");
+        dispatcher.forward(req, resp);
     }
     public void crearReserva(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
             int viajeId = Integer.parseInt(req.getParameter("viajeId"));
