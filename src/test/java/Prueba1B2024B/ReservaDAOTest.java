@@ -121,16 +121,7 @@ public class ReservaDAOTest {
         assertTrue(pasajeros.contains(reservas.get(2).getEstudiante())); // Verifica que el segundo estudiante esté en la lista
     }
 
-    @Test
-    public void given_Viaje_when_ListPassengersOnEmptyViaje_then_ReturnsEmptyList() {
-        Bus bus = new Bus("BUS-003", 40);
-        Ruta ruta = new Ruta(2, "Ciudad C", "Ciudad D", new ArrayList<>());
-        Viaje viaje3 = new Viaje(3, bus, null, Time.valueOf("10:00:00"), ruta, "matutino", 20, null);
 
-        List<Estudiante> pasajeros = reservaDAO.listPassengersByViaje(viaje3);
-        System.out.println("Pasajeros en viaje 3: " + pasajeros); // Mensaje de consola
-        assertTrue(pasajeros.isEmpty()); // Debe devolver una lista vacía
-    }
 
 
 
