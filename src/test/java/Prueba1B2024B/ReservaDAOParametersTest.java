@@ -50,4 +50,16 @@ public class ReservaDAOParametersTest {
         this.estudiantesEsperados = estudiantesEsperados;
     }
 
+    @Test
+    public void given_Viaje_when_ListPassengersSorted_then_ReturnsSortedPassengers() {
+        List<Estudiante> pasajerosObtenidos = reservaDAO.listPassengersByViajeSorted(viaje);
+
+        assertEquals(estudiantesEsperados.size(), pasajerosObtenidos.size());
+
+        for (int i = 0; i < estudiantesEsperados.size(); i++) {
+            assertEquals(estudiantesEsperados.get(i).getNombre(), pasajerosObtenidos.get(i).getNombre());
+        }
+
+        System.out.println("Pasajeros ordenados: " + pasajerosObtenidos);
+    }
 }
