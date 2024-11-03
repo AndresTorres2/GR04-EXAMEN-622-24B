@@ -2,6 +2,7 @@ package Controller;
 
 import Model.DAO.*;
 import Model.Entity.*;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -21,6 +22,7 @@ public class GestionController extends HttpServlet {
     CalleDAO calleDAO ;
     ViajeDAO viajeDAO;
     BusDAO busDAO;
+    EmailDAO emailDAO;
     UsuarioDAO usuarioDAO ;
     ConductorDAO conductorDAO;
     ReservaDAO reservaDAO;
@@ -37,20 +39,28 @@ public class GestionController extends HttpServlet {
         conductorDAO = new ConductorDAO();
         reservaDAO = new ReservaDAO();
         estudianteDAO = new EstudianteDAO();
+        emailDAO = new EmailDAO();
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.ruteador(req, resp);
+        try {
+            this.ruteador(req, resp);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.ruteador(req, resp);
+        try {
+            this.ruteador(req, resp);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-
-    public void ruteador(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void ruteador(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, MessagingException {
         String ruta = (req.getParameter("action") == null) ? "login" : req.getParameter("action");
         switch (ruta) {
             case "mostrarLogin":
@@ -147,11 +157,84 @@ public class GestionController extends HttpServlet {
             case "consultarViajesConductor":
                 consultarViajesDelConductor(req,resp);
                 break;
-
+            case "notificarPasajeros":
+                notificarPasajeros(req,resp);
+                break;
+            case "consultarViajesDetallesConductor":
+                consultarViajesDetallesConductor(req,resp);
+                break;
+            case "compartirUbicacion":
+                compartirUbicacion(req, resp);
+                break;
+            case "obtenerUbicacion":
+                obtenerUbicacion(req, resp);
+                break;
+            case "cerrarSesion":
+                cerrarSesion(req, resp);
+                break;
             default:
                 break;
         }
     }
+    public void cerrarSesion(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.sendRedirect(req.getContextPath() + "/View/login.jsp"); // Redirige al login
+    }
+
+    private void compartirUbicacion(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String latitud = req.getParameter("latitud");
+        String longitud = req.getParameter("longitud");
+
+        req.getSession().setAttribute("latitud", latitud);
+        req.getSession().setAttribute("longitud", longitud);
+
+        resp.setStatus(HttpServletResponse.SC_OK);
+    }
+    private void obtenerUbicacion(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String latitud = (String) req.getSession().getAttribute("latitud");
+        String longitud = (String) req.getSession().getAttribute("longitud");
+
+        resp.setContentType("text/plain");
+        resp.setCharacterEncoding("UTF-8");
+
+        if (latitud != null && longitud != null) {
+            resp.getWriter().write(latitud + "," + longitud);
+        } else {
+            resp.getWriter().write("Ubicación no disponible");
+        }
+    }
+
+    private void notificarPasajeros(HttpServletRequest req, HttpServletResponse resp) throws MessagingException {
+        int viajeId = Integer.parseInt(req.getParameter("viajeId"));
+
+        Viaje viaje = viajeDAO.obtenerViajePorCodigo(viajeId);
+        List<String> correosPasajeros = viajeDAO.obtenerCorreosPasajerosPorViaje(viajeId);
+
+        String fecha = viaje.getFecha().toString();
+        String horaSalida = String.valueOf(viaje.getHoraDeSalida());
+        String jornada = viaje.getJornada();
+        String ruta = viaje.getRuta().getOrigen() + " ➔ " + viaje.getRuta().getDestino();
+
+        String mensaje = String.format("Estimados pasajeros,\n\n" +
+                "Les informamos que su viaje programado con los siguientes detalles:\n\n" +
+                "Fecha: %s\n" +
+                "Hora de Salida: %s\n" +
+                "Jornada: %s\n" +
+                "Ruta: %s\n\n" +
+                "Está a punto de empezar y el conductor ha iniciado la compartición de ubicación. Por favor, asegúrense de estar puntuales.\n" +
+                "¡Gracias por elegir Polibus!\n\n" +
+                "Atentamente,\n" +
+                "El equipo de Polibus", fecha, horaSalida, jornada, ruta);
+
+        for (String email : correosPasajeros) {
+            emailDAO.enviarCorreo(email, "Notificación de viaje Polibus", mensaje);
+            System.out.println("Correo enviado a: " + email);
+        }
+
+        System.out.println("Notificaciones enviadas a los pasajeros.");
+    }
+
+
+
 
     public void mostrarLogin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher dispatcher = req.getRequestDispatcher("/View/login.jsp");
@@ -192,6 +275,13 @@ public class GestionController extends HttpServlet {
             dispatcher.forward(req, resp);
     }
 
+    public void consultarViajesDetallesConductor(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("viaje",viajeDAO.obtenerViajePorCodigo(Integer.parseInt(req.getParameter("viajeId"))));
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/viajesConductorDetalles.jsp");
+        dispatcher.forward(req, resp);
+
+    }
+
     public void gestionarRutas(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         req.setAttribute("rutas", rutaDAO.obtenerTodasLasRutas());
@@ -227,12 +317,9 @@ public class GestionController extends HttpServlet {
         dispatcher.forward(req, resp);
     }
     public void mostrarFormRuta(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-
         req.setAttribute("calles", calleDAO.obtenerTodasLasCalles());
         RequestDispatcher dispatcher = req.getRequestDispatcher("/View/registrarRuta.jsp");
         dispatcher.forward(req, resp);
-
     }
     public void guardarRuta(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String origen = req.getParameter("origen");

@@ -135,6 +135,20 @@ public class ViajeDAO extends GenericDAO{
             return null;
         }
     }
+    public List<String> obtenerCorreosPasajerosPorViaje(int viajeId) {
+        List<String> correosPasajeros = new ArrayList<>();
+        try {
+            String sql = "SELECT e.email FROM Reserva r JOIN r.estudiante e WHERE r.viaje.id = :viajeId";
+
+            Query query = em.createQuery(sql);
+            query.setParameter("viajeId", viajeId);
+
+            correosPasajeros = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return correosPasajeros;
+    }
 
     public int[] convertirIdsAEnteros(String[] idsViajesSeleccionados) {
         if (idsViajesSeleccionados != null) {

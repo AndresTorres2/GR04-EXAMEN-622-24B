@@ -20,17 +20,18 @@ public class ReservaDAO extends GenericDAO {
     public void guardarReserva(Reserva reserva, Viaje viaje) {
         try {
             beginTransaction();
-
             em.persist(reserva);
-
-            viaje.setAsientosOcupados(viaje.getAsientosOcupados() + 1);
-            em.merge(viaje);
-
+            actualizarAsientosOcupados(viaje, 1);
             commitTransaction();
         } catch (Exception e) {
             rollbackTransaction();
             e.printStackTrace();
         }
+    }
+
+    private void actualizarAsientosOcupados(Viaje viaje, int incremento) {
+        viaje.setAsientosOcupados(viaje.getAsientosOcupados() + incremento);
+        em.merge(viaje);
     }
 
     public List<Reserva> obtenerTodasLasReservas() {
@@ -68,8 +69,7 @@ public class ReservaDAO extends GenericDAO {
             beginTransaction();
             Reserva reserva = em.find(Reserva.class, reservaId);
             em.remove(reserva);
-            viaje.setAsientosOcupados(viaje.getAsientosOcupados() - 1);
-            em.merge(viaje);
+            actualizarAsientosOcupados(viaje,-1);
             commitTransaction();
         } catch (Exception e) {
             rollbackTransaction();

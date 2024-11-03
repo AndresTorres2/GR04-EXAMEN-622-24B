@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/app/database
+    environment:
+      - JAVA_OPTS=-Djava.awt.headless=true

@@ -27,10 +27,10 @@ public class Usuario implements Serializable {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "phone", unique = true, nullable = false)
+    @Column(name = "phone", nullable = false)
     private String phone;
 
-    @Column(name = "contraseña", unique = true, nullable = false)
+    @Column(name = "contraseña", nullable = false)
     private String contrasena;
 
     public Usuario() {

@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.DAO.EmailDAO;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -8,8 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 @WebServlet(name = "NotificacionServlet", value = "/NotificacionServlet")
 public class NotificacionController extends HttpServlet {
@@ -35,22 +34,25 @@ public class NotificacionController extends HttpServlet {
             case "notificar":
                 notificar(req, resp);
                 break;
-               default:
-                   break;
+            default:
+                break;
         }
     }
     public void notificar(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String correos = req.getParameter("destinatarios"); // Cadena de correos separados por comas
-        String asunto = "Se ha iniciado la comparticion de la ubicación del viaje";
-        String mensaje = "La ubicación del viaje se está compartiendo ahora con la descripción: " +
-                req.getParameter("descripcion");
+        String destinatario = req.getParameter("destinatario");
+        String asunto = req.getParameter("asunto");
+        String mensaje = req.getParameter("mensaje");
 
-        // Convertir la cadena de correos en una lista de correos
-        List<String> destinatarios = Arrays.asList(correos.split(","));
-
-        emailDAO.enviarCorreo(destinatarios, asunto, mensaje);
-
-        resp.getWriter().write("Correo enviado a todos los destinatarios.");
+        try {
+            System.out.println("Enviadoo");
+            System.out.println(destinatario);
+            emailDAO.enviarCorreo(destinatario, asunto, mensaje);
+            resp.getWriter().write("Notificación enviada exitosamente.");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            resp.getWriter().write("Error al enviar la notificación.");
+        }
     }
+
 
 }
