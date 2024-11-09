@@ -2,8 +2,11 @@ package Model.DAO;
 
 import Model.Entity.Viaje;
 import Model.Entity.Ruta;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.Query;
+import org.hibernate.exception.ConstraintViolationException;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -49,7 +52,7 @@ public class ViajeDAO extends GenericDAO{
         return em.find(Viaje.class, id) != null;
     }
 
-    public void eliminarViajeEnDB(Integer id) {
+    public void eliminarViajeEnDB(Integer id)  {
         try {
             Viaje viaje = em.find(Viaje.class, id);
             if (viaje != null) {
@@ -57,7 +60,14 @@ public class ViajeDAO extends GenericDAO{
                 em.remove(viaje);
                 em.getTransaction().commit();
             }
-        } catch (Exception e) {
+        } catch (PersistenceException e) {
+
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("No se puede eliminar el viaje porque hay reservas asociadas.");
+        }
+        catch (Exception e) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }

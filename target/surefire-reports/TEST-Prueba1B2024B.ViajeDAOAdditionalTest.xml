@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="3" failures="0" name="Prueba1B2024B.ViajeDAOAdditionalTest" time="1.976" errors="0" skipped="0">
+<testsuite tests="3" failures="0" name="Prueba1B2024B.ViajeDAOAdditionalTest" time="2.717" errors="0" skipped="0">
   <properties>
     <property name="idea.version" value="2024.2.3"/>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
@@ -64,7 +64,7 @@
     <property name="intellij.os.virtualization" value="none"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="Prueba1B2024B.ViajeDAOAdditionalTest" name="given_IdsArray_when_ConvertIdsToIntegers_then_ReturnsCorrectArray" time="0.391"/>
-  <testcase classname="Prueba1B2024B.ViajeDAOAdditionalTest" name="given_IdString_when_ConvertToList_then_ReturnsCorrectIdList" time="0.401"/>
-  <testcase classname="Prueba1B2024B.ViajeDAOAdditionalTest" name="given_ConductorId_when_ListViajesByConductor_then_ReturnsCorrectList" time="1.184"/>
+  <testcase classname="Prueba1B2024B.ViajeDAOAdditionalTest" name="given_IdsArray_when_ConvertIdsToIntegers_then_ReturnsCorrectArray" time="0.711"/>
+  <testcase classname="Prueba1B2024B.ViajeDAOAdditionalTest" name="given_IdString_when_ConvertToList_then_ReturnsCorrectIdList" time="0.229"/>
+  <testcase classname="Prueba1B2024B.ViajeDAOAdditionalTest" name="given_ConductorId_when_ListViajesByConductor_then_ReturnsCorrectList" time="1.777"/>
 </testsuite>

@@ -68,13 +68,17 @@
             text-decoration: underline;
         }
     </style>
+
 </head>
 <body>
 <div class="container">
-    <h1>Reservar Asiento</h1>
 
-    <!-- Mostrar la información de los viajes -->
-    <form action="${pageContext.request.contextPath}/ReservarAsientoServlet?action=guardarReserva" method="post">
+    <h1>Reservar Asiento</h1>
+    <c:if test="${not empty error}">
+        <p style="color: red;">${error}</p>
+    </c:if>
+
+    <form action="${pageContext.request.contextPath}/ReservarAsientoServlet?action=guardarReserva" method="post" >
         <table>
             <thead>
             <tr>

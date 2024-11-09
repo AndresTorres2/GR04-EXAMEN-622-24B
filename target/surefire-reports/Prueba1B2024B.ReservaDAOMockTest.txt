@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: Prueba1B2024B.ReservaDAOMockTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.971 sec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.325 sec

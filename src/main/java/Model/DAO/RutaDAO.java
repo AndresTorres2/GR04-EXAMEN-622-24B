@@ -1,7 +1,10 @@
 package Model.DAO;
 
 import Model.Entity.Ruta;
+import jakarta.persistence.PersistenceException;
+import org.hibernate.exception.ConstraintViolationException;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,17 +67,21 @@ public class RutaDAO extends GenericDAO {
     }
     public void eliminarRutaDb(int rutaId) {
         try {
-            beginTransaction();
-
             Ruta ruta = obtenerRutaId(rutaId);
-            if (ruta != null) {
-                em.remove(ruta);
-            } else {
-                System.out.println("No se encontró la ruta con ID: " + rutaId);
-            }
+            em.getTransaction().begin();
+            em.remove(ruta);
+            em.getTransaction().commit();
+        }
+        catch (PersistenceException e) {
 
-            commitTransaction();
-        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("No se puede eliminar la ruta porque hay viajes asociados a esa ruta. " +
+                    "Si desea eliminar esta ruta, debe eliminar los viajes asociados a esa ruta");
+
+        }
+        catch (Exception e) {
             rollbackTransaction();
             e.printStackTrace();
         }

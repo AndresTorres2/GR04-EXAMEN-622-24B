@@ -40,6 +40,11 @@
   </style>
 </head>
 <body>
+<c:if test="${not empty errorMessage}">
+  <script type="text/javascript">
+    alert("${errorMessage}");
+  </script>
+</c:if>
 <h1>Gestión de Buses</h1>
 <div style="display: flex; margin: 1.5rem 0; justify-content: space-between">
   <a href="${pageContext.request.contextPath}/View/dashboardAdmin.jsp">Volver al Dashboard</a>
@@ -51,7 +56,6 @@
     <th>Bus #</th>
     <th>Capacidad</th>
     <th></th>
-    <th></th>
   </tr>
   </thead>
   <tbody>
@@ -61,11 +65,8 @@
       <td>${bus.capacidad}</td>
       <td>
         <a href="${pageContext.request.contextPath}/GestionServlet?action=actualizarBus&busId=${bus.busId}">Actualizar</a>
-      </td>
-      <td>
         <a href="${pageContext.request.contextPath}/GestionServlet?action=eliminarBus&busId=${bus.busId}" onclick="return confirm('¿Estás seguro de que deseas eliminar este bus?');">Eliminar</a>
       </td>
-
     </tr>
   </c:forEach>
   </tbody>

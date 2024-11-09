@@ -42,6 +42,22 @@
     .menu-item:hover {
       background-color: #71a8df;
     }
+    .logout-button {
+      background-color: #a94442;
+      padding: 20px;
+      text-align: center;
+      width: 100%;
+      border-radius: 8px;
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    .logout-button:hover {
+      background-color: #d9534f;
+    }
   </style>
 </head>
 <body>
@@ -54,6 +70,7 @@
     <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionViajes">Viajes</a>
     <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionReservas">Reservas</a>
   </div>
+  <a class="logout-button" href="${pageContext.request.contextPath}/GestionServlet?action=cerrarSesion">Cerrar Sesión</a>
 </div>
 </body>
 </html>

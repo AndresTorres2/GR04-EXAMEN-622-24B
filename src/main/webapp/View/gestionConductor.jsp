@@ -39,6 +39,11 @@
     </style>
 </head>
 <body>
+<c:if test="${not empty errorMessage}">
+    <script type="text/javascript">
+        alert("${errorMessage}");
+    </script>
+</c:if>
 <h1>Gestión de Conductores</h1>
 <div style="display: flex; margin: 1.5rem 0; justify-content: space-between">
     <a href="${pageContext.request.contextPath}/View/dashboardAdmin.jsp">Volver al Dashboard</a>

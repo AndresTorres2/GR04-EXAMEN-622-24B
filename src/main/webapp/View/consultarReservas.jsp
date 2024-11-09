@@ -54,6 +54,19 @@
       text-decoration: none;
       color: #dcdcdc;
     }
+
+    .botton {
+      text-decoration: none;
+      padding: 10px 20px;
+      background-color: #48578e;
+      color: white;
+      border-radius: 5px;
+      display: inline-block;
+    }
+
+    .botton:hover {
+      background-color: #71a8df;
+    }
   </style>
 </head>
 <body>
@@ -67,11 +80,14 @@
     <a class="tab" href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=verReservasDia&dia=4">Jueves</a>
     <a class="tab" href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=verReservasDia&dia=5">Viernes</a>
   </div>
-  <c:set var="fechaAnterior" value="" />
+  <c:set var="diaAnterior" value="" />
   <c:forEach var="reserva" items="${reservas}">
-    <c:if test="${reserva.fecha != fechaAnterior}">
+    <c:set var="diaReserva">
+      <fmt:formatDate value="${reserva.viaje.fecha}" pattern="EEEE"/>
+    </c:set>
+    <c:if test="${diaReserva  != diaAnterior}">
       <h2>Reservas para el día: <fmt:formatDate value="${reserva.viaje.fecha}" pattern="EEEE"/></h2>
-      <c:set var="fechaAnterior" value="${reserva.fecha}" />
+      <c:set var="diaAnterior" value="${diaReserva}" />
     </c:if>
     <div class="reserva">
       <a  href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=detalleReserva&reservaId=${reserva.id}">
@@ -83,7 +99,7 @@
       </a>
     </div>
   </c:forEach>
-
+  <a href="${pageContext.request.contextPath}/View/listarViajes.jsp" class="botton">Regresar a la lista de viajes</a>
 </div>
 </body>
 </html>

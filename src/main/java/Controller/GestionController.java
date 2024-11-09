@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -177,6 +178,11 @@ public class GestionController extends HttpServlet {
         }
     }
     public void cerrarSesion(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        HttpSession session = req.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+        }
         resp.sendRedirect(req.getContextPath() + "/View/login.jsp"); // Redirige al login
     }
 
@@ -247,10 +253,15 @@ public class GestionController extends HttpServlet {
 
         if (usuarioDAO.validarCredenciales(email, password)) {
             String tipoUsuario = usuarioDAO.obtenerTipoDeUsuario(email);
-
+            HttpSession session = req.getSession();
+            Usuario usuario = usuarioDAO.buscarUsuarioPorEmail(email);
+            session.setAttribute("usuario", usuario);
+            session.setAttribute("usuarioId", usuario.getId());
+            session.setAttribute("tipoUsuario", tipoUsuario);
             if ("U_Administrador".equals(tipoUsuario)) {
                 resp.sendRedirect(req.getContextPath() + "/View/dashboardAdmin.jsp");
             } else if ("U_Estudiante".equals(tipoUsuario)) {
+                session.setAttribute("estudiante", usuario);
                 resp.sendRedirect(req.getContextPath() + "/View/listarViajes.jsp");
             } else if ("U_Conductor".equals(tipoUsuario)) {
                 Usuario conductor = usuarioDAO.buscarUsuarioPorEmail(email);
@@ -337,10 +348,19 @@ public class GestionController extends HttpServlet {
 
     }
     public void eliminarRuta(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        rutaDAO.eliminarRutaDb(Integer.parseInt(req.getParameter("rutaId")));
-        req.setAttribute("rutas", rutaDAO.obtenerTodasLasRutas());
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionRutas.jsp");
-        dispatcher.forward(req, resp);
+
+       try{
+           rutaDAO.eliminarRutaDb(Integer.parseInt(req.getParameter("rutaId")));
+           req.setAttribute("rutas", rutaDAO.obtenerTodasLasRutas());
+           RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionRutas.jsp");
+           dispatcher.forward(req, resp);
+       }catch (Exception e){
+           req.setAttribute("errorMessage", e.getMessage());
+           req.setAttribute("rutas", rutaDAO.obtenerTodasLasRutas());
+           RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionRutas.jsp");
+           dispatcher.forward(req, resp);
+       }
+
 
     }
     public void mostrarFormActualizarRuta(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -424,11 +444,19 @@ public class GestionController extends HttpServlet {
     }
 
     public void eliminarViaje(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        viajeDAO.eliminarViajeEnDB(Integer.parseInt(req.getParameter("viajeId")));
+        try {
+            viajeDAO.eliminarViajeEnDB(Integer.parseInt(req.getParameter("viajeId")));
+            req.setAttribute("viajes", viajeDAO.obtenerTodosLosViajes());
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionViaje.jsp");
+            dispatcher.forward(req, resp);
+        }catch (Exception e){
+            req.setAttribute("errorMessage", e.getMessage());
+            req.setAttribute("viajes", viajeDAO.obtenerTodosLosViajes());
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionViaje.jsp");
+            dispatcher.forward(req, resp);
 
-        req.setAttribute("viajes", viajeDAO.obtenerTodosLosViajes());
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionViaje.jsp");
-        dispatcher.forward(req, resp);
+        }
+
     }
 
 
@@ -505,11 +533,20 @@ public class GestionController extends HttpServlet {
     }
 
     public void eliminarConductor(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-        String conductorId = (req.getParameter("conductorId"));
-        conductorDAO.eliminarConductorDb(conductorId);
-        req.setAttribute("conductores", conductorDAO.obtenerConductores() );
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionConductor.jsp");
-        dispatcher.forward(req, resp);
+        try{
+            String conductorId = (req.getParameter("conductorId"));
+            conductorDAO.eliminarConductorDb(conductorId);
+            req.setAttribute("conductores", conductorDAO.obtenerConductores() );
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionConductor.jsp");
+            dispatcher.forward(req, resp);
+        } catch (Exception e) {
+            req.setAttribute("errorMessage", e.getMessage());
+            req.setAttribute("conductores", conductorDAO.obtenerConductores() );
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionConductor.jsp");
+            dispatcher.forward(req, resp);
+        }
+
+
     }
     public void mostrarFormConductor(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         RequestDispatcher dispatcher = req.getRequestDispatcher("/View/registrarConductor.jsp");
@@ -535,11 +572,32 @@ public class GestionController extends HttpServlet {
     }
 
     public void eliminarBus(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-        String busId = req.getParameter("busId");
-        busDAO.eliminarBusEnDB(busId);
-        req.setAttribute("buses", busDAO.obtenerTodosLosBuses() );
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionBuses.jsp");
-        dispatcher.forward(req,resp);
+        try{
+            busDAO.eliminarBusEnDB(req.getParameter("busId"));
+            req.setAttribute("buses", busDAO.obtenerTodosLosBuses() );
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionBuses.jsp");
+            dispatcher.forward(req,resp);
+        }
+        catch (Exception e){
+            req.setAttribute("errorMessage", e.getMessage());
+            req.setAttribute("buses", busDAO.obtenerTodosLosBuses() );
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionBuses.jsp");
+            dispatcher.forward(req,resp);
+        }
+
+
+        /*try {
+            viajeDAO.eliminarViajeEnDB(Integer.parseInt(req.getParameter("viajeId")));
+            req.setAttribute("viajes", viajeDAO.obtenerTodosLosViajes());
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionViaje.jsp");
+            dispatcher.forward(req, resp);
+        }catch (Exception e){
+            req.setAttribute("errorMessage", e.getMessage());
+            req.setAttribute("viajes", viajeDAO.obtenerTodosLosViajes());
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionViaje.jsp");
+            dispatcher.forward(req, resp);
+
+        }*/
 
     }
     private void mostrarFormBus(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{

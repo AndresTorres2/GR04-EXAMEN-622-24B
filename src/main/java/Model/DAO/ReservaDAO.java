@@ -1,9 +1,6 @@
 package Model.DAO;
 
-import Model.Entity.Bus;
-import Model.Entity.Reserva;
-import Model.Entity.Estudiante;
-import Model.Entity.Viaje;
+import Model.Entity.*;
 import jakarta.persistence.*;
 
 import java.sql.Date;
@@ -50,16 +47,15 @@ public class ReservaDAO extends GenericDAO {
     public Reserva obtenerReservaPorId(int reservaId) {
         Reserva reserva = null;
         try {
-            beginTransaction();  // Iniciar la transacción
+            beginTransaction();
 
-            // Crear una consulta parametrizada para obtener la reserva por su ID
             TypedQuery<Reserva> query = em.createQuery("SELECT r FROM Reserva r WHERE r.id = :reservaId", Reserva.class);
-            query.setParameter("reservaId", reservaId);  // Pasar el parámetro
+            query.setParameter("reservaId", reservaId);
 
             reserva = query.getSingleResult();
             commitTransaction();
         } catch (Exception e) {
-            rollbackTransaction();  // Revertir en caso de error
+            rollbackTransaction();
             e.printStackTrace();
         }
         return reserva;
@@ -77,9 +73,9 @@ public class ReservaDAO extends GenericDAO {
         }
 
     }
-    public List<Reserva> obtenerReservasPorDia(int diaSeleccionado) {
+    public List<Reserva> obtenerReservasPorDia(int diaSeleccionado, Usuario usuario) {
         List<Reserva> reservasFiltradas = new ArrayList<>();
-        for (Reserva  reserva : obtenerTodasLasReservas())
+        for (Reserva  reserva : obtenerReservasPorEstudianteId(usuario.getId()))
         {
             int diaReserva = reserva.getViaje().getFecha().getDay();
             if(diaReserva == diaSeleccionado){
@@ -88,6 +84,20 @@ public class ReservaDAO extends GenericDAO {
         }
 
         return reservasFiltradas;
+    }
+    public List<Reserva> obtenerReservasPorEstudianteId(int estudianteId) {
+        List<Reserva> reservas = null;
+        try {
+            beginTransaction();
+            TypedQuery<Reserva> query = em.createQuery("SELECT r FROM Reserva r WHERE r.estudiante.id = :estudianteId", Reserva.class);
+            query.setParameter("estudianteId", estudianteId); // Configura el parámetro de la consulta
+            reservas = query.getResultList();
+            commitTransaction();
+        } catch (Exception e) {
+            rollbackTransaction();
+            e.printStackTrace();
+        }
+        return reservas;
     }
 
     public void guardarVariasReservas(List<Viaje> listaViajes, Estudiante estudiante) {
@@ -144,7 +154,25 @@ public class ReservaDAO extends GenericDAO {
         }
         return pasajeros;
     }
-
+    public boolean existeReserva(int estudianteId, int viajeId) {
+        boolean existe = false;
+        try {
+            beginTransaction();
+            TypedQuery<Long> query = em.createQuery(
+                    "SELECT COUNT(r) FROM Reserva r WHERE r.estudiante.id = :estudianteId AND r.viaje.id = :viajeId",
+                    Long.class
+            );
+            query.setParameter("estudianteId", estudianteId);
+            query.setParameter("viajeId", viajeId);
+            Long count = query.getSingleResult();
+            existe = (count > 0);
+            commitTransaction();
+        } catch (Exception e) {
+            rollbackTransaction();
+            e.printStackTrace();
+        }
+        return existe;
+    }
 
 
 

@@ -8,7 +8,9 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +26,7 @@ public class ReservaController extends HttpServlet {
     private EstudianteDAO estudianteDAO;
     private ViajeDAO viajeDAO;
     private CalleDAO calleDAO;
+    HttpSession session;
 
     public void init() {
         reservaDAO = new ReservaDAO();
@@ -70,6 +73,8 @@ public class ReservaController extends HttpServlet {
 
     private void mostrarFormularioReserva(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        HttpSession session = request.getSession();
+        session.setAttribute("viajesList", viajeDAO.obtenerViajesPorIds(request.getParameter("idsViaje")));
         request.setAttribute("viajesList", viajeDAO.obtenerViajesPorIds(request.getParameter("idsViaje")));
         request.getRequestDispatcher("/View/reservarAsiento.jsp").forward(request, response);
 
@@ -79,14 +84,42 @@ public class ReservaController extends HttpServlet {
     private void guardarReserva(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String[] viajesIdsSeleccionados = request.getParameterValues("idsViajesSeleccionados");
-        Estudiante estudiante = estudianteDAO.obtenerEstudiantePorId(202110777);
+        HttpSession session = request.getSession();
+        List<Viaje> viajesList = (List<Viaje>) session.getAttribute("viajesList");
+        if (viajesIdsSeleccionados == null || viajesIdsSeleccionados.length == 0) {
+            request.setAttribute("error", "Debe seleccionar al menos un viaje para realizar la reserva.");
+            request.setAttribute("viajesList", viajesList);
+            request.getRequestDispatcher("/View/reservarAsiento.jsp").forward(request, response);
+
+            return;
+        }
+
+        Integer estudianteId = (Integer) session.getAttribute("usuarioId");
+        Estudiante estudiante = estudianteDAO.obtenerEstudiantePorId(estudianteId);
         List<Viaje> listaViajes = viajeDAO.obtenerListaDeViajes(viajesIdsSeleccionados);
+        for (Viaje viaje : listaViajes) {
+            if (reservaDAO.existeReserva(estudiante.getId(), viaje.getId())) {
+                java.sql.Date sqlDate = viaje.getFecha();
+                LocalDate localDate = sqlDate.toLocalDate();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", new Locale("es", "ES"));
+                String dia = localDate.format(formatter);
+                request.setAttribute("error", "Ya tiene una reserva para el viaje para el dia " + dia  + ". No puede reservar el mismo viaje más de una vez.");
+                request.setAttribute("viajesList", viajesList);
+                request.getRequestDispatcher("/View/reservarAsiento.jsp").forward(request, response);
+
+                return;
+            }
+        }
         reservaDAO.guardarVariasReservas(listaViajes, estudiante);
-        response.sendRedirect(request.getContextPath() + "/View/listarViajes.jsp");
+        request.setAttribute("successMessage", "Reserva realizada con éxito.");
+        request.getRequestDispatcher("/View/listarViajes.jsp").forward(request, response);
+
     }
 
     private void verReservasDia(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("reservas", reservaDAO.obtenerReservasPorDia(Integer.parseInt(request.getParameter("dia"))));
+        HttpSession session = request.getSession();
+        Estudiante estudiante = (Estudiante) session.getAttribute("usuario");
+        request.setAttribute("reservas", reservaDAO.obtenerReservasPorDia(Integer.parseInt(request.getParameter("dia")),estudiante));
         request.getRequestDispatcher("/View/consultarReservas.jsp").forward(request, response);
     }
 

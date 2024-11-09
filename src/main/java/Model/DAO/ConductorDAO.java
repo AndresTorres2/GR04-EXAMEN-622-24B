@@ -2,6 +2,7 @@ package Model.DAO;
 
 import Model.Entity.Conductor;
 import Model.Entity.Usuario;
+import jakarta.persistence.PersistenceException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +50,16 @@ public class ConductorDAO extends GenericDAO{
             beginTransaction();
                 em.remove(obtenerConductorDb(idConductor));
             commitTransaction();
-        } catch (Exception e) {
+        }catch (PersistenceException e) {
+
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("No se puede eliminar el conductor porque hay viajes asociados a este conductor. " +
+                    "Si desea eliminar al conductor, debe eliminar los viajes asociados a ese conductor");
+
+        }
+        catch (Exception e) {
             rollbackTransaction();
             System.out.println("No se encontró la ruta con ID: " + idConductor);
             e.printStackTrace();

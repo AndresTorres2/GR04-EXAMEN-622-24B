@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="10" failures="0" name="Prueba1B2024B.ReservaDAOTest" time="3.151" errors="0" skipped="0">
+<testsuite tests="10" failures="0" name="Prueba1B2024B.ReservaDAOTest" time="3.598" errors="0" skipped="0">
   <properties>
     <property name="idea.version" value="2024.2.3"/>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
@@ -64,14 +64,14 @@
     <property name="intellij.os.virtualization" value="none"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_NonExistentReserva_when_Delete_then_ExceptionIsThrown" time="0.404"/>
-  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_Reserva_when_Delete_then_ReservaIsDeletedSuccessfully" time="0.416"/>
-  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_Viaje_when_CheckIfNotEmpty_then_ReturnsFalseIfHasReservations" time="0.409"/>
-  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_Reservas_when_ReadAll_then_AllReservasAreReturned" time="0.369"/>
-  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_Reserva_when_Create_then_ReservaIsCreatedSuccessfully" time="0.298"/>
-  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_ExistingId_when_GetById_then_ReservaIsReturned" time="0.251"/>
-  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_Viaje_when_CheckIfEmpty_then_ReturnsTrueIfNoReservations" time="0.324"/>
-  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_ReadError_when_ReadAll_then_ExceptionIsThrown" time="0.279"/>
-  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_Viaje_when_ListPassengers_then_ReturnsCorrectPassengers" time="0.201"/>
-  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_Viaje_when_ListPassengersOnEmptyViaje_then_ReturnsEmptyList" time="0.2"/>
+  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_NonExistentReserva_when_Delete_then_ExceptionIsThrown" time="0.379"/>
+  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_Reserva_when_Delete_then_ReservaIsDeletedSuccessfully" time="0.425"/>
+  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_Viaje_when_CheckIfNotEmpty_then_ReturnsFalseIfHasReservations" time="0.342"/>
+  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_Reservas_when_ReadAll_then_AllReservasAreReturned" time="0.381"/>
+  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_Reserva_when_Create_then_ReservaIsCreatedSuccessfully" time="0.306"/>
+  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_ExistingId_when_GetById_then_ReservaIsReturned" time="0.311"/>
+  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_Viaje_when_CheckIfEmpty_then_ReturnsTrueIfNoReservations" time="0.311"/>
+  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_ReadError_when_ReadAll_then_ExceptionIsThrown" time="0.452"/>
+  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_Viaje_when_ListPassengers_then_ReturnsCorrectPassengers" time="0.355"/>
+  <testcase classname="Prueba1B2024B.ReservaDAOTest" name="given_Viaje_when_ListPassengersOnEmptyViaje_then_ReturnsEmptyList" time="0.336"/>
 </testsuite>

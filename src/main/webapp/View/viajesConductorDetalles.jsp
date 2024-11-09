@@ -76,7 +76,9 @@
         <a href="${pageContext.request.contextPath}/GestionServlet?action=notificarPasajeros&viajeId=${viaje.id}">Notificar Pasajeros</a>
         <a href="${pageContext.request.contextPath}/ViajeServlet?ruta=verPasajeros&viajeId=${viaje.id}">Ver listado de Pasajeros</a>
     </div>
+
 </div>
+<a href="javascript:history.back();" class="menu-item">Regresar</a>
 <script>
     function iniciarCompartirUbicacion(viajeId) {
         if (navigator.geolocation) {

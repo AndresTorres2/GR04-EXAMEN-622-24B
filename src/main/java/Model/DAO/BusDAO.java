@@ -3,6 +3,7 @@ package Model.DAO;
 import Model.Entity.Bus;
 import Model.Entity.Conductor;
 import Model.Entity.Ruta;
+import jakarta.persistence.PersistenceException;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -90,7 +91,16 @@ public class BusDAO extends GenericDAO {
                 em.remove(bus);
                 commitTransaction();
             }
-        } catch (Exception e) {
+        }catch (PersistenceException e) {
+
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("No se puede eliminar el bus porque hay viajes asociados a esa bus. " +
+                    "Si desea eliminar este bus, debe eliminar los viajes asociados a ese bus");
+
+        }
+        catch (Exception e) {
             rollbackTransaction();
             e.printStackTrace();
         }

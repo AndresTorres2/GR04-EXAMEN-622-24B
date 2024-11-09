@@ -70,6 +70,11 @@
     </style>
 </head>
 <body>
+<c:if test="${not empty successMessage}">
+    <script type="text/javascript">
+        alert('${successMessage}');
+    </script>
+</c:if>
 <div style="display: flex; justify-content: space-between">
     <svg width="182" height="100" fill="#c5c5c5" xmlns="http://www.w3.org/2000/svg">
         <g xmlns="http://www.w3.org/2000/svg">
@@ -402,7 +407,11 @@
             </g>
         </g>
     </svg>
-    <a style="margin: 2rem 0"  href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=consultarReservas">Consultar Reservas</a>
+    <div>
+        <a style="margin: 2rem 0"  href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=consultarReservas">Consultar Reservas</a>
+        <a style="margin: 2rem 0"  href="${pageContext.request.contextPath}/GestionServlet?action=cerrarSesion">Cerrar Sesión</a>
+    </div>
+
 </div>
     <div style="display: flex; justify-content: space-between">
         <h1 class="header">

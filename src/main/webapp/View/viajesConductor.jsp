@@ -88,7 +88,9 @@
             </a>
 
         </div>
+
     </c:forEach>
 </div>
+<a href="javascript:history.back();" class="menu-item">Regresar</a>
 </body>
 </html>
