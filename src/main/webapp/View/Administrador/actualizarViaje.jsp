@@ -53,7 +53,7 @@
     <input type="submit" value="Actualizar Viaje" />
 </form>
 
-<a href="${pageContext.request.contextPath}/View/gestionViaje.jsp">Volver a la lista de viajes</a>
+<a href="${pageContext.request.contextPath}/View/Administrador/gestionViaje.jsp">Volver a la lista de viajes</a>
 
 </body>
 </html>

@@ -73,7 +73,7 @@
 <h1>Gestión de Reservas</h1>
 
 <div style="display: flex; margin: 1.5rem 0; justify-content: space-between">
-  <a href="${pageContext.request.contextPath}/View/dashboardAdmin.jsp">Volver al Dashboard</a>
+  <a href="${pageContext.request.contextPath}/View/Administrador/dashboardAdmin.jsp">Volver al Dashboard</a>
   <a href="${pageContext.request.contextPath}/GestionServlet?action=nuevaReserva">Agregar nueva reserva</a>
 </div>
 

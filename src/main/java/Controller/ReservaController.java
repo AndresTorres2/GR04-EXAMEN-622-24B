@@ -76,7 +76,7 @@ public class ReservaController extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute("viajesList", viajeDAO.obtenerViajesPorIds(request.getParameter("idsViaje")));
         request.setAttribute("viajesList", viajeDAO.obtenerViajesPorIds(request.getParameter("idsViaje")));
-        request.getRequestDispatcher("/View/reservarAsiento.jsp").forward(request, response);
+        request.getRequestDispatcher("/View/Estudiante/reservarAsiento.jsp").forward(request, response);
 
 
     }
@@ -89,7 +89,7 @@ public class ReservaController extends HttpServlet {
         if (viajesIdsSeleccionados == null || viajesIdsSeleccionados.length == 0) {
             request.setAttribute("error", "Debe seleccionar al menos un viaje para realizar la reserva.");
             request.setAttribute("viajesList", viajesList);
-            request.getRequestDispatcher("/View/reservarAsiento.jsp").forward(request, response);
+            request.getRequestDispatcher("/View/Estudiante/reservarAsiento.jsp").forward(request, response);
 
             return;
         }
@@ -105,14 +105,14 @@ public class ReservaController extends HttpServlet {
                 String dia = localDate.format(formatter);
                 request.setAttribute("error", "Ya tiene una reserva para el viaje para el dia " + dia  + ". No puede reservar el mismo viaje más de una vez.");
                 request.setAttribute("viajesList", viajesList);
-                request.getRequestDispatcher("/View/reservarAsiento.jsp").forward(request, response);
+                request.getRequestDispatcher("/View/Estudiante/reservarAsiento.jsp").forward(request, response);
 
                 return;
             }
         }
         reservaDAO.guardarVariasReservas(listaViajes, estudiante);
         request.setAttribute("successMessage", "Reserva realizada con éxito.");
-        request.getRequestDispatcher("/View/listarViajes.jsp").forward(request, response);
+        request.getRequestDispatcher("/View/Estudiante/listarViajes.jsp").forward(request, response);
 
     }
 
@@ -120,12 +120,12 @@ public class ReservaController extends HttpServlet {
         HttpSession session = request.getSession();
         Estudiante estudiante = (Estudiante) session.getAttribute("usuario");
         request.setAttribute("reservas", reservaDAO.obtenerReservasPorDia(Integer.parseInt(request.getParameter("dia")),estudiante));
-        request.getRequestDispatcher("/View/consultarReservas.jsp").forward(request, response);
+        request.getRequestDispatcher("/View/Estudiante/consultarReservas.jsp").forward(request, response);
     }
 
     private void consultarReservas(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        request.getRequestDispatcher("/View/consultarReservas.jsp").forward(request, response);
+        request.getRequestDispatcher("/View/Estudiante/consultarReservas.jsp").forward(request, response);
 
     }
 
@@ -140,7 +140,7 @@ public class ReservaController extends HttpServlet {
             request.setAttribute("origen", callesYCoordenadas.get(0)); // Primera calle
             request.setAttribute("destino", callesYCoordenadas.get(callesYCoordenadas.size() - 1)); // Última calle
         }
-        request.getRequestDispatcher("/View/detallesReserva.jsp").forward(request, response);
+        request.getRequestDispatcher("/View/Estudiante/detallesReserva.jsp").forward(request, response);
 
     }
 

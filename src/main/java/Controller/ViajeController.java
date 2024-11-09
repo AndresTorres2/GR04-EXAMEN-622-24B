@@ -31,7 +31,7 @@ public class ViajeController extends HttpServlet {
     public void listarViajes(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("viajes", viajeDAO.listarViajesPorJornada(req.getParameter("jornada")));
 
-        RequestDispatcher dispatcher = req.getRequestDispatcher("View/listarViajes.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("View/Estudiante/listarViajes.jsp");
         dispatcher.forward(req, resp);
     }
 
@@ -45,7 +45,7 @@ public class ViajeController extends HttpServlet {
         req.setAttribute("callesYCoordenadas", callesYCoordenadas);
 
         setOrigenYDestino(req,callesYCoordenadas);
-        RequestDispatcher dispatcher = req.getRequestDispatcher("View/detallesViaje.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("View/Estudiante/detallesViaje.jsp");
         dispatcher.forward(req, resp);
 
 
@@ -97,7 +97,7 @@ public class ViajeController extends HttpServlet {
         req.setAttribute("isVacio", isVacio);
         req.setAttribute("viaje", viaje);
 
-        RequestDispatcher dispatcher = req.getRequestDispatcher("View/detallesViaje.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("View/Estudiante/detallesViaje.jsp");
         dispatcher.forward(req, resp);
     }
 
@@ -108,7 +108,7 @@ public class ViajeController extends HttpServlet {
         List<Estudiante> pasajeros = reservaDAO.listarPasajerosPorViajeOrdenado(viaje);
         req.setAttribute("pasajeros", pasajeros);
         req.setAttribute("viaje", viaje);
-        RequestDispatcher dispatcher = req.getRequestDispatcher("View/listaPasajeros.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("View/Conductor/listaPasajeros.jsp");
         dispatcher.forward(req, resp);
     }
 

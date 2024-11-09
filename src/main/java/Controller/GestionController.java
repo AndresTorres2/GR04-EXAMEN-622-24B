@@ -259,14 +259,14 @@ public class GestionController extends HttpServlet {
             session.setAttribute("usuarioId", usuario.getId());
             session.setAttribute("tipoUsuario", tipoUsuario);
             if ("U_Administrador".equals(tipoUsuario)) {
-                resp.sendRedirect(req.getContextPath() + "/View/dashboardAdmin.jsp");
+                resp.sendRedirect(req.getContextPath() + "/View/Administrador/dashboardAdmin.jsp");
             } else if ("U_Estudiante".equals(tipoUsuario)) {
                 session.setAttribute("estudiante", usuario);
-                resp.sendRedirect(req.getContextPath() + "/View/listarViajes.jsp");
+                resp.sendRedirect(req.getContextPath() + "/View/Estudiante/listarViajes.jsp");
             } else if ("U_Conductor".equals(tipoUsuario)) {
                 Usuario conductor = usuarioDAO.buscarUsuarioPorEmail(email);
                 req.setAttribute("conductor", conductor);
-                req.getRequestDispatcher("/View/dashboardConductor.jsp").forward(req,resp);
+                req.getRequestDispatcher("/View/Conductor/dashboardConductor.jsp").forward(req,resp);
             }
         } else {
             req.setAttribute("error", "Credenciales inválidas.");
@@ -277,18 +277,18 @@ public class GestionController extends HttpServlet {
 
 
     public void mostrarDashboardAdmin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/dashboardAdmin.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/dashboardAdmin.jsp");
         dispatcher.forward(req, resp);
     }
     public void consultarViajesDelConductor(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
             req.setAttribute("viajes",viajeDAO.obtenerListaDeViajesPorConductor(Integer.parseInt(req.getParameter("conductorId"))));
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/viajesConductor.jsp");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Conductor/viajesConductor.jsp");
             dispatcher.forward(req, resp);
     }
 
     public void consultarViajesDetallesConductor(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("viaje",viajeDAO.obtenerViajePorCodigo(Integer.parseInt(req.getParameter("viajeId"))));
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/viajesConductorDetalles.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Conductor/viajesConductorDetalles.jsp");
         dispatcher.forward(req, resp);
 
     }
@@ -296,19 +296,19 @@ public class GestionController extends HttpServlet {
     public void gestionarRutas(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         req.setAttribute("rutas", rutaDAO.obtenerTodasLasRutas());
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionRutas.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionRutas.jsp");
         dispatcher.forward(req, resp);
     }
     public void gestionarReservas(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("reservas", reservaDAO.obtenerTodasLasReservas());
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionReservas.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionReservas.jsp");
         dispatcher.forward(req, resp);
     }
     public void cancelarReservas(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         reservaDAO.cancelarReserva(Integer.parseInt(req.getParameter("reservaId")),
                 reservaDAO.obtenerReservaPorId(Integer.parseInt(req.getParameter("reservaId"))).getViaje());
         req.setAttribute("reservas", reservaDAO.obtenerTodasLasReservas());
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionReservas.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionReservas.jsp");
         dispatcher.forward(req, resp);
     }
     public void crearReserva(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -321,18 +321,18 @@ public class GestionController extends HttpServlet {
             reservaDAO.guardarReserva(reserva,viaje);
         req.setAttribute("mensaje", "Reserva realizada exitosamente.");
         req.setAttribute("reservas", reservaDAO.obtenerTodasLasReservas());
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionReservas.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionReservas.jsp");
         dispatcher.forward(req, resp);
     }
     public void formNuevaReserva(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("estudiantes",estudianteDAO.obtenerEstudiantes());
         req.setAttribute("viajes", viajeDAO.obtenerTodosLosViajes());
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/registrarReserva.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/registrarReserva.jsp");
         dispatcher.forward(req, resp);
     }
     public void mostrarFormRuta(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("calles", calleDAO.obtenerTodasLasCalles());
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/registrarRuta.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/registrarRuta.jsp");
         dispatcher.forward(req, resp);
     }
     public void guardarRuta(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -343,7 +343,7 @@ public class GestionController extends HttpServlet {
         Ruta nuevaRuta = new Ruta(0,origen,destino,callesSeleccionadas);
         rutaDAO.guardarRutaDb(nuevaRuta);
         req.setAttribute("rutas", rutaDAO.obtenerTodasLasRutas());
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionRutas.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionRutas.jsp");
         dispatcher.forward(req, resp);
 
     }
@@ -352,12 +352,12 @@ public class GestionController extends HttpServlet {
        try{
            rutaDAO.eliminarRutaDb(Integer.parseInt(req.getParameter("rutaId")));
            req.setAttribute("rutas", rutaDAO.obtenerTodasLasRutas());
-           RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionRutas.jsp");
+           RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionRutas.jsp");
            dispatcher.forward(req, resp);
        }catch (Exception e){
            req.setAttribute("errorMessage", e.getMessage());
            req.setAttribute("rutas", rutaDAO.obtenerTodasLasRutas());
-           RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionRutas.jsp");
+           RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionRutas.jsp");
            dispatcher.forward(req, resp);
        }
 
@@ -367,7 +367,7 @@ public class GestionController extends HttpServlet {
         int rutaId = Integer.parseInt(req.getParameter("rutaId"));
         Ruta ruta = rutaDAO.obtenerRutaId(rutaId);
         req.setAttribute("ruta", ruta);
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/actualizarRuta.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/actualizarRuta.jsp");
         dispatcher.forward(req, resp);
     }
     public void actualizarRuta(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -382,7 +382,7 @@ public class GestionController extends HttpServlet {
         ruta.setCalles(callesSeleccionadas);
         rutaDAO.actualizarRutaDb(ruta);
         req.setAttribute("rutas", rutaDAO.obtenerTodasLasRutas());
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionRutas.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionRutas.jsp");
         dispatcher.forward(req, resp);
 
     }
@@ -390,7 +390,7 @@ public class GestionController extends HttpServlet {
     // Métodos para gestionar viajes
     public void gestionarViajes(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("viajes", viajeDAO.obtenerTodosLosViajes()); // Obtener todos los viajes
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionViaje.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionViaje.jsp");
         dispatcher.forward(req, resp);
     }
 
@@ -398,7 +398,7 @@ public class GestionController extends HttpServlet {
         req.setAttribute("buses", busDAO.obtenerTodosLosBuses());
         req.setAttribute("rutas", rutaDAO.obtenerTodasLasRutas());
         req.setAttribute("conductores", conductorDAO.obtenerConductores());
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/registrarViaje.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/registrarViaje.jsp");
         dispatcher.forward(req, resp);
     }
 
@@ -447,12 +447,12 @@ public class GestionController extends HttpServlet {
         try {
             viajeDAO.eliminarViajeEnDB(Integer.parseInt(req.getParameter("viajeId")));
             req.setAttribute("viajes", viajeDAO.obtenerTodosLosViajes());
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionViaje.jsp");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionViaje.jsp");
             dispatcher.forward(req, resp);
         }catch (Exception e){
             req.setAttribute("errorMessage", e.getMessage());
             req.setAttribute("viajes", viajeDAO.obtenerTodosLosViajes());
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionViaje.jsp");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionViaje.jsp");
             dispatcher.forward(req, resp);
 
         }
@@ -469,7 +469,7 @@ public class GestionController extends HttpServlet {
         req.setAttribute("rutas", rutaDAO.obtenerTodasLasRutas());
         req.setAttribute("conductores", conductorDAO.obtenerConductores());
 
-        forward(req, resp, "/View/actualizarViaje.jsp");
+        forward(req, resp, "/View/Administrador/actualizarViaje.jsp");
     }
 
     private void actualizarViaje(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -528,7 +528,7 @@ public class GestionController extends HttpServlet {
     private void mostrarConductores(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 
         req.setAttribute("conductores", conductorDAO.obtenerConductores() );
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionConductor.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionConductor.jsp");
         dispatcher.forward(req, resp);
     }
 
@@ -537,19 +537,19 @@ public class GestionController extends HttpServlet {
             String conductorId = (req.getParameter("conductorId"));
             conductorDAO.eliminarConductorDb(conductorId);
             req.setAttribute("conductores", conductorDAO.obtenerConductores() );
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionConductor.jsp");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionConductor.jsp");
             dispatcher.forward(req, resp);
         } catch (Exception e) {
             req.setAttribute("errorMessage", e.getMessage());
             req.setAttribute("conductores", conductorDAO.obtenerConductores() );
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionConductor.jsp");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionConductor.jsp");
             dispatcher.forward(req, resp);
         }
 
 
     }
     public void mostrarFormConductor(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/registrarConductor.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/registrarConductor.jsp");
         dispatcher.forward(req, resp);
     }
     public void guardarConductor(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
@@ -561,13 +561,13 @@ public class GestionController extends HttpServlet {
         Conductor nuevoConductor = new Conductor(0, nombre, apellido, email, telefono, contrasena);
         conductorDAO.guardarConductorDb(nuevoConductor);
         req.setAttribute("conductores", conductorDAO.obtenerConductores() );
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionConductor.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionConductor.jsp");
         dispatcher.forward(req, resp);
     }
 
     private void mostrarBuses(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         req.setAttribute("buses", busDAO.obtenerTodosLosBuses() );
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionBuses.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionBuses.jsp");
         dispatcher.forward(req, resp);
     }
 
@@ -575,13 +575,13 @@ public class GestionController extends HttpServlet {
         try{
             busDAO.eliminarBusEnDB(req.getParameter("busId"));
             req.setAttribute("buses", busDAO.obtenerTodosLosBuses() );
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionBuses.jsp");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionBuses.jsp");
             dispatcher.forward(req,resp);
         }
         catch (Exception e){
             req.setAttribute("errorMessage", e.getMessage());
             req.setAttribute("buses", busDAO.obtenerTodosLosBuses() );
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionBuses.jsp");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionBuses.jsp");
             dispatcher.forward(req,resp);
         }
 
@@ -603,7 +603,7 @@ public class GestionController extends HttpServlet {
     private void mostrarFormBus(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         List<Usuario> conductores = conductorDAO.obtenerConductores();
         req.setAttribute("conductores", conductores );
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/registrarBus.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/registrarBus.jsp");
         dispatcher.forward(req, resp);
     }
     public void guardarBus(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
@@ -612,7 +612,7 @@ public class GestionController extends HttpServlet {
         Bus nuevoBus = new Bus(busIdStr,capacidad);
         busDAO.crearBusEnDB(nuevoBus);
         req.setAttribute("buses", busDAO.obtenerTodosLosBuses() );
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionBuses.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionBuses.jsp");
         dispatcher.forward(req,resp);
 
     }
@@ -621,7 +621,7 @@ public class GestionController extends HttpServlet {
 
         req.setAttribute("bus", busDAO.obtenerBusPorId(busIdStr));
         req.setAttribute("conductores", conductorDAO.obtenerConductores());
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/actualizarBus.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/actualizarBus.jsp");
         dispatcher.forward(req,resp);
     }
     public void actualizarBus(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
@@ -631,7 +631,7 @@ public class GestionController extends HttpServlet {
         bus.setCapacidad(capacidad);
         busDAO.actualizarBusDb(bus);
         req.setAttribute("buses", busDAO.obtenerTodosLosBuses() );
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionBuses.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionBuses.jsp");
         dispatcher.forward(req,resp);
     }
 

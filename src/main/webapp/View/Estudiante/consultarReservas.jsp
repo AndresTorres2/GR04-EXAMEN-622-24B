@@ -99,7 +99,7 @@
       </a>
     </div>
   </c:forEach>
-  <a href="${pageContext.request.contextPath}/View/listarViajes.jsp" class="botton">Regresar a la lista de viajes</a>
+  <a href="${pageContext.request.contextPath}/View/Estudiante/listarViajes.jsp" class="botton">Regresar a la lista de viajes</a>
 </div>
 </body>
 </html>
