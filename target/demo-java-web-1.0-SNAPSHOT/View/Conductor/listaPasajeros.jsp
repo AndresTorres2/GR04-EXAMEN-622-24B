@@ -110,7 +110,7 @@
     </c:if>
 
     <div class="button-group">
-        <a href="${pageContext.request.contextPath}/GestionServlet?action=consultarViajesConductor&conductorId=${viaje.conductor.id}">Volver a Mis Viajes</a>
+        <a href="javascript:history.back();" class="menu-item">Regresar</a>
     </div>
 
 </div>

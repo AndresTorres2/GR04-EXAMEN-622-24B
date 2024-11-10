@@ -16,6 +16,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "GestionServlet", value = "/GestionServlet")
 public class GestionController extends HttpServlet {
@@ -366,7 +367,12 @@ public class GestionController extends HttpServlet {
     public void mostrarFormActualizarRuta(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int rutaId = Integer.parseInt(req.getParameter("rutaId"));
         Ruta ruta = rutaDAO.obtenerRutaId(rutaId);
+        List<Integer> selectedCalleIds = ruta.getCalles().stream()
+                .map(Calle::getId)
+                .collect(Collectors.toList());
         req.setAttribute("ruta", ruta);
+        req.setAttribute("allCalles", calleDAO.obtenerTodasLasCalles());
+        req.setAttribute("selectedCalleIds", selectedCalleIds);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/actualizarRuta.jsp");
         dispatcher.forward(req, resp);
     }
@@ -586,19 +592,6 @@ public class GestionController extends HttpServlet {
         }
 
 
-        /*try {
-            viajeDAO.eliminarViajeEnDB(Integer.parseInt(req.getParameter("viajeId")));
-            req.setAttribute("viajes", viajeDAO.obtenerTodosLosViajes());
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionViaje.jsp");
-            dispatcher.forward(req, resp);
-        }catch (Exception e){
-            req.setAttribute("errorMessage", e.getMessage());
-            req.setAttribute("viajes", viajeDAO.obtenerTodosLosViajes());
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/gestionViaje.jsp");
-            dispatcher.forward(req, resp);
-
-        }*/
-
     }
     private void mostrarFormBus(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         List<Usuario> conductores = conductorDAO.obtenerConductores();
@@ -609,11 +602,19 @@ public class GestionController extends HttpServlet {
     public void guardarBus(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         String busIdStr = req.getParameter("busId");
         int capacidad = Integer.parseInt(req.getParameter("capacidad"));
-        Bus nuevoBus = new Bus(busIdStr,capacidad);
-        busDAO.crearBusEnDB(nuevoBus);
-        req.setAttribute("buses", busDAO.obtenerTodosLosBuses() );
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionBuses.jsp");
-        dispatcher.forward(req,resp);
+        try{
+            Bus nuevoBus = new Bus(busIdStr,capacidad);
+            busDAO.crearBusEnDB(nuevoBus);
+            req.setAttribute("buses", busDAO.obtenerTodosLosBuses() );
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionBuses.jsp");
+            dispatcher.forward(req,resp);
+        } catch (Exception e) {
+            req.setAttribute("errorMessage", e.getMessage());
+            req.setAttribute("buses", busDAO.obtenerTodosLosBuses() );
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionBuses.jsp");
+            dispatcher.forward(req,resp);
+        }
+
 
     }
     public void mostrarFormActualizarBus(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{

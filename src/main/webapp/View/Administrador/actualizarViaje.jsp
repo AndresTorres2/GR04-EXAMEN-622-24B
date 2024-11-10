@@ -37,23 +37,25 @@
     <label for="jornada">Jornada:</label>
     <select name="jornada" id="jornada" required>
         <option value="">Seleccione una jornada</option>
-        <option value="Matutina">Matutina</option>
-        <option value="Vespertina">Vespertina</option>
-    </select>
+        <option value="Matutina" ${viaje.jornada == 'matutina' ? 'selected' : ''}>matutina</option>
+        <option value="Vespertina" ${viaje.jornada == 'vespertino' ? 'selected' : ''}>vespertino</option>
+    </select><br>
     <br>
 
     <label for="conductor">Conductor:</label><br/>
     <select id="conductor" name="conductorId" required>
         <option value="">Selecciona un conductor</option>
         <c:forEach var="conductor" items="${conductores}">
-            <option value="${conductor.id}">${conductor.nombre} ${conductor.apellido}</option>
+            <option value="${conductor.id}" ${conductor.id == viaje.conductor.id ? 'selected' : ''}>
+                    ${conductor.nombre} ${conductor.apellido}
+            </option>
         </c:forEach>
     </select><br/><br/>
 
     <input type="submit" value="Actualizar Viaje" />
 </form>
 
-<a href="${pageContext.request.contextPath}/View/Administrador/gestionViaje.jsp">Volver a la lista de viajes</a>
+<a href="${pageContext.request.contextPath}/GestionServlet?action=gestionViajes">Volver a la lista de viajes</a>
 
 </body>
 </html>

@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
-    <title>Gestión de Conductores</title>
+    <title>Gestión de Rutas</title>
     <style>
         body {
             background: #100f0f;
@@ -26,9 +26,10 @@
             background-color: #71a8df;
         }
         table{
-            width: 100%;
             border-collapse: collapse;
             margin-bottom: 1.5rem;
+            width: 100%;
+
         }
 
         th, td, tr{
@@ -44,35 +45,40 @@
         alert("${errorMessage}");
     </script>
 </c:if>
-<h1>Gestión de Conductores</h1>
+<h1>Gestión de Rutas</h1>
 <div style="display: flex; margin: 1.5rem 0; justify-content: space-between">
-    <a href="${pageContext.request.contextPath}/View/dashboardAdmin.jsp">Volver al Dashboard</a>
-    <a href="${pageContext.request.contextPath}/GestionServlet?action=nuevoConductor">Agregar nuevo conductor</a>
+    <a href="${pageContext.request.contextPath}/View/Administrador/dashboardAdmin.jsp">Volver al Dashboard</a>
+    <a href="${pageContext.request.contextPath}/GestionServlet?action=nuevaRuta">Agregar nueva ruta</a>
 </div>
-<table>
+<table >
     <thead>
     <tr>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Email</th>
-        <th>Teléfono</th>
-        <th>Acciones</th>
+        <th>Origen</th>
+        <th>Destino</th>
+        <th>Recorrido</th>
+        <th></th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="conductor" items="${conductores}">
+    <c:forEach var="ruta" items="${rutas}">
         <tr>
-            <td>${conductor.nombre}</td>
-            <td>${conductor.apellido}</td>
-            <td>${conductor.email}</td>
-            <td>${conductor.phone}</td>
+            <td>${ruta.origen}</td>
+            <td>${ruta.destino}</td>
             <td>
-                <a href="${pageContext.request.contextPath}/GestionServlet?action=eliminarConductor&conductorId=${conductor.id}" onclick="return confirm('¿Estás seguro de que deseas eliminar este conductor?');">Eliminar</a>
+                <c:forEach var="calle" items="${ruta.calles}" varStatus="status">
+                    ${calle.nombre}<c:if test="${!status.last}">, </c:if>
+                </c:forEach>
+            </td>
+            <td>
+                <a href="${pageContext.request.contextPath}/GestionServlet?action=formActualizarRuta&rutaId=${ruta.id}">Actualizar</a>
+            </td>
+            <td>
+                <a href="${pageContext.request.contextPath}/GestionServlet?action=eliminarRuta&rutaId=${ruta.id}" onclick="return confirm('¿Estás seguro de que deseas eliminar esta ruta?');">Eliminar</a>
             </td>
         </tr>
     </c:forEach>
     </tbody>
 </table>
-
 </body>
 </html>

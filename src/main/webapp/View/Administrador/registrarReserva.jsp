@@ -67,7 +67,7 @@
 
 
 <div style="margin-bottom: 2rem;">
-    <a href="${pageContext.request.contextPath}/View/Administrador/gestionReservas.jsp">Volver al Gestion de Reservas</a>
+    <a href="${pageContext.request.contextPath}/GestionServlet?action=gestionReservas">Volver al Gestion de Reservas</a>
 </div>
 
 <form action="${pageContext.request.contextPath}/GestionServlet?action=crearReserva" method="post">

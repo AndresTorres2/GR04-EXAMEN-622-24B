@@ -19,10 +19,10 @@
   <input type="text" id="destino" name="destino" value="${ruta.destino}" required /><br/><br/>
 
   <label for="calles">Selecciona Calles:</label><br/>
-  <select name="calles" id="calles" multiple>
-    <c:forEach var="calle" items="${ruta.calles}">
+  <select name="calles" id="calles" multiple required>
+    <c:forEach var="calle" items="${allCalles}">
       <option value="${calle.id}"
-      <c:if test="${fn:contains(ruta.calles, calle)}">selected</c:if>
+              <c:if test="${selectedCalleIds.contains(calle.id)}">selected</c:if>
       >${calle.nombre}</option>
     </c:forEach>
   </select>
@@ -30,7 +30,7 @@
 
   <input type="submit" value="Actualizar Ruta" />
 </form>
-
+<a class="" href="${pageContext.request.contextPath}/GestionServlet?action=gestionRutas">Volver a la lista de Rutas</a>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script>

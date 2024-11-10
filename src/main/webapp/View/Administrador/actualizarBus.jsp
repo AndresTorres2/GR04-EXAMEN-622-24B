@@ -3,6 +3,11 @@
 <html>
 <head>
   <title>Actualizar Bus</title>
+    <script>
+        function validateInput(input) {
+            input.value = input.value.replace(/[^0-9]/g, '');
+        }
+    </script>
 </head>
 <body>
 <h1>Actualizar Bus</h1>
@@ -15,7 +20,7 @@
   <input type="text" id="busIdDisplay" name="busIdDisplay" value="${bus.busId}" disabled/><br/><br/>
 
   <label for="capacidad">Capacidad:</label><br/>
-  <input type="number" id="capacidad" name="capacidad" value="${bus.capacidad}" required/><br/><br/>
+  <input type="number" id="capacidad" name="capacidad" value="${bus.capacidad}" required oninput="validateInput(this)"/><br/><br/>
 
  <br/><br/>
 

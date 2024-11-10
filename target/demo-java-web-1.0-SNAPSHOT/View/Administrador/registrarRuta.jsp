@@ -15,7 +15,7 @@
   <input type="text" id="destino" name="destino" required /><br/><br/>
 
   <label for="calles">Selecciona Calles:</label><br/>
-  <select name="calles" id="calles" multiple>
+  <select name="calles" id="calles" multiple required>
     <c:forEach var="calle" items="${calles}">
       <option value="${calle.id}">${calle.nombre}</option>
     </c:forEach>
@@ -25,6 +25,8 @@
 
   <input type="submit" value="Crear Ruta" />
 </form>
+
+<a class="" href="${pageContext.request.contextPath}/GestionServlet?action=gestionRutas">Volver a la lista de Rutas</a>
 
 <!-- Incluye jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

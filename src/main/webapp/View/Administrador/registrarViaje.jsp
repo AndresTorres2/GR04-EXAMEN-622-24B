@@ -45,5 +45,6 @@
 
     <button type="submit">Agregar Viaje</button>
 </form>
+<a href="${pageContext.request.contextPath}/GestionServlet?action=gestionViajes">Volver a la lista de viajes</a>
 </body>
 </html>
