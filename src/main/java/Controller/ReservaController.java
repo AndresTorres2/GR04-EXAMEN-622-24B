@@ -2,6 +2,7 @@ package Controller;
 
 import Model.DAO.*;
 import Model.Entity.*;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -26,11 +27,12 @@ public class ReservaController extends HttpServlet {
     private EstudianteDAO estudianteDAO;
     private ViajeDAO viajeDAO;
     private CalleDAO calleDAO;
+    private  EmailDAO emailDAO;
     HttpSession session;
 
     public void init() {
         reservaDAO = new ReservaDAO();
-
+        emailDAO = new EmailDAO();
         estudianteDAO = new EstudianteDAO();
         viajeDAO = new ViajeDAO();
         calleDAO = new CalleDAO();
@@ -111,6 +113,7 @@ public class ReservaController extends HttpServlet {
             }
         }
         reservaDAO.guardarVariasReservas(listaViajes, estudiante);
+        notificarReserva(request, response, listaViajes, estudiante);
         request.setAttribute("successMessage", "Reserva realizada con éxito.");
         request.getRequestDispatcher("/View/Estudiante/listarViajes.jsp").forward(request, response);
 
@@ -151,4 +154,44 @@ public class ReservaController extends HttpServlet {
 
     }
 
+
+
+    private void notificarReserva(HttpServletRequest req, HttpServletResponse resp, List<Viaje> listaViajes, Estudiante estudiante) {
+        try {
+            // Construir el mensaje
+            StringBuilder mensaje = new StringBuilder();
+            mensaje.append("Estimado/a ").append(estudiante.getNombre()).append(",\n\n");
+            mensaje.append("Le confirmamos que ha realizado la reserva de los siguientes viajes:\n\n");
+
+
+            for (Viaje viaje : listaViajes) {
+                java.sql.Date sqlDate = viaje.getFecha();
+                LocalDate localDate = sqlDate.toLocalDate();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", new Locale("es", "ES"));
+                String dia = localDate.format(formatter);
+
+                mensaje.append("- Viaje: ").append(viaje.getRuta().getOrigen()).append(" ➔ ").append(viaje.getRuta().getDestino()).append("\n");
+                mensaje.append("  Fecha: ").append(viaje.getFecha()).append(" (").append(dia).append(")\n");
+                mensaje.append("  Hora de salida: ").append(viaje.getHoraDeSalida()).append("\n\n");
+            }
+
+            mensaje.append("Por favor, asegúrese de estar puntual y listo para abordar. ¡Gracias por elegir Polibus!\n\n");
+            mensaje.append("Atentamente,\n");
+            mensaje.append("El equipo de Polibus");
+
+
+            emailDAO.enviarCorreo(estudiante.getEmail(), "Confirmación de Reserva - Polibus", mensaje.toString());
+
+        } catch (MessagingException e) {
+            // Manejar la excepción de correo
+            e.printStackTrace();  // Puedes registrar el error o enviar una respuesta apropiada
+            // Por ejemplo, puedes enviar un mensaje de error en el response o agregar un atributo en la request para mostrarlo
+            try {
+                req.setAttribute("error", "Hubo un problema al enviar el correo de confirmación.");
+                req.getRequestDispatcher("/View/Error.jsp").forward(req, resp);
+            } catch (ServletException | IOException servletException) {
+                servletException.printStackTrace();  // Manejar errores al redirigir a la página de error
+            }
+        }
+    }
 }
