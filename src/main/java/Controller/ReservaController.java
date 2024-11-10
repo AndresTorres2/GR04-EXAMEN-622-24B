@@ -148,8 +148,10 @@ public class ReservaController extends HttpServlet {
     }
 
     private void cancelarReserva(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Reserva reserva = reservaDAO.obtenerReservaPorId(Integer.parseInt(request.getParameter("reservaId")));
         reservaDAO.cancelarReserva(Integer.parseInt(request.getParameter("reservaId")),
-                reservaDAO.obtenerReservaPorId(Integer.parseInt(request.getParameter("reservaId"))).getViaje());
+                reserva.getViaje());
+        notificarCancelarReserva(request, response, reserva.getViaje(), reserva.getEstudiante());
         response.sendRedirect(request.getContextPath() + "/ReservarAsientoServlet?action=consultarReservas");
 
     }
@@ -183,15 +185,47 @@ public class ReservaController extends HttpServlet {
             emailDAO.enviarCorreo(estudiante.getEmail(), "Confirmación de Reserva - Polibus", mensaje.toString());
 
         } catch (MessagingException e) {
-            // Manejar la excepción de correo
-            e.printStackTrace();  // Puedes registrar el error o enviar una respuesta apropiada
-            // Por ejemplo, puedes enviar un mensaje de error en el response o agregar un atributo en la request para mostrarlo
+
+            e.printStackTrace();
+
             try {
                 req.setAttribute("error", "Hubo un problema al enviar el correo de confirmación.");
                 req.getRequestDispatcher("/View/Error.jsp").forward(req, resp);
             } catch (ServletException | IOException servletException) {
-                servletException.printStackTrace();  // Manejar errores al redirigir a la página de error
+                servletException.printStackTrace();
             }
         }
     }
+    private void notificarCancelarReserva(HttpServletRequest req, HttpServletResponse resp, Viaje viaje, Estudiante estudiante) {
+        try {
+            StringBuilder mensaje = new StringBuilder();
+            mensaje.append("Estimado/a ").append(estudiante.getNombre()).append(",\n\n");
+            mensaje.append("Le informamos que su reserva ha sido cancelada con exito  para el siguiente viaje:\n\n");
+
+            java.sql.Date sqlDate = viaje.getFecha();
+            LocalDate localDate = sqlDate.toLocalDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", new Locale("es", "ES"));
+            String dia = localDate.format(formatter);
+
+            mensaje.append("- Viaje: ").append(viaje.getRuta().getOrigen()).append(" ➔ ").append(viaje.getRuta().getDestino()).append("\n");
+            mensaje.append("  Fecha: ").append(viaje.getFecha()).append(" (").append(dia).append(")\n");
+            mensaje.append("  Hora de salida: ").append(viaje.getHoraDeSalida()).append("\n\n");
+
+            mensaje.append("Si tiene alguna pregunta o necesita asistencia, no dude en contactarnos.\n\n");
+            mensaje.append("Atentamente,\n");
+            mensaje.append("El equipo de Polibus");
+
+            emailDAO.enviarCorreo(estudiante.getEmail(), "Cancelación de Reserva - Polibus", mensaje.toString());
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            try {
+                req.setAttribute("error", "Hubo un problema al enviar el correo de cancelación.");
+                req.getRequestDispatcher("/View/Error.jsp").forward(req, resp);
+            } catch (ServletException | IOException servletException) {
+                servletException.printStackTrace();
+            }
+        }
+    }
+
 }
