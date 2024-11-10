@@ -66,7 +66,7 @@
     <h1>Detalles del Viaje</h1>
 
     <h2>Jornada: ${viaje.jornada}</h2>
-
+    <h3>Fecha: ${viaje.fecha}</h3>
     <h3>Origen: ${viaje.ruta.origen}</h3>
     <h3>Destino: ${viaje.ruta.destino}</h3>
     <h4>Ruta:</h4>
@@ -77,6 +77,7 @@
     </ul>
 
     <p><strong>Horario:</strong> ${viaje.horaDeSalida}</p>
+    <p><strong>Conductor:</strong> ${viaje.conductor.nombre} ${viaje.conductor.apellido}</p>
 
     <div id="map"></div>
 

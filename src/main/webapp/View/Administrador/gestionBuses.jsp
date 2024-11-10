@@ -56,6 +56,7 @@
     <th>Bus #</th>
     <th>Capacidad</th>
     <th></th>
+    <th></th>
   </tr>
   </thead>
   <tbody>
@@ -65,8 +66,9 @@
       <td>${bus.capacidad}</td>
       <td>
         <a href="${pageContext.request.contextPath}/GestionServlet?action=actualizarBus&busId=${bus.busId}">Actualizar</a>
-        <a href="${pageContext.request.contextPath}/GestionServlet?action=eliminarBus&busId=${bus.busId}" onclick="return confirm('¿Estás seguro de que deseas eliminar este bus?');">Eliminar</a>
+
       </td>
+      <td><a href="${pageContext.request.contextPath}/GestionServlet?action=eliminarBus&busId=${bus.busId}" onclick="return confirm('¿Estás seguro de que deseas eliminar este bus?');">Eliminar</a></td>
     </tr>
   </c:forEach>
   </tbody>

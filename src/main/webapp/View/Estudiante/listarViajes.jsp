@@ -439,7 +439,7 @@
     </div>
 
     <c:if test="${empty viajes}">
-        <p>No se encontraron viajes para la jornada seleccionada.</p>
+        <p>No se encontraron viajes. Seleccione una jornada.</p>
     </c:if>
 
 </body>

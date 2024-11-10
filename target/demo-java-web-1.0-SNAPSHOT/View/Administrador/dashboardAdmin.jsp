@@ -64,10 +64,10 @@
 <div class="dashboard-container">
   <h1>Menu Administrador - PoliBus</h1>
   <div class="menu">
-    <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionConductores">Conductores</a>
-    <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionBuses">Buses</a>
-    <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionRutas">Rutas</a>
-    <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionViajes">Viajes</a>
+    <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionConductores">Gestion de Conductores</a>
+    <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionBuses">Gestion de Buses</a>
+    <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionRutas">Gestion de Rutas</a>
+    <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionViajes">Gestion de Viajes</a>
     <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionReservas">Reservas</a>
   </div>
   <a class="logout-button" href="${pageContext.request.contextPath}/GestionServlet?action=cerrarSesion">Cerrar Sesión</a>
