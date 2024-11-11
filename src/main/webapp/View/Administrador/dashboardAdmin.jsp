@@ -68,7 +68,7 @@
     <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionBuses">Gestion de Buses</a>
     <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionRutas">Gestion de Rutas</a>
     <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionViajes">Gestion de Viajes</a>
-    <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionReservas">Reservas</a>
+    <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionReservas">Gestion de Reservas</a>
   </div>
   <a class="logout-button" href="${pageContext.request.contextPath}/GestionServlet?action=cerrarSesion">Cerrar Sesión</a>
 </div>
