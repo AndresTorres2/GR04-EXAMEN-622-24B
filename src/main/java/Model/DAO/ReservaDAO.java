@@ -32,9 +32,6 @@ public class ReservaDAO extends GenericDAO {
     }
 
     public List<Reserva> obtenerTodasLasReservas() {
-        if (forceReadError) {
-            throw new RuntimeException("Error al leer la base de datos");
-        }
         List<Reserva> reservas = null;
         try {
             beginTransaction();
@@ -44,6 +41,7 @@ public class ReservaDAO extends GenericDAO {
         } catch (Exception e) {
             rollbackTransaction();
             e.printStackTrace();
+            throw new RuntimeException("Error al leer la base de datos");
 
 
         }

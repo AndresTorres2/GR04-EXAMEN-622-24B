@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 public class GenericDAO {
-    protected EntityManager em;
+    public EntityManager em;
 
     public GenericDAO() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistencia");

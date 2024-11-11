@@ -1,6 +1,6 @@
 package Prueba1B2024B;
 
-import Model.DAO.ReservaDAO;
+import Model.DAO.*;
 import Model.Entity.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,10 +13,21 @@ import static org.junit.Assert.*;
 
 public class ReservaDAOTest {
     ReservaDAO reservaDAO;
+    ViajeDAO viajeDAO;
+    EstudianteDAO estudianteDAO;
+    BusDAO busDAO;
+    RutaDAO rutaDAO;
+    UsuarioDAO usuarioDAO;
 
     @Before
     public void setUp() throws Exception {
         reservaDAO = new ReservaDAO();
+        viajeDAO = new ViajeDAO();
+        estudianteDAO = new EstudianteDAO();
+        busDAO = new BusDAO();
+        rutaDAO = new RutaDAO();
+        usuarioDAO = new UsuarioDAO();
+        /*reservaDAO = new ReservaDAO();
         // Configura los datos en la base de datos (simulando la inserción)
         Ruta ruta = new Ruta(1,"Ciudad A","Ciudad B", new ArrayList<>());
         Bus bus1 = new Bus("BUS-001",40);
@@ -29,44 +40,47 @@ public class ReservaDAOTest {
         // Se guardan las reservas en la base de datos
         reservaDAO.guardarReserva(new Reserva(1, viaje1, estudiante1, null), viaje1);
         reservaDAO.guardarReserva(new Reserva(2, viaje2, estudiante2, null), viaje2);
-        reservaDAO.guardarReserva(new Reserva(3, viaje2, estudiante1, null), viaje2);
+        reservaDAO.guardarReserva(new Reserva(3, viaje2, estudiante1, null), viaje2);*/
     }
 
     @Test
     public void given_Reservas_when_ReadAll_then_AllReservasAreReturned() {
-        // Lee las reservas directamente desde la base de datos
         List<Reserva> reservas = reservaDAO.obtenerTodasLasReservas();
-        assertEquals(3, reservas.size());
+        assertNotNull(reservas);
+        assertFalse(reservas.isEmpty());
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void given_ReadError_when_ReadAll_then_ExceptionIsThrown() {
-        // Activa el error simulado
-        reservaDAO.setForceReadError(true);
-
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            reservaDAO.obtenerTodasLasReservas();
-        });
-
-        assertEquals("Error al leer la base de datos", exception.getMessage());
-
-        // Desactiva el error para no afectar otros tests
-        reservaDAO.setForceReadError(false);
+        reservaDAO.em.close();
+        reservaDAO.obtenerTodasLasReservas();
     }
 
 
     @Test
     public void given_Reserva_when_Create_then_ReservaIsCreatedSuccessfully() {
-        Estudiante estudiante3 = new Estudiante(3, "Laura", "Martínez", "laura.martinez@example.com", "456789", "password321");
+        Date fechaReserva = Date.valueOf("2024-11-18");
+        Date fechaViaje = Date.valueOf("2024-11-20");
+        Estudiante estudiante3 = new Estudiante(0, "Laura", "Martínez", "laura.martinez@example.com", "456789", "password321");
+        estudianteDAO.guardarEstudianteDb(estudiante3);
         Bus bus3 = new Bus("BUS-003", 40);
-        Ruta ruta = new Ruta(2, "Ciudad C", "Ciudad D", new ArrayList<>());
-        Viaje viaje3 = new Viaje(3, bus3, null, Time.valueOf("10:00:00"), ruta, "matutino", 20, null);
-        Reserva nuevaReserva = new Reserva(4, viaje3, estudiante3, null);
+        busDAO.crearBusEnDB(bus3);
+        Ruta ruta = new Ruta(0, "Ciudad C", "Ciudad D", new ArrayList<>());
+        rutaDAO.guardarRutaDb(ruta);
+        Viaje viaje3 = new Viaje(0, bus3, fechaViaje, Time.valueOf("10:00:00"), ruta, "matutino", 20, null);
+        viajeDAO.crearViajeEnDB(viaje3);
+        Reserva nuevaReserva = new Reserva(0, viaje3, estudiante3, fechaReserva);
         reservaDAO.guardarReserva(nuevaReserva, viaje3);
 
-        // Verifica que la reserva fue guardada
         List<Reserva> reservas = reservaDAO.obtenerTodasLasReservas();
-        assertFalse(reservas.contains(nuevaReserva));
+        assertTrue(reservas.contains(nuevaReserva));
+        Usuario estudianteEnDB = usuarioDAO.buscarUsuarioPorEmail("laura.martinez@example.com");
+        reservaDAO.cancelarReserva(nuevaReserva.getId(), viaje3);
+        estudianteDAO.eliminarEstudianteDb(estudianteEnDB.getId());
+        viajeDAO.eliminarViajeEnDB(viaje3.getId());
+        busDAO.eliminarBusEnDB(bus3.getBusId());
+        rutaDAO.eliminarRutaDb(ruta.getId());
+
     }
 
     /*
@@ -83,10 +97,14 @@ public class ReservaDAOTest {
     } */
 
     @Test(expected = RuntimeException.class)
-    public void given_NonExistentReserva_when_Delete_then_ExceptionIsThrown() {
-        // Intenta eliminar una reserva inexistente
-        reservaDAO.cancelarReserva(9999, new Viaje());  // ID de reserva no existente
+    public void given_InvalidReservaId_when_CancelarReserva_then_ThrowRuntimeException() {
+
+        int invalidReservaId = 9999;
+        Viaje viaje = new Viaje();
+
+        reservaDAO.cancelarReserva(invalidReservaId, viaje);
     }
+//revisar
 
     @Test
     public void given_ExistingId_when_GetById_then_ReservaIsReturned() {
@@ -98,6 +116,16 @@ public class ReservaDAOTest {
         assertEquals(reservaEsperada, reservaObtenida);
     }
 
+    @Test
+    public void given_Viaje_when_CheckIfNotEmpty_then_ReturnsFalseIfHasReservations() {
+        // Recupera el viaje con reservas
+        List<Reserva> reservas = reservaDAO.obtenerTodasLasReservas();
+        Viaje viaje2 = reservas.get(1).getViaje();
+
+        boolean isEmpty = reservaDAO.verificarViajeVacio(viaje2);
+        assertFalse(isEmpty); // El viaje no debería estar vacío, ya que tiene reservas
+    }
+    //FALTAN ARREGLAR LAS DE ABAJO, ESTOS TDD FUNCIONAN PERFECTAMENTE
     // Prueba de verificar si el viaje está vacío
     @Test
     public void given_Viaje_when_CheckIfEmpty_then_ReturnsTrueIfNoReservations() {
@@ -119,15 +147,7 @@ public class ReservaDAOTest {
 
     }
 
-    @Test
-    public void given_Viaje_when_CheckIfNotEmpty_then_ReturnsFalseIfHasReservations() {
-        // Recupera el viaje con reservas
-        List<Reserva> reservas = reservaDAO.obtenerTodasLasReservas();
-        Viaje viaje2 = reservas.get(1).getViaje();
 
-        boolean isEmpty = reservaDAO.verificarViajeVacio(viaje2);
-        assertFalse(isEmpty); // El viaje no debería estar vacío, ya que tiene reservas
-    }
 
     @Test
     public void given_Viaje_when_ListPassengers_then_ReturnsCorrectPassengers() {

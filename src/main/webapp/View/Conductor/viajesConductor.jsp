@@ -75,6 +75,9 @@
 </div>
 
 <div class="card-container">
+    <c:if test="${empty viajes}">
+        <p>No hay viajes programados en este momento.</p>
+    </c:if>
     <c:forEach var="viaje" items="${viajes}">
         <div class="card">
             <div>
