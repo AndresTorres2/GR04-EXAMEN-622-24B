@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
+    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
     <title>Actualizar Viaje</title>
 </head>
 <body>

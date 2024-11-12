@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
+    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
     <title>Gestión de Conductores</title>
     <style>
         body {

@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>Lista de viajes del Conductor</title>
+    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
     <style>
         body {
             background: #100f0f;

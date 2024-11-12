@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
   <title>Consultar Reservas</title>
   <style>
     body {

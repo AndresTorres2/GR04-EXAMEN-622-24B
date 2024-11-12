@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
     <title>Detalles de la Reserva</title>
     <style>
         body {

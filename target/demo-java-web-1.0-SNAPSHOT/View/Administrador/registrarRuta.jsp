@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
+  <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
   <title>Crear Ruta</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 </head>

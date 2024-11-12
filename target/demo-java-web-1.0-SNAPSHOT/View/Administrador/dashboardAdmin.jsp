@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <html>
 <head>
+  <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
   <title>Menu Administrador - PoliBus</title>
   <style>
     body {

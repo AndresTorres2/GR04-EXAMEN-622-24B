@@ -4,13 +4,14 @@
 
 <html>
 <head>
+  <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
   <title>Actualizar Ruta</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
 <h1>Actualizar Ruta</h1>
 <form action="${pageContext.request.contextPath}/GestionServlet?action=actualizarRuta" method="post">
-  <input type="hidden" name="rutaId" value="${ruta.id}" /> <!-- ID de la ruta a actualizar -->
+  <input type="hidden" name="rutaId" value="${ruta.id}" />
 
   <label for="origen">Origen:</label>
   <input type="text" id="origen" name="origen" value="${ruta.origen}" required /><br/><br/>
