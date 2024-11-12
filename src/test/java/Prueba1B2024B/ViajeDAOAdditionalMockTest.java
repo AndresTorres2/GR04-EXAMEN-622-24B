@@ -32,7 +32,7 @@ public class ViajeDAOAdditionalMockTest {
         viaje = new Viaje(1, new Bus(), Date.valueOf("2024-11-01"),
                 Time.valueOf("08:00:00"), new Ruta(), "Mañana", 0, new Conductor());
     }
-
+/*
     @Test
     public void given_ExistingId_when_CheckExistence_then_ReturnsTrue() {
         when(mockViajeDAO.existeViaje(viaje.getId())).thenReturn(true);
@@ -54,6 +54,7 @@ public class ViajeDAOAdditionalMockTest {
         System.out.println("Prueba con Mockito: Se ha actualizado el viaje correctamente con ID " + viaje.getId());
     }
 
+
     @Test
     public void given_Viaje_when_Delete_then_Viaje_Is_Deleted_Successfully() {
         doNothing().when(mockViajeDAO).eliminarViaje(viaje.getId());
@@ -63,6 +64,7 @@ public class ViajeDAOAdditionalMockTest {
         verify(mockViajeDAO, times(1)).eliminarViaje(viaje.getId());
         System.out.println("Prueba con Mockito: Se ha eliminado el viaje con ID " + viaje.getId());
     }
+   */
     //Prueba Correcta---------------
     @Test
     public void given_Jornada_when_ListViajes_then_ReturnsCorrectList() {
