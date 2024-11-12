@@ -3,6 +3,7 @@ package Model.DAO;
 import Model.Entity.Bus;
 import Model.Entity.Conductor;
 import Model.Entity.Ruta;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.PersistenceException;
 
 import java.util.List;
@@ -45,7 +46,11 @@ public class BusDAO extends GenericDAO {
             beginTransaction();
             em.persist(bus);
             commitTransaction();
-        } catch (Exception e) {
+        }catch (EntityExistsException e) {
+            rollbackTransaction();
+            throw new RuntimeException(" El bus no se puede registrar, debido a que ya existe ese numero de bus: " + bus.getBusId());
+        }
+        catch (Exception e) {
             rollbackTransaction();
             e.printStackTrace();
         }

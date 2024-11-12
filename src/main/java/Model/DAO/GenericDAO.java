@@ -4,10 +4,14 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 public class GenericDAO {
-    protected EntityManager em;
+    private static EntityManagerFactory emf;
+    public EntityManager em;
 
+    static {
+        emf = Persistence.createEntityManagerFactory("persistencia");
+    }
     public GenericDAO() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistencia");
+
         this.em = emf.createEntityManager();
     }
     public void beginTransaction() {
@@ -25,6 +29,11 @@ public class GenericDAO {
     public void rollbackTransaction() {
         if (em.getTransaction().isActive()) {
             em.getTransaction().rollback();
+        }
+    }
+    public void openEntityManager() {
+        if (em == null || !em.isOpen()) {
+            em = emf.createEntityManager();
         }
     }
 

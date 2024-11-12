@@ -41,8 +41,15 @@ public class ReservaDAO extends GenericDAO {
         } catch (Exception e) {
             rollbackTransaction();
             e.printStackTrace();
+            throw new RuntimeException("Error al leer la base de datos");
+
+
         }
         return reservas;
+    }
+    private boolean forceReadError = false;
+    public void setForceReadError(boolean forceReadError) {
+        this.forceReadError = forceReadError;
     }
     public Reserva obtenerReservaPorId(int reservaId) {
         Reserva reserva = null;
@@ -57,6 +64,7 @@ public class ReservaDAO extends GenericDAO {
         } catch (Exception e) {
             rollbackTransaction();
             e.printStackTrace();
+            throw e;
         }
         return reserva;
     }
@@ -64,15 +72,20 @@ public class ReservaDAO extends GenericDAO {
         try {
             beginTransaction();
             Reserva reserva = em.find(Reserva.class, reservaId);
+            if (reserva == null) {
+                throw new RuntimeException("Reserva no encontrada con ID: " + reservaId);
+            }
             em.remove(reserva);
             actualizarAsientosOcupados(viaje,-1);
             commitTransaction();
         } catch (Exception e) {
             rollbackTransaction();
             e.printStackTrace();
+            throw e;
         }
 
     }
+
     public List<Reserva> obtenerReservasPorDia(int diaSeleccionado, Usuario usuario) {
         List<Reserva> reservasFiltradas = new ArrayList<>();
         for (Reserva  reserva : obtenerReservasPorEstudianteId(usuario.getId()))
