@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
-        import static org.junit.Assert.*;
+import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ViajeDAOAdditionalMockTest {
