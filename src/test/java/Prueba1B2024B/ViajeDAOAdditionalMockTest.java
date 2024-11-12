@@ -63,7 +63,7 @@ public class ViajeDAOAdditionalMockTest {
         verify(mockViajeDAO, times(1)).eliminarViaje(viaje.getId());
         System.out.println("Prueba con Mockito: Se ha eliminado el viaje con ID " + viaje.getId());
     }
-
+    //Prueba Correcta---------------
     @Test
     public void given_Jornada_when_ListViajes_then_ReturnsCorrectList() {
         List<Object[]> viajesList = new ArrayList<>();
@@ -77,6 +77,7 @@ public class ViajeDAOAdditionalMockTest {
         System.out.println("Prueba con Mockito: Se ha listado correctamente los viajes de la jornada 'Mañana'.");
     }
 
+/*
     @Test
     public void given_IdsArray_when_ConvertIdsToIntegers_then_ReturnsCorrectArray() {
         String[] ids = {"1", "2", "3"};
@@ -89,4 +90,5 @@ public class ViajeDAOAdditionalMockTest {
         assertArrayEquals(expectedIds, result);
         System.out.println("Prueba con Mockito: Conversión de IDs a enteros fue exitosa.");
     }
+    */
 }

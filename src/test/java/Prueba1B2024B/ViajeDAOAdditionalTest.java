@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.Time;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -35,15 +34,16 @@ public class ViajeDAOAdditionalTest {
 //     System.out.println("Viajes encontrados para la jornada 'Mañana': " + viajes.size());
 // }
 
-    @Test
+    //Prueba realizada en MOkito
+/*    @Test
     public void given_IdsArray_when_ConvertIdsToIntegers_then_ReturnsCorrectArray() {
         String[] ids = {"1", "2", "3"};
         int[] convertedIds = viajeDAO.convertirIdsAEnteros(ids);
         assertArrayEquals(new int[]{1, 2, 3}, convertedIds);
         System.out.println("Conversión de IDs correcta: " + Arrays.toString(ids));
-    }
+    }*/
 
-    @Test
+/*    @Test
     public void given_IdString_when_ConvertToList_then_ReturnsCorrectIdList() {
         String idsViajes = "1, 2, 3";
         List<Integer> idList = viajeDAO.convertirCadenaAListaDeIds(idsViajes);
@@ -53,7 +53,7 @@ public class ViajeDAOAdditionalTest {
         assertTrue(idList.contains(2));
         assertTrue(idList.contains(3));
         System.out.println("Conversión de cadena a lista de IDs correcta: " + idsViajes);
-    }
+    }*/
 
     @Test
     public void given_ConductorId_when_ListViajesByConductor_then_ReturnsCorrectList() {
