@@ -13,27 +13,6 @@ import java.util.Map;
 
 public class BusDAO extends GenericDAO {
 
-    private static Map<String, Bus> busDatabase = new HashMap<>();
-
-    public Bus createBus(String id, int capacidad) {
-        busDatabase.put(id, new Bus(id, capacidad));
-        return busDatabase.get(id);
-    }
-    public void actualizarBus(String id, int nuevaCapacidad, Conductor nuevoConductor) {
-        Bus busExistente = busDatabase.get(id);
-        if (busExistente != null) {
-            busExistente.setCapacidad(nuevaCapacidad);
-            busDatabase.put(id, busExistente);
-        }
-    }
-
-    public Bus deleteBus(String id) {
-        return busDatabase.remove(id);
-    }
-
-    public Bus findBusById(String id) {
-        return busDatabase.get(id);
-    }
 
 //implementacion con la DB
     public BusDAO() {

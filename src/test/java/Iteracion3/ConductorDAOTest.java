@@ -33,9 +33,8 @@ public class ConductorDAOTest {
             conductores.add(conductor);
         }
     }
-    //sE VA COMO PARAMETRICA
     @Test
-    public void testInsertConductor() {
+    public void given_NewConductor_when_Insert_then_ConductorIsSaved() {
         Conductor conductor = new Conductor(0,"Andresdasdsa","Santiagosadsa","asdas321@example.com","09821321321","contrasena");
         conductorDAO.guardarConductorDb(conductor);
         Usuario conductorEnDB = usuarioDAO.buscarUsuarioPorEmail("asdas321@example.com");
