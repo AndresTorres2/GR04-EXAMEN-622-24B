@@ -62,8 +62,7 @@
     <th>Recorrido</th>
     <th>Jornada</th>
     <th>Asientos Ocupados</th>
-    <th></th>
-    <th></th>
+    <th>Acciones</th>
   </tr>
   <c:forEach var="viaje" items="${viajes}">
     <tr>
@@ -81,9 +80,7 @@
       <td>${viaje.jornada}</td>
       <td>${viaje.asientosOcupados}</td>
       <td>
-        <a href="${pageContext.request.contextPath}/GestionServlet?action=formActualizarViaje&viajeId=${viaje.id}">Actualizar</a>
-      </td>
-      <td>
+        <a href="${pageContext.request.contextPath}/GestionServlet?action=formActualizarViaje&viajeId=${viaje.id}">Actualizar</a> |
         <a href="${pageContext.request.contextPath}/GestionServlet?action=eliminarViaje&viajeId=${viaje.id}"
            onclick="return confirm('¿Estás seguro de que deseas eliminar este viaje?');">Eliminar</a>
       </td>

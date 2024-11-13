@@ -57,8 +57,7 @@
         <th>Origen</th>
         <th>Destino</th>
         <th>Recorrido</th>
-        <th></th>
-        <th></th>
+        <th>Acciones</th>
     </tr>
     </thead>
     <tbody>
@@ -72,11 +71,10 @@
                 </c:forEach>
             </td>
             <td>
-                <a href="${pageContext.request.contextPath}/GestionServlet?action=formActualizarRuta&rutaId=${ruta.id}">Actualizar</a>
-            </td>
-            <td>
+                <a href="${pageContext.request.contextPath}/GestionServlet?action=formActualizarRuta&rutaId=${ruta.id}">Actualizar</a> |
                 <a href="${pageContext.request.contextPath}/GestionServlet?action=eliminarRuta&rutaId=${ruta.id}" onclick="return confirm('¿Estás seguro de que deseas eliminar esta ruta?');">Eliminar</a>
             </td>
+
         </tr>
     </c:forEach>
     </tbody>

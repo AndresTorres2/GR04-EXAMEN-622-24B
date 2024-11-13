@@ -68,6 +68,7 @@
             <td>${conductor.email}</td>
             <td>${conductor.phone}</td>
             <td>
+                <a href="${pageContext.request.contextPath}/GestionServlet?action=actualizarConductorForm&conductorId=${conductor.id}">Actualizar</a> |
                 <a href="${pageContext.request.contextPath}/GestionServlet?action=eliminarConductor&conductorId=${conductor.id}" onclick="return confirm('¿Estás seguro de que deseas eliminar este conductor?');">Eliminar</a>
             </td>
         </tr>

@@ -3,6 +3,7 @@ package Model.DAO;
 import Model.Entity.Conductor;
 import Model.Entity.Usuario;
 import jakarta.persistence.PersistenceException;
+import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -70,12 +71,33 @@ public class ConductorDAO extends GenericDAO{
             beginTransaction();
             em.persist(conductor);
             commitTransaction();
-        } catch (Exception e) {
+        }catch (PersistenceException e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("No se puede registrar el conductor porque el correo electrónico ya está en uso. Por favor, use un correo diferente.");
+        }
+        catch (Exception e) {
             rollbackTransaction();
-            System.out.println("Error en crear conductor " );
             e.printStackTrace();
         }
     }
+    public void actualizarConductorDb(Conductor conductor) {
+        try {
+            beginTransaction();
+            em.merge(conductor);
+            commitTransaction();
+        } catch (PersistenceException e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+                    throw new RuntimeException("No se puede actualizar el conductor porque el correo electrónico ya está en uso. Por favor, use un correo diferente.");
+        } catch (Exception e) {
+            rollbackTransaction();
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

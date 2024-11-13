@@ -47,15 +47,16 @@ public class ConductorDAOTest {
     public void given_Conductor_when_Update_then_ConductorIsUpdatedSuccessfully() {
         Conductor conductor = new Conductor(0, "Carlos", "Perez", "carlos.perez@example.com", "0987654321", "password123");
         conductorDAO.guardarConductorDb(conductor);
-        Usuario conductorEnDB = usuarioDAO.buscarUsuarioPorEmail(conductor.getEmail());
+        Conductor conductorEnDB = conductorDAO.obtenerConductorDb(String.valueOf(conductor.getId()));
 
         conductorEnDB.setNombre("Carlos Updated");
         conductorEnDB.setApellido("Perez Updated");
-        //conductorDAO.actualizarConductorDb(conductorEnDB);
+        conductorDAO.actualizarConductorDb(conductorEnDB);
         Usuario conductorActualizado = usuarioDAO.buscarUsuarioPorEmail(conductorEnDB.getEmail());
         assertEquals("Carlos Updated", conductorActualizado.getNombre());
         assertEquals("Perez Updated", conductorActualizado.getApellido());
-
+        System.out.println("Nombre actualizado: " + conductorActualizado.getNombre());
+        System.out.println("Apellido actualizado: " + conductorActualizado.getApellido());
         conductorDAO.eliminarConductorDb(String.valueOf(conductorEnDB.getId()));
     }
     @Test

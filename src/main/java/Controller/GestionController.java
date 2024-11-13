@@ -171,12 +171,51 @@ public class GestionController extends HttpServlet {
             case "obtenerUbicacion":
                 obtenerUbicacion(req, resp);
                 break;
+            case "actualizarConductorForm":
+                mostrarFormActualizarConductor(req,resp);
+                break;
+            case "actualizarConductor":
+                actualizarConductor(req,resp);
+                break;
             case "cerrarSesion":
                 cerrarSesion(req, resp);
                 break;
             default:
                 break;
         }
+    }
+    public void mostrarFormActualizarConductor(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String conductorId = req.getParameter("conductorId");
+        req.setAttribute("conductor",conductorDAO.obtenerConductorDb(conductorId));
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/actualizarConductor.jsp");
+        dispatcher.forward(req, resp);
+    }
+    public void actualizarConductor(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+       try{
+           String conductorId = req.getParameter("conductorId");
+           String nombre = req.getParameter("nombre");
+           String apellido = req.getParameter("apellido");
+           String email = req.getParameter("email");
+           String telefono = req.getParameter("telefono");
+           Conductor conductorExistente = conductorDAO.obtenerConductorDb(conductorId);
+           conductorExistente.setNombre(nombre);
+           conductorExistente.setApellido(apellido);
+           conductorExistente.setEmail(email);
+           conductorExistente.setPhone(telefono);
+           conductorDAO.actualizarConductorDb(conductorExistente);
+
+           req.setAttribute("conductores", conductorDAO.obtenerConductores() );
+           RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionConductor.jsp");
+           dispatcher.forward(req, resp);
+       } catch (Exception e) {
+           req.setAttribute("errorMessage", e.getMessage());
+           req.setAttribute("conductores", conductorDAO.obtenerConductores() );
+           RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionConductor.jsp");
+           dispatcher.forward(req, resp);
+       }
+
+
+
     }
     public void cerrarSesion(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession(false);
@@ -377,6 +416,7 @@ public class GestionController extends HttpServlet {
         dispatcher.forward(req, resp);
     }
     public void actualizarRuta(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         int rutaId = Integer.parseInt(req.getParameter("rutaId"));
         String origen = req.getParameter("origen");
         String destino = req.getParameter("destino");
@@ -559,16 +599,24 @@ public class GestionController extends HttpServlet {
         dispatcher.forward(req, resp);
     }
     public void guardarConductor(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-        String nombre = req.getParameter("nombre");
-        String apellido = req.getParameter("apellido");
-        String email = req.getParameter("email");
-        String contrasena = req.getParameter("contrasena");
-        String telefono = req.getParameter("telefono");
-        Conductor nuevoConductor = new Conductor(0, nombre, apellido, email, telefono, contrasena);
-        conductorDAO.guardarConductorDb(nuevoConductor);
-        req.setAttribute("conductores", conductorDAO.obtenerConductores() );
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionConductor.jsp");
-        dispatcher.forward(req, resp);
+        try{
+            String nombre = req.getParameter("nombre");
+            String apellido = req.getParameter("apellido");
+            String email = req.getParameter("email");
+            String contrasena = req.getParameter("contrasena");
+            String telefono = req.getParameter("telefono");
+            Conductor nuevoConductor = new Conductor(0, nombre, apellido, email, telefono, contrasena);
+            conductorDAO.guardarConductorDb(nuevoConductor);
+            req.setAttribute("conductores", conductorDAO.obtenerConductores() );
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionConductor.jsp");
+            dispatcher.forward(req, resp);
+        } catch (Exception e) {
+            req.setAttribute("errorMessage", e.getMessage());
+            req.setAttribute("conductores", conductorDAO.obtenerConductores() );
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Administrador/gestionConductor.jsp");
+            dispatcher.forward(req, resp);
+        }
+
     }
 
     private void mostrarBuses(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{

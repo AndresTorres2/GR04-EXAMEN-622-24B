@@ -90,7 +90,7 @@
     <th>Ruta</th>
     <th>Horario de Salida</th>
 
-    <th></th>
+    <th>Acciones</th>
   </tr>
   </thead>
   <tbody>
