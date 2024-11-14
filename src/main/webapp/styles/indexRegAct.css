@@ -99,6 +99,8 @@ a.button:hover {
 }
 
 /* Estilo de los campos de entrada */
+.styled-form input[type="number"],
+.styled-form input[type="hidden"],
 .styled-form input[type="text"],
 .styled-form input[type="email"],
 .styled-form input[type="password"]{
