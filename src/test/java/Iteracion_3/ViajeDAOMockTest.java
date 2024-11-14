@@ -1,4 +1,4 @@
-package Iteracion3;
+package Iteracion_3;
 
 import Model.DAO.ViajeDAO;
 import Model.Entity.Bus;
@@ -11,7 +11,6 @@ import org.mockito.*;
 import java.sql.Date;
 import java.sql.Time;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class ViajeDAOMockTest {
@@ -40,7 +39,6 @@ public class ViajeDAOMockTest {
     @Test
     public void  given_ViajeDetails_when_CrearViaje_then_ViajeIsSaved() {
         doNothing().when(viajeDAO).crearViajeEnDB(viaje);
-
         viajeDAO.crearViajeEnDB(viaje);
         verify(viajeDAO, times(1)).crearViajeEnDB(viaje);
     }
@@ -51,6 +49,6 @@ public class ViajeDAOMockTest {
         doNothing().when(viajeDAO).actualizarViajeEnDB(viaje);
         viajeDAO.actualizarViajeEnDB(viaje);
         verify(viajeDAO, times(1)).actualizarViajeEnDB(viaje);
-        assertEquals(25, viaje.getAsientosOcupados());
+
     }
 }

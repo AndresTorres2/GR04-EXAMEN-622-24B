@@ -1,4 +1,4 @@
-package Iteracion3;
+package Iteracion_3;
 
 import Model.DAO.BusDAO;
 import Model.Entity.Bus;

@@ -1,4 +1,4 @@
-package Prueba1B2024B;
+package Iteracion_4;
 
 import Model.DAO.*;
 import Model.Entity.*;
@@ -36,27 +36,27 @@ public class ReservaDAOTest {
         Date fechaReserva = Date.valueOf("2024-11-25");
         Date fechaViaje = Date.valueOf("2024-11-30");
         for (int i = 0; i < 3; i++) {
-            // Crear y guardar estudiante
+
             Estudiante estudiante = new Estudiante(0, "Estudiante" + i, "Apellido" + i, "email" + i + "@example.com", "tel" + i, "password" + i);
             estudianteDAO.guardarEstudianteDb(estudiante);
             estudiantes.add(estudiante);
 
-            // Crear y guardar bus
+
             Bus bus = new Bus("BUS-00" + i, 40 + i);
             busDAO.crearBusEnDB(bus);
             buses.add(bus);
 
-            // Crear y guardar ruta
+
             Ruta ruta = new Ruta(0, "Ciudad" + (char)('A' + i), "Ciudad" + (char)('B' + i), new ArrayList<>());
             rutaDAO.guardarRutaDb(ruta);
             rutas.add(ruta);
 
-            // Crear y guardar viaje
+
             Viaje viaje = new Viaje(0, bus, fechaViaje, Time.valueOf("10:00:00"), ruta, "matutino", 20 + i, null);
             viajeDAO.crearViajeEnDB(viaje);
             viajes.add(viaje);
 
-            // Crear y guardar reserva
+
             Reserva reserva = new Reserva(0, viaje, estudiante, fechaReserva);
             reservaDAO.guardarReserva(reserva, viaje);
             reservas.add(reserva);
@@ -138,7 +138,7 @@ public class ReservaDAOTest {
 
         reservaDAO.cancelarReserva(invalidReservaId, viaje);
     }
-//revisar
+
 
     @Test
     public void given_ExistingId_when_GetById_then_ReservaIsReturned() {
@@ -152,34 +152,13 @@ public class ReservaDAOTest {
 
     @Test
     public void given_Viaje_when_CheckIfNotEmpty_then_ReturnsFalseIfHasReservations() {
-        // Recupera el viaje con reservas
+
         List<Reserva> reservas = reservaDAO.obtenerTodasLasReservas();
         Viaje viaje2 = reservas.get(1).getViaje();
 
         boolean isEmpty = reservaDAO.verificarViajeVacio(viaje2);
         assertFalse(isEmpty); // El viaje no debería estar vacío, ya que tiene reservas
     }
-    //FALTAN ARREGLAR LAS DE ABAJO, ESTOS TDD FUNCIONAN PERFECTAMENTE
-    // Prueba de verificar si el viaje está vacío
-   /* @Test
-    public void given_Viaje_when_CheckIfEmpty_then_ReturnsTrueIfNoReservations() {
-        // Simula un viaje sin reservas
-        Bus bus = new Bus("BUS-003", 40);
-        Ruta ruta = new Ruta(2, "Ciudad C", "Ciudad D", new ArrayList<>());
-        Viaje viaje3 = new Viaje(2, bus, null, Time.valueOf("10:00:00"), ruta, "matutino", 20, null);
-
-        try {
-            boolean isEmpty = reservaDAO.verificarViajeVacio(viaje3);
-            System.out.println("Viaje 3 is empty: " + isEmpty); // Mensaje de consola
-
-            // Permitir que el test pase si está vacío o no
-            assertTrue("El viaje no está vacío cuando debería estarlo.", isEmpty || !isEmpty);
-        } catch (Exception e) {
-            System.out.println("Se ha producido una excepción al verificar si el viaje está vacío: " + e.getMessage());
-            fail("No se esperaba una excepción al verificar si el viaje está vacío.");
-        }
-
-    }*/
 
 
 
@@ -202,34 +181,12 @@ public class ReservaDAOTest {
 
     }
 
-   /*@Test
-    public void given_Viaje_when_ListPassengersOnEmptyViaje_then_ReturnsEmptyList() {
-        Bus bus = new Bus("BUS-003", 40);
-        Ruta ruta = new Ruta(2, "Ciudad C", "Ciudad D", new ArrayList<>());
-        Viaje viaje3 = new Viaje(2, bus, null, Time.valueOf("10:00:00"), ruta, "matutino", 20, null);
 
-        try {
-            // Obtener los pasajeros del viaje
-            List<Estudiante> pasajeros = reservaDAO.listarPasajerosPorViaje(viaje3);
-            System.out.println("Pasajeros en viaje 3: " + pasajeros); // Mensaje de consola
-
-            // Aquí se permite que el test pase si la lista está vacía
-            if (!pasajeros.isEmpty()) {
-                System.out.println("El viaje tiene pasajeros.");
-            }
-
-            assertTrue("La lista de pasajeros debería estar vacía, pero tiene " + pasajeros.size() + " pasajeros.", pasajeros.isEmpty() || pasajeros.size() > 0);
-        } catch (Exception e) {
-            System.out.println("Se ha producido una excepción al listar pasajeros: " + e.getMessage());
-            fail("No se esperaba una excepción al listar pasajeros en un viaje vacío.");
-        }
-    }*/
     @After
     public void tearDown() {
         if (!reservaDAO.em.isOpen()) {
             reservaDAO.openEntityManager();
         }
-        // Eliminar las reservas, estudiantes, viajes, buses y rutas creados en setUp
         for (Reserva reserva : reservas) {
             reservaDAO.cancelarReserva(reserva.getId(), reserva.getViaje());
         }

@@ -1,4 +1,4 @@
-package Prueba1B2024B;
+package Iteracion_4;
 
 import Model.DAO.ReservaDAO;
 import Model.Entity.*;
@@ -7,7 +7,6 @@ import org.junit.*;
 import java.sql.Time;
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class ReservaDAOMockTest {
@@ -24,7 +23,7 @@ public class ReservaDAOMockTest {
         Ruta ruta = new Ruta(2, "Ciudad C", "Ciudad D", new ArrayList<>());
         Viaje viaje3 = new Viaje(3, bus3, null, Time.valueOf("10:00:00"), ruta, "matutino", 20, null);
         Reserva nuevaReserva = new Reserva(4, viaje3, estudiante3, null);
-        doThrow(new RuntimeException("Error al crear la reserva")).when(reservaDAOMock).createReserva(any(Reserva.class));
-        reservaDAOMock.createReserva(nuevaReserva);
+        doThrow(new RuntimeException("Error al crear la reserva")).when(reservaDAOMock).guardarReserva(any(Reserva.class),any(Viaje.class));
+        reservaDAOMock.guardarReserva(nuevaReserva,viaje3);
     }
 }
