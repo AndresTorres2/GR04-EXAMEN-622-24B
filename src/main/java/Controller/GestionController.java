@@ -327,10 +327,14 @@ public class GestionController extends HttpServlet {
     }
 
     public void consultarViajesDetallesConductor(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("viaje",viajeDAO.obtenerViajePorCodigo(Integer.parseInt(req.getParameter("viajeId"))));
+        Viaje viaje = viajeDAO.obtenerViajePorCodigo(Integer.parseInt(req.getParameter("viajeId")));
+        List<Object[]> callesYCoordenadas = calleDAO.obtenerCallesYCoordenadasPorRutaId(viaje.getRuta().getId());
+
+        req.setAttribute("viaje", viaje);
+        req.setAttribute("callesYCoordenadas", callesYCoordenadas);
+
         RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Conductor/viajesConductorDetalles.jsp");
         dispatcher.forward(req, resp);
-
     }
 
     public void gestionarRutas(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
