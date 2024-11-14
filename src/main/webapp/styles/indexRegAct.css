@@ -113,4 +113,13 @@ a.button:hover {
   font-size: 16px;
 }
 
+/* Forzar color negro en las opciones de Select2 */
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+  color: black !important; /* Color negro para las etiquetas seleccionadas */
+}
+
+/* Estilo de las opciones en el menú desplegable */
+.select2-container--default .select2-results__option {
+  color: black !important; /* Color negro para el texto de cada opción */
+}
 
