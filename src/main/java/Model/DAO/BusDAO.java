@@ -35,12 +35,12 @@ public class BusDAO extends GenericDAO {
         }
     }
 
-    // Método para verificar si un Bus existe en la base de datos por su ID
+
     public boolean existeBusEnDB(int id) {
         return em.find(Bus.class, id) != null;
     }
 
-    // Método para obtener un Bus de la base de datos por su ID
+
     public Bus obtenerBusPorId(String id) {
         Bus bus = null;
         try {
@@ -91,14 +91,14 @@ public class BusDAO extends GenericDAO {
     }
 
     public List<Bus> obtenerTodosLosBuses() {
-        List<Bus> buses = new ArrayList<>();
         try {
-            buses = em.createQuery("SELECT b FROM Bus b", Bus.class).getResultList();
+            return em.createQuery("SELECT b FROM Bus b", Bus.class).getResultList();
         } catch (Exception e) {
             e.printStackTrace();
+            return new ArrayList<>();
         }
-        return buses;
     }
+
     public void actualizarBusDb(Bus bus) {
         try {
             beginTransaction();

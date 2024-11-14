@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Tue Nov 12 14:20:32 ECT 2024:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.16.1.1 - (1901046): instance a816c00e-0193-21d2-025d-00000b5d0900 
+Thu Nov 14 05:42:30 ECT 2024:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.16.1.1 - (1901046): instance a816c00e-0193-2a44-7849-00000b7dd640 
 on database directory C:\Users\tandr\OneDrive\Documentos\GitHub\Prueba-Agiles\polibus3 with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@60e53b93 
 Loaded from file:/C:/Users/tandr/.m2/repository/org/apache/derby/derby/10.16.1.1/derby-10.16.1.1.jar
 java.vendor=JetBrains s.r.o.

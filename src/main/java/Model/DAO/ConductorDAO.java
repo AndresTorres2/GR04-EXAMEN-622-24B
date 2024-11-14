@@ -39,8 +39,7 @@ public class ConductorDAO extends GenericDAO{
 
     public Conductor obtenerConductorDb(String idConductor) {
         try {
-            Conductor conductor = em.find(Conductor.class, idConductor);
-            return conductor;
+            return em.find(Conductor.class, idConductor);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

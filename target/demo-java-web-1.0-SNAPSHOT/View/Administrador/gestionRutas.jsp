@@ -2,82 +2,53 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
-    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
-    <title>Gestión de Rutas</title>
-    <style>
-        body {
-            background: #100f0f;
-            color: #d3d3d3;
-            font-family: Arial, sans-serif;
-            padding: 4rem;
-            margin: 0;
-            box-sizing: border-box;
-        }
-
-        a {
-            text-decoration: none;
-            padding: 10px 20px;
-            background-color: #48578e;
-            color: white;
-            border-radius: 5px;
-            display: inline-block;
-        }
-
-        a:hover {
-            background-color: #71a8df;
-        }
-        table{
-            border-collapse: collapse;
-            margin-bottom: 1.5rem;
-            width: 100%;
-
-        }
-
-        th, td, tr{
-            padding: 0.5rem 1rem;
-            border: 1px solid #d3d3d3;
-        }
-
-    </style>
+  <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
+  <title>Gestión de Rutas</title>
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/indexGestionRutas.css">
 </head>
 <body>
 <c:if test="${not empty errorMessage}">
-    <script type="text/javascript">
-        alert("${errorMessage}");
-    </script>
+  <script type="text/javascript">
+    alert("${errorMessage}");
+  </script>
 </c:if>
-<h1>Gestión de Rutas</h1>
-<div style="display: flex; margin: 1.5rem 0; justify-content: space-between">
-    <a href="${pageContext.request.contextPath}/View/Administrador/dashboardAdmin.jsp">Volver al Dashboard</a>
-    <a href="${pageContext.request.contextPath}/GestionServlet?action=nuevaRuta">Agregar nueva ruta</a>
-</div>
-<table >
+
+<div class="container">
+  <h1>Gestión de Rutas</h1>
+
+  <div class="nav-links">
+    <a class="button" href="${pageContext.request.contextPath}/View/Administrador/dashboardAdmin.jsp">Volver al Dashboard</a>
+    <a class="button" href="${pageContext.request.contextPath}/GestionServlet?action=nuevaRuta">Agregar nueva ruta</a>
+  </div>
+
+  <table>
     <thead>
-    <tr>
+      <tr>
         <th>Origen</th>
         <th>Destino</th>
         <th>Recorrido</th>
         <th>Acciones</th>
-    </tr>
+      </tr>
     </thead>
     <tbody>
-    <c:forEach var="ruta" items="${rutas}">
+      <c:forEach var="ruta" items="${rutas}">
         <tr>
-            <td>${ruta.origen}</td>
-            <td>${ruta.destino}</td>
-            <td>
-                <c:forEach var="calle" items="${ruta.calles}" varStatus="status">
-                    ${calle.nombre}<c:if test="${!status.last}">, </c:if>
-                </c:forEach>
-            </td>
-            <td>
-                <a href="${pageContext.request.contextPath}/GestionServlet?action=formActualizarRuta&rutaId=${ruta.id}">Actualizar</a> |
-                <a href="${pageContext.request.contextPath}/GestionServlet?action=eliminarRuta&rutaId=${ruta.id}" onclick="return confirm('¿Estás seguro de que deseas eliminar esta ruta?');">Eliminar</a>
-            </td>
-
+          <td>${ruta.origen}</td>
+          <td>${ruta.destino}</td>
+          <td>
+            <c:forEach var="calle" items="${ruta.calles}" varStatus="status">
+              ${calle.nombre}<c:if test="${!status.last}">, </c:if>
+            </c:forEach>
+          </td>
+          <td>
+            <a href="${pageContext.request.contextPath}/GestionServlet?action=formActualizarRuta&rutaId=${ruta.id}">Actualizar</a> |
+            <a href="${pageContext.request.contextPath}/GestionServlet?action=eliminarRuta&rutaId=${ruta.id}" onclick="return confirm('¿Estás seguro de que deseas eliminar esta ruta?');">Eliminar</a>
+          </td>
         </tr>
-    </c:forEach>
+      </c:forEach>
     </tbody>
-</table>
+  </table>
+</div>
+
 </body>
 </html>

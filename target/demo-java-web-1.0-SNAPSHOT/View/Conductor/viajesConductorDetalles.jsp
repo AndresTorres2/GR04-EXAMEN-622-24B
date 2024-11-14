@@ -7,6 +7,10 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/index.css">
     <title>Compartir Ubicación del Conductor</title>
     <style>
+        body{
+            display: flex;
+            gap: 1.5rem;
+        }
         .button-group {
             display: flex;
             gap: 0.75rem;

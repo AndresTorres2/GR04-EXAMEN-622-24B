@@ -32,8 +32,8 @@
     <label for="jornada">Jornada:</label>
     <select name="jornada" id="jornada" required>
         <option value="">Seleccione una jornada</option>
-        <option value="Matutina">Matutina</option>
-        <option value="Vespertina">Vespertina</option>
+        <option value="matutina">Matutina</option>
+        <option value="vespertino">Vespertina</option>
     </select>
 
     <label for="conductor">Conductor:</label><br/>

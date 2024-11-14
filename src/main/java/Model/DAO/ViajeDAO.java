@@ -36,17 +36,26 @@ public class ViajeDAO extends GenericDAO{
 
 
     public void crearViajeEnDB(Viaje viaje) {
+        executeInTransaction(() -> em.persist(viaje));
+    }
+
+    private void executeInTransaction(Runnable action) {
         try {
             em.getTransaction().begin();
-            em.persist(viaje);
+            action.run();
             em.getTransaction().commit();
         } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
+            rollbackIfActive();
             e.printStackTrace();
         }
     }
+
+    private void rollbackIfActive() {
+        if (em.getTransaction().isActive()) {
+            em.getTransaction().rollback();
+        }
+    }
+
 
     public boolean existeViajeEnDB(Integer id) {
         return em.find(Viaje.class, id) != null;
@@ -204,18 +213,16 @@ public class ViajeDAO extends GenericDAO{
 
 
     public List<Viaje> obtenerListaDeViajesPorConductor(int idConductor) {
-        List<Viaje> listaViajes = new ArrayList<>();
         try {
             String sql = "SELECT v FROM Viaje v WHERE v.conductor.id = :idConductor";
-
             Query query = em.createQuery(sql, Viaje.class);
             query.setParameter("idConductor", idConductor);
-
-            listaViajes = query.getResultList();
+            return query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
+            return new ArrayList<>();
         }
-        return listaViajes;
     }
+
 
 }

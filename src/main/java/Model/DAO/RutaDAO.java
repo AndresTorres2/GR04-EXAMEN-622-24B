@@ -12,25 +12,6 @@ import java.util.Map;
 
 public class RutaDAO extends GenericDAO {
 
-    private static Map<Integer, Ruta> rutas = new HashMap<>();
-
-    public void guardarRuta(Ruta ruta) {
-        rutas.put(ruta.getId(), ruta);
-    }
-    public boolean existeRuta(int id) {
-        return rutas.containsKey(id);
-    }
-
-    public void eliminarRuta(int id) {
-        rutas.remove(id);
-    }
-    public void actualizarRuta(int id, Ruta nuevaRuta) {
-        rutas.put(id, nuevaRuta);
-    }
-
-    public Ruta obtenerRuta(int id) {
-        return rutas.get(id);
-    }
 
     //Implementacion con DB
     public List<Ruta> obtenerTodasLasRutas() {
@@ -44,14 +25,23 @@ public class RutaDAO extends GenericDAO {
     }
     public void guardarRutaDb(Ruta ruta) {
         try {
-            beginTransaction();  // Iniciar la transacción
-            em.persist(ruta);
-            commitTransaction(); // Confirmar la transacción
+            executeInTransaction(() -> em.persist(ruta));
         } catch (Exception e) {
-            rollbackTransaction(); // Revertir en caso de error
             e.printStackTrace();
         }
     }
+
+    private void executeInTransaction(Runnable action) {
+        try {
+            beginTransaction();
+            action.run();
+            commitTransaction();
+        } catch (Exception e) {
+            rollbackTransaction();
+            throw e;
+        }
+    }
+
     public Ruta  obtenerRutaId(int rutaId) {
         Ruta ruta =  null;
         try {

@@ -5,61 +5,7 @@
 <head>
   <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
   <title>Menu Administrador - PoliBus</title>
-  <style>
-    body {
-      background: #100f0f;
-      color: #d3d3d3;
-      font-family: Arial, sans-serif;
-      padding: 4rem;
-      margin: 0;
-      box-sizing: border-box;
-    }
-
-    .dashboard-container {
-      width: 80%;
-      margin: 0 auto;
-      padding: 20px;
-      border-radius: 8px;
-    }
-    h1 {
-      text-align: center;
-    }
-    .menu {
-      display: flex;
-      justify-content: space-around;
-      margin: 20px 0;
-    }
-    .menu-item {
-      background-color: #48578e;
-      padding: 20px;
-      width: 20%;
-      text-align: center;
-      border-radius: 8px;
-      color: white;
-      text-decoration: none;
-      font-size: 18px;
-      transition: background-color 0.3s ease;
-    }
-    .menu-item:hover {
-      background-color: #71a8df;
-    }
-    .logout-button {
-      background-color: #a94442;
-      padding: 20px;
-      text-align: center;
-      width: 100%;
-      border-radius: 8px;
-      color: white;
-      text-decoration: none;
-      font-size: 18px;
-      margin-top: 20px;
-      transition: background-color 0.3s ease;
-    }
-
-    .logout-button:hover {
-      background-color: #d9534f;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/indexDashboardAdmin.css">
 </head>
 <body>
 <div class="dashboard-container">

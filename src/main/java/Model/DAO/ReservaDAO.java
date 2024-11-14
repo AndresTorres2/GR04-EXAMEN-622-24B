@@ -7,24 +7,35 @@ import java.sql.Date;
 import java.util.*;
 
 public class ReservaDAO extends GenericDAO {
-    private static Map<Integer, Reserva> reservaDatabase = new HashMap<>();
+
 
 
     public ReservaDAO() {
         super();
     }
 
+
+
     public void guardarReserva(Reserva reserva, Viaje viaje) {
-        try {
-            beginTransaction();
+        executeInTransaction(() -> {
             em.persist(reserva);
             actualizarAsientosOcupados(viaje, 1);
+        });
+    }
+
+    private void executeInTransaction(Runnable action) {
+        try {
+            beginTransaction();
+            action.run();
             commitTransaction();
         } catch (Exception e) {
             rollbackTransaction();
             e.printStackTrace();
         }
     }
+
+
+
 
     private void actualizarAsientosOcupados(Viaje viaje, int incremento) {
         viaje.setAsientosOcupados(viaje.getAsientosOcupados() + incremento);
@@ -68,23 +79,16 @@ public class ReservaDAO extends GenericDAO {
         }
         return reserva;
     }
-    public void cancelarReserva(int reservaId, Viaje viaje) {
-        try {
-            beginTransaction();
-            Reserva reserva = em.find(Reserva.class, reservaId);
-            if (reserva == null) {
-                throw new RuntimeException("Reserva no encontrada con ID: " + reservaId);
-            }
-            em.remove(reserva);
-            actualizarAsientosOcupados(viaje,-1);
-            commitTransaction();
-        } catch (Exception e) {
-            rollbackTransaction();
-            e.printStackTrace();
-            throw e;
-        }
 
+    public void cancelarReserva(int reservaId, Viaje viaje) {
+        executeInTransaction(() -> {
+            Reserva reserva = em.find(Reserva.class, reservaId);
+            em.remove(reserva);
+            actualizarAsientosOcupados(viaje, -1);
+        });
     }
+
+
 
     public List<Reserva> obtenerReservasPorDia(int diaSeleccionado, Usuario usuario) {
         List<Reserva> reservasFiltradas = new ArrayList<>();
@@ -189,65 +193,7 @@ public class ReservaDAO extends GenericDAO {
 
 
 
-    ////CODIGO PARA LAS PRUEBAS UNITARIAS.
-    public void createReserva(Reserva reserva) {
-        reservaDatabase.put(reserva.getId(), reserva);
-    }
 
-
-    public Reserva readReserva(int id) {
-        return reservaDatabase.get(id);
-    }
-
-
-    public void deleteReserva(int id, boolean simulateError) {
-        if (simulateError) {
-            throw new RuntimeException("Error al eliminar la reserva");
-        }
-        reservaDatabase.remove(id);
-    }
-
-
-    public List<Reserva> getAllReservas(boolean simulateReadError) {
-        if (simulateReadError) {
-            throw new RuntimeException("Error al leer la base de datos");
-        }
-        return new ArrayList<>(reservaDatabase.values());
-    }
-
-
-    //Estas si van
-    public boolean isViajeEmpty(Viaje viaje) {
-        for (Reserva reserva : reservaDatabase.values()) {
-            if (reserva.getViaje().equals(viaje)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public List<Estudiante> listPassengersByViaje(Viaje viaje) {
-        List<Estudiante> pasajeros = new ArrayList<>();
-
-        for (Reserva reserva : reservaDatabase.values()) {
-            if (reserva.getViaje().equals(viaje)) {
-                pasajeros.add(reserva.getEstudiante());
-            }
-        }
-        return pasajeros;
-    }
-    public List<Estudiante> listPassengersByViajeSorted(Viaje viaje) {
-        List<Estudiante> pasajeros = new ArrayList<>();
-
-        for (Reserva reserva : reservaDatabase.values()) {
-            if (reserva.getViaje().equals(viaje)) {
-                pasajeros.add(reserva.getEstudiante());
-            }
-        }
-        pasajeros.sort(Comparator.comparing(Estudiante::getNombre));
-
-        return pasajeros;
-    }
 
 
 

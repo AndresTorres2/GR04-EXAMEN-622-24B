@@ -4,70 +4,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/index.css">
     <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
     <title>Detalles de la Reserva</title>
     <style>
-        body {
-            background: #100f0f;
-            color: #dcdcdc;
-            font-family: Arial, sans-serif;
-        }
 
-        .container {
-            width: 80%;
-            margin: auto;
-            padding: 20px;
-            background: #1c1c1c;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        }
 
-        h1, h2 {
-            text-align: center;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            margin: 5px 0;
-        }
-
-        button {
-            all: unset;
-            cursor: pointer;
-            background-color: #48578e;
-            border-radius: 5px;
-            padding: 0.75rem 1.5rem;
-            margin: 0;
-        }
-
-        a {
-            display: block;
-            text-align: center;
-            text-decoration: none;
-            padding: 10px;
-            background-color: #48578e;
-            color: white;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-
-        a:hover {
-            background-color: #71a8df;
-        }
-
-        .leaflet-top, .leaflet-bottom {
-            display: none;
-        }
-
-        #map {
-            height: 600px;
-            width: 100%;
-            margin: 20px 0;
-        }
 
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"/>
