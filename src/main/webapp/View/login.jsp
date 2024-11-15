@@ -41,7 +41,7 @@
         }
 
         body > div{
-            margin-top: 150px;
+            margin-top: 100px;
             margin-left: 1100px;
             width: fit-content;
             text-align: center;
@@ -85,11 +85,11 @@
         .logo-container {
             text-align: center;
             margin-bottom: 50px;
-            margin-left: 100px;
+            margin-left: 80px;
         }
 
         .logo-container img {
-            width: 100px;
+            width: 150px;
             height: auto;
         }
     </style>

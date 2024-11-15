@@ -4,49 +4,7 @@
 <head>
     <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
     <title>Crear Nueva Reserva</title>
-    <style>
-        body {
-            background: #100f0f;
-            color: #d3d3d3;
-            font-family: Arial, sans-serif;
-            padding: 4rem;
-            margin: 0;
-            box-sizing: border-box;
-        }
-
-        a {
-            text-decoration: none;
-            padding: 10px 20px;
-            background-color: #48578e;
-            color: white;
-            border-radius: 5px;
-            display: inline-block;
-        }
-
-        a:hover {
-            background-color: #71a8df;
-        }
-
-        table {
-            border-collapse: collapse;
-            margin-bottom: 1.5rem;
-            width: 100%;
-        }
-
-        th, td, tr {
-            padding: 0.5rem 1rem;
-            border: 1px solid #d3d3d3;
-        }
-
-        select, button {
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #d3d3d3;
-            border-radius: 5px;
-            background: #1c1c1c;
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/indexRegAct.css">
     <script>
         function searchViajes() {
             const input = document.getElementById('rutaSearchInput').value.toLowerCase();
@@ -67,11 +25,11 @@
 <h1>Nueva Reserva</h1>
 
 
-<div style="margin-bottom: 2rem;">
-    <a href="${pageContext.request.contextPath}/GestionServlet?action=gestionReservas">Volver al Gestion de Reservas</a>
+<div class="button-container">
+    <a class="button"href="${pageContext.request.contextPath}/GestionServlet?action=gestionReservas">Volver al Gestion de Reservas</a>
 </div>
 
-<form action="${pageContext.request.contextPath}/GestionServlet?action=crearReserva" method="post">
+<form class="tablaReserva" action="${pageContext.request.contextPath}/GestionServlet?action=crearReserva" method="post">
     <label for="estudianteSelect">Seleccionar Estudiante:</label>
     <select id="estudianteSelect" name="estudianteId" required>
         <option value="">Seleccione un estudiante</option>
@@ -105,12 +63,15 @@
                 <td>${viaje.asientosOcupados}</td>
                 <td>${viaje.ruta.origen} ➜ ${viaje.ruta.destino}</td>
                 <td>
-                    <button type="submit" name="viajeId" value="${viaje.id}">Reservar</button>
+                    <div class="reserva-container ">
+                        <button class="buttonR" type="submit" name="viajeId" value="${viaje.id}">Reservar</button>
+                    </div>
                 </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
 </form>
+
 </body>
 </html>

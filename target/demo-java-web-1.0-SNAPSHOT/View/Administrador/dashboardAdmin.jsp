@@ -5,7 +5,68 @@
 <head>
   <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
   <title>Menu Administrador - PoliBus</title>
-  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/indexDashboardAdmin.css">
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/indexAdministrador.css">
+<style>
+.dashboard-container {
+  width: 80%;
+  margin: auto;
+  padding: 2rem;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  border: 1px solid #7e7e7e;
+  text-align: center;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.menu-item {
+  background-color: #48578e;
+  padding: 15px 20px;
+  width: 18%;
+  text-align: center;
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+  margin-top: 50px;
+}
+
+.menu-item:hover {
+  background-color: #71a8df;
+  border: 1px solid #7e7e7e;
+  transform: scale(1.05);
+}
+
+.logout-button {
+  background-color: #a94442;
+  padding: 15px 20px;
+  text-align: center;
+  width: 15%;
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  margin-top: 150px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+  display: inline-block;
+  border: 1px solid transparent;
+}
+
+.logout-button:hover {
+  background-color: #d9534f;
+  border: 1px solid #7e7e7e;
+  transform: scale(1.05);
+}
+</style>
 </head>
 <body>
 <div class="dashboard-container">

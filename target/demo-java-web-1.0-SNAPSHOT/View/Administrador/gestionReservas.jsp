@@ -4,7 +4,22 @@
 <head>
   <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
   <title>Gestión de Reservas</title>
-  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/indexGestionReservas.css">
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/indexAdministrador.css">
+  <style>
+  #searchInput {
+    padding: 10px;
+    width: 200px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #7e7e7e;
+    border-radius: 5px;
+    background: #1c1c1c;
+    color: white;
+  }
+
+  #searchInput::placeholder {
+    color: #a0a0a0;
+  }
+  </style>
   <script>
     function searchReservas() {
       const input = document.getElementById('searchInput').value.toLowerCase();

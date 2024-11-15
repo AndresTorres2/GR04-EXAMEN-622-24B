@@ -32,10 +32,11 @@
   border-radius: 8px;
   color: white;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 18px;
   transition: background-color 0.3s ease, transform 0.3s ease;
   cursor: pointer;
   border: 1px solid transparent;
+  margin-top: 50px;
 }
 
 .menu-item:hover {
@@ -53,7 +54,7 @@
   color: white;
   text-decoration: none;
   font-size: 16px;
-  margin-top: 20px;
+  margin-top: 150px;
   transition: background-color 0.3s ease, transform 0.3s ease;
   cursor: pointer;
   display: inline-block;

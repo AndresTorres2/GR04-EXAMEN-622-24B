@@ -41,7 +41,8 @@
         }
 
         body > div{
-            margin: auto;
+            margin-top: 100px;
+            margin-left: 1100px;
             width: fit-content;
             text-align: center;
         }
@@ -49,7 +50,7 @@
             backdrop-filter: blur(8px);
             border-radius: 12px;
             border: 1px #7e7e7e solid;
-            padding: 2.25rem 2rem;
+            padding: 3.25rem 5rem;
         }
         form > div{
             width: 100%;
@@ -81,11 +82,24 @@
             color: #bf4141;
             margin-top: 10px;
         }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 50px;
+            margin-left: 80px;
+        }
+
+        .logo-container img {
+            width: 150px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
 <div>
     <form action="${pageContext.request.contextPath}/GestionServlet?action=validarUsuario" method="post">
+        <div class="logo-container">
+            <img src="${pageContext.request.contextPath}/assets/epn.png" alt="EPN Logo">
+        </div>
         <h2>Iniciar sesión</h2>
         <div>
             <label for="email">Correo</label>

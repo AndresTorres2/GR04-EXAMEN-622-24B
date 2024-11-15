@@ -4,7 +4,7 @@
 <head>
   <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
   <title>Gestión de Conductores</title>
-  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/indexGestionConductor.css">
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/indexAdministrador.css">
 </head>
 <body>
 <c:if test="${not empty errorMessage}">

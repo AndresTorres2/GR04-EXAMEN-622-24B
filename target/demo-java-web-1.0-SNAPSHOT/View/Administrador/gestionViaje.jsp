@@ -4,7 +4,19 @@
 <head>
   <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
   <title>Lista de Viajes</title>
-  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/indexGestionViajes.css">
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/indexAdministrador.css">
+  <style>
+  .container {
+    max-width: 1400px;
+    margin: auto;
+    padding: 2rem;
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    border: 1px solid #7e7e7e;
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  </style>
 </head>
 <body>
 <c:if test="${not empty errorMessage}">
