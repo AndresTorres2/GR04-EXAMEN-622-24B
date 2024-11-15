@@ -42,7 +42,7 @@
 
         body > div{
             margin-top: 150px;
-            margin-left: 200px;
+            margin-left: 1100px;
             width: fit-content;
             text-align: center;
         }
@@ -82,11 +82,24 @@
             color: #bf4141;
             margin-top: 10px;
         }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 50px;
+            margin-left: 100px;
+        }
+
+        .logo-container img {
+            width: 100px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
 <div>
     <form action="${pageContext.request.contextPath}/GestionServlet?action=validarUsuario" method="post">
+        <div class="logo-container">
+            <img src="${pageContext.request.contextPath}/assets/epn.png" alt="EPN Logo">
+        </div>
         <h2>Iniciar sesión</h2>
         <div>
             <label for="email">Correo</label>
