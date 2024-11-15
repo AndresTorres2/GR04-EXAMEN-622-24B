@@ -17,12 +17,6 @@
   text-align: center;
 }
 
-h1 {
-  font-size: 24px;
-  margin-bottom: 1.5rem;
-  color: #d3d3d3;
-}
-
 .menu {
   display: flex;
   justify-content: space-around;
