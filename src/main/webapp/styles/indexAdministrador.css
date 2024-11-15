@@ -46,7 +46,7 @@ a.button {
   border-radius: 5px;
   display: inline-block;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  font-size: 14px;
+  font-size: 18px;
   border: 1px solid transparent;
 }
 
@@ -73,7 +73,7 @@ th, td {
   padding: 0.75rem 1rem;
   border: 1px solid #3a3a3a;
   text-align: left;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 tbody tr {
