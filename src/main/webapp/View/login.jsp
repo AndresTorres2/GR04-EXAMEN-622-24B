@@ -41,7 +41,8 @@
         }
 
         body > div{
-            margin: auto;
+            margin-top: 150px;
+            margin-left: 200px;
             width: fit-content;
             text-align: center;
         }
@@ -49,7 +50,7 @@
             backdrop-filter: blur(8px);
             border-radius: 12px;
             border: 1px #7e7e7e solid;
-            padding: 2.25rem 2rem;
+            padding: 3.25rem 5rem;
         }
         form > div{
             width: 100%;
