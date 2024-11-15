@@ -8,7 +8,8 @@
     <title>Lista de Pasajeros</title>
     <style>
         body {
-            background: #100f0f;
+            background: url("${pageContext.request.contextPath}/assets/BannerPolibus720.jpg") no-repeat center center fixed;
+            background-size: cover;
             color: #dcdcdc;
             font-family: Arial, sans-serif;
         }
