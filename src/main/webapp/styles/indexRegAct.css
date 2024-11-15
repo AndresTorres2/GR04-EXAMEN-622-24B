@@ -140,3 +140,97 @@ a.button:hover {
   color: black !important; /* Color negro para el texto de cada opción */
 }
 
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+thead {
+  background-color: #48578e;
+  color: white;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  border: 1px solid #3a3a3a;
+  text-align: left;
+  font-size: 14px;
+}
+
+tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+tbody tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+td a {
+  color: #71a8df;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+td a:hover {
+  color: #d3d3d3;
+  text-decoration: underline;
+}
+.tablaReserva label{
+  margin-bottom: 5px;
+  color: #d3d3d3;
+  font-weight: bold;
+  font-size: 20px;
+}
+.tablaReserva input[type="text"]{
+  width: 20%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  font-size: 16px;
+  border-radius: 5px;
+  background: #1c1c1c;
+  color: white;
+}
+#estudianteSelect{
+  width: 20%;
+  font-size: 15px;
+  padding: 10px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #7e7e7e;
+  border-radius: 5px;
+  background: #1c1c1c;
+  color: white;
+}
+.reserva-container {
+  display: flex;
+  justify-content: center;
+}
+
+.buttonR{
+  text-align: center;
+  text-decoration: none;
+  padding: 10px 20px;
+  background-color: #48578e;
+  color: white;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 14px;
+  border: 1px solid transparent;
+  margin-top: 10px;
+}
+
+.buttonR:hover {
+  background-color: #71a8df;
+  transform: scale(1.05);
+}
+
