@@ -23,11 +23,11 @@
   <form class="styled-form" action="${pageContext.request.contextPath}/GestionServlet?action=actualizarRuta" method="post">
     <input type="hidden" name="rutaId" value="${ruta.id}" />
 
-    <label for="origen">Origen:</label>
+    <label for="origen">Origen:</label><br/>
     <input type="text" id="origen" name="origen" value="${ruta.origen}" required /><br/>
 
-    <label for="destino">Destino:</label>
-    <input type="text" id="destino" name="destino" value="${ruta.destino}" required /><br/><br/>
+    <label for="destino">Destino:</label><br/>
+    <input type="text" id="destino" name="destino" value="${ruta.destino}" required /><br/>
 
     <label for="calles">Selecciona Calles:</label><br/>
       <select name="calles" id="calles" multiple required>

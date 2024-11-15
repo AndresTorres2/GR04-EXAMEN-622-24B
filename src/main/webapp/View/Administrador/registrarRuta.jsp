@@ -19,7 +19,7 @@
   <h1>Crear Ruta</h1>
 
   <form class="styled-form" action="${pageContext.request.contextPath}/GestionServlet?action=guardarRuta" method="post">
-    <label for="origen">Origen:</label>
+    <label for="origen">Origen:</label><br/>
     <input type="text" id="origen" name="origen" required /><br/>
 
     <label for="destino">Destino:</label>

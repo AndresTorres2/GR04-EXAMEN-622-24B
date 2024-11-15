@@ -52,6 +52,21 @@ input.button:hover {
   background-color: #71a8df;
   transform: scale(1.05);
 }
+button.button{
+  text-decoration: none;
+  padding: 10px 20px;
+  background-color: #48578e;
+  color: white;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 14px;
+  border: 1px solid transparent;
+  justify-content: center;
+}
+button.button:hover {
+  background-color: #71a8df;
+  transform: scale(1.05);
+}
 
 .button-container {
   display: flex;
@@ -99,6 +114,8 @@ a.button:hover {
 }
 
 /* Estilo de los campos de entrada */
+.styled-form input[type="date"],
+.styled-form input[type="time"],
 .styled-form input[type="number"],
 .styled-form input[type="hidden"],
 .styled-form input[type="text"],
