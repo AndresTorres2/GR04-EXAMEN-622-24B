@@ -34,8 +34,8 @@ body::before {
 h1 {
   font-size: 24px;
   margin-bottom: 1.5rem;
-  text-align: center;
   color: #d3d3d3;
+  text-align: center;
 }
 
 a.button {
@@ -53,26 +53,6 @@ a.button {
 a.button:hover {
   background-color: #71a8df;
   transform: scale(1.05);
-}
-
-.nav-links {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-}
-
-#searchInput {
-  padding: 10px;
-  width: 200px;
-  margin-bottom: 1.5rem;
-  border: 1px solid #7e7e7e;
-  border-radius: 5px;
-  background: #1c1c1c;
-  color: white;
-}
-
-#searchInput::placeholder {
-  color: #a0a0a0;
 }
 
 table {
@@ -117,4 +97,10 @@ td a {
 td a:hover {
   color: #d3d3d3;
   text-decoration: underline;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
 }
