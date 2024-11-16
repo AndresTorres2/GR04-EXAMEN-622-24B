@@ -43,7 +43,7 @@
       
       <div class="card">
          <div>
-           <p><b>Ruta:</b>${reserva.viaje.ruta.origen} ➜ ${reserva.viaje.ruta.destino}</p>
+           <p><b>Ruta: </b>${reserva.viaje.ruta.origen} ➜ ${reserva.viaje.ruta.destino}</p>
            <p><b>Horario:</b> ${reserva.viaje.horaDeSalida} (${reserva.viaje.jornada})</p>
            <p><strong>Bus:</strong> #${reserva.viaje.bus.busId}</p>
          </div>

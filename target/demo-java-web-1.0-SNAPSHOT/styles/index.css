@@ -143,3 +143,18 @@ li {
     border: 1px solid var(--white-300);
     z-index: 1;
 }
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+table, th, td {
+    border: 1px solid var(--white-300);
+}
+th, td {
+    padding: 0.5rem;
+    text-align: center;
+}
+th {
+    background-color: var(--white-300);
+}
