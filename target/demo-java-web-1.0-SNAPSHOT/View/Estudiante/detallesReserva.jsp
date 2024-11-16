@@ -8,15 +8,16 @@
     <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
     <title>Detalles de la Reserva</title>
     <style>
-
-
-
+        body{
+            display: flex;
+            gap: 1.5rem;
+        }
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
 </head>
 <body>
-<div class="container">
+<div>
     <h1>Detalles de la Reserva</h1>
     <h2>Bus #${reserva.viaje.bus.busId}</h2>
     <h3>${reserva.viaje.ruta.origen} ➜ ${reserva.viaje.ruta.destino}</h3>
@@ -35,15 +36,8 @@
     <p><strong>Ubicacion del conductor:</strong></p>
     <p id="coordenadas-conductor">Esperando ubicación del conductor...</p>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%">
-        <button id="add-waypoint" style="align-items: center; display: block;">Establecer Parada</button>
-        <div style="display: flex; gap: 1rem">
-            <p>Notificar proximidad del bus</p>
-            <input type="checkbox">
-        </div>
-    </div>
+        <button id="add-waypoint" style="align-items: center; display: block;" onclick="habilitarAgregarParada()">Establecer Parada</button>
 
-    <div id="map"></div>
     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem">
         <a href="javascript:history.back();" class="tab">Regresar a Reservas</a>
         <a style="background: #501d1b"
@@ -53,6 +47,25 @@
         </a>
     </div>
 </div>
+<div>
+    <div id="map"></div>
+   <div>
+       <div class="map-leyenda-item">
+           <img src="${pageContext.request.contextPath}/assets/markerIcon.png">
+           <p>Punto de referencia en la ruta</p>
+       </div>
+       <div class="map-leyenda-item">
+           <img src="${pageContext.request.contextPath}/assets/paradaIcon.png">
+           <p>Su parada seleccionada</p>
+       </div>
+       <div class="map-leyenda-item">
+           <img style="filter: invert(1)" src="${pageContext.request.contextPath}/assets/busIcon.png">
+           <p>Polibus</p>
+       </div>
+   </div>
+
+</div>
+
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script>
@@ -94,6 +107,7 @@
         waypoints: waypoints,
         routeWhileDragging: false,
         draggableWaypoints: false,
+        addWaypoints: false,
         autoRoute: false,
         editable: false,
     }).addTo(map);
@@ -115,6 +129,8 @@
     });
 
     var busMarker;
+    var paradaMarker;
+    var agregarParada = false;
 
     function actualizarUbicacionBus() {
         fetch('${pageContext.request.contextPath}/GestionServlet?action=obtenerUbicacion')
@@ -143,6 +159,26 @@
     }
 
     setInterval(actualizarUbicacionBus, 5000);
+
+    function habilitarAgregarParada() {
+        agregarParada = true;
+        document.getElementById('add-waypoint').textContent = "Haga clic en el mapa para agregar una parada";
+    }
+
+    map.on('click', function (e) {
+        if (agregarParada) {
+            if (paradaMarker) {
+                map.removeLayer(paradaMarker);
+            }
+
+            paradaMarker = L.marker([e.latlng.lat, e.latlng.lng], { icon: paradaIcon }).addTo(map)
+                .bindPopup("Su parada está aquí.").openPopup();
+
+            agregarParada = false;
+            document.getElementById('add-waypoint').textContent = "Establecer Parada";
+        }
+    });
+
 </script>
 
 </body>

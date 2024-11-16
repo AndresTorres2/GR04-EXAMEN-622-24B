@@ -4,6 +4,7 @@
 <html>
 <head>
     <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
+
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/index.css">
     <title>Compartir Ubicación del Conductor</title>
     <style>
@@ -89,6 +90,7 @@
         waypoints: waypoints,
         routeWhileDragging: false,
         draggableWaypoints: false,
+        addWaypoints: false,
         autoRoute: false,
         editable: false,
     }).addTo(map);
