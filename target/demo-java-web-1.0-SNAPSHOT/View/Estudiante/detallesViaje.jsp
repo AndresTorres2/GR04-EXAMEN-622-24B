@@ -4,89 +4,49 @@
 <html>
 <head>
     <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/index.css">
     <title>Detalles del Bus</title>
-    <style>
-        body {
-            background: #100f0f;
-            color: #dcdcdc;
-            font-family: Arial, sans-serif;
-        }
 
-        .container {
-            width: 80%;
-            margin: auto;
-            padding: 20px;
-            background: #1c1c1c;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        h1, h2 {
-            text-align: center;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            margin: 5px 0;
-        }
-
-        a {
-            display: block;
-            text-align: center;
-            text-decoration: none;
-            padding: 10px;
-            background-color: #48578e;
-            color: white;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-
-        .leaflet-top, .leaflet-bottom {
-            display: none;
-        }
-
-        a:hover {
-            background-color: #71a8df;
-        }
-
-        #map {
-            height: 600px;
-            width: 100%;
-            margin: 20px 0;
-        }
-    </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
+    <style>
+        body{
+            display: flex;
+            align-items: center;
+            height: 100vh;
+            gap: 1.5rem;
+            justify-content: space-between;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
+<div style="width: 100%">
     <h1>Detalles del Viaje</h1>
-
-    <h2>Jornada: ${viaje.jornada}</h2>
-    <h3>Fecha: ${viaje.fecha}</h3>
-    <h3>Origen: ${viaje.ruta.origen}</h3>
-    <h3>Destino: ${viaje.ruta.destino}</h3>
-    <h4>Ruta:</h4>
+    <h3>${viaje.ruta.origen} ➜ ${viaje.ruta.destino}</h3>
+    <p><strong>Horario:</strong> ${viaje.horaDeSalida} (${viaje.jornada})</p>
+    <p><strong>Recorrido:</strong></p>
     <ul>
         <c:forEach var="calle" items="${viaje.ruta.calles}">
             <li>${calle.nombre}</li>
         </c:forEach>
     </ul>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin: 1.5rem 0;  gap: 1.5rem; width: 100%">
+        <a href="${pageContext.request.contextPath}/View/Estudiante/listarViajes.jsp">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                <path fill="currentColor" d="m9 18l-6-6l6-6l1.4 1.4L6.8 11H21v2H6.8l3.6 3.6z"/>
+            </svg>
+            <p>
+                Regresar a la lista de viajes
+            </p>
+        </a>
 
-    <p><strong>Horario:</strong> ${viaje.horaDeSalida}</p>
-    <p><strong>Conductor:</strong> ${viaje.conductor.nombre} ${viaje.conductor.apellido}</p>
-
-    <div id="map"></div>
-
-    <a href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=formularioReserva&idsViaje=${idViajes}">Realizar
-        reserva de asiento</a>
-    <a href="${pageContext.request.contextPath}/View/Estudiante/listarViajes.jsp">Regresar a la lista de viajes</a>
+        <a href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=formularioReserva&idsViaje=${idViajes}">
+            Reservar asiento</a>
+    </div>
 
 </div>
+<div id="map"></div>
+
 
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>

@@ -18,15 +18,15 @@ input {
 }
 
 input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px #242424 inset !important; /** nota: se necesita una manera de hacer esto transparente **/
-    -webkit-text-fill-color: #d3d3d3 !important;
+    -webkit-box-shadow: 0 0 0 1000px var(--white-200) inset !important;
+    -webkit-text-fill-color: var(--black) !important;
     transition: background-color 5000s ease-in-out 0s;
 }
 
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0px 1000px #242424 inset !important;
-    -webkit-text-fill-color: #d3d3d3 !important;
+    -webkit-box-shadow: 0 0 0 1000px var(--white-200) inset !important;
+    -webkit-text-fill-color: var(--black) !important;
     transition: background-color 5000s ease-in-out 0s;
 }
 body > div{
@@ -34,10 +34,13 @@ body > div{
     text-align: center;
 }
 form{
-    backdrop-filter: blur(8px);
+    background: var(--white-200);
     border-radius: 12px;
-    border: 1px #7e7e7e solid;
+    border: 1px var(--white-300) solid;
     padding: 3.25rem 5rem;
+}
+form h2{
+    margin-bottom: 1.5rem;
 }
 form > div{
     width: 100%;
@@ -48,21 +51,22 @@ form > div{
 input[type="submit"] {
     all: unset;
     padding: 10px 20px;
-    background-color: #48578e;
+    background-color: var(--blue);
+    border: 1px solid var(--dark-blue);
     color: white;
-    border-radius: 5px;
+    border-radius: 6px;
     display: inline-block;
     cursor: pointer;
 }
 
 input[type="text"], input[type="number"], input[type="password"] {
     all:unset;
-    border-bottom: 1px white solid;
+    border-bottom: 1px var(--black) solid;
     justify-content: normal;
 }
 
 input[type="submit"]:hover {
-    background-color: #71a8df;
+    background-color: var(--light-blue);
 }
 
 .error-message {

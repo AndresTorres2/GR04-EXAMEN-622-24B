@@ -25,7 +25,6 @@
        </div>
     </div>
 
-
     <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
         <h1>Viajes Polibus </h1>
 

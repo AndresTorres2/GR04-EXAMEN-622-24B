@@ -10,46 +10,54 @@
     <style>
         body{
             display: flex;
+            align-items: center;
+            height: 100vh;
             gap: 1.5rem;
+            justify-content: space-between;
+
         }
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
 </head>
 <body>
-<div>
+<div style="width: 100%">
     <h1>Detalles de la Reserva</h1>
-    <h2>Bus #${reserva.viaje.bus.busId}</h2>
     <h3>${reserva.viaje.ruta.origen} ➜ ${reserva.viaje.ruta.destino}</h3>
+    <p><strong>Horario:</strong> ${reserva.viaje.horaDeSalida} (${reserva.viaje.jornada})</p>
+    <p><strong>Bus:</strong> #${reserva.viaje.bus.busId}</p>
     <p><strong>Fecha de viaje:</strong> <fmt:formatDate value="${reserva.viaje.fecha}"
                                                         pattern="EEEE"/>, ${reserva.viaje.fecha}</p>
     <p><strong>Fecha de la reserva:</strong> <fmt:formatDate value="${reserva.fecha}" pattern="EEEE"/>, ${reserva.fecha}
     </p>
-    <p><strong>Horario:</strong> ${reserva.viaje.horaDeSalida} (${reserva.viaje.jornada})</p>
-    <p><strong>Recorrido:</strong>
-        <c:forEach var="calle" items="${reserva.viaje.ruta.calles}" varStatus="status">
-            ${calle.nombre}
-            <c:if test="${!status.last}">, </c:if>
+    <strong>Recorrido:</strong>
+    <ul>
+        <c:forEach var="calle" items="${reserva.viaje.ruta.calles}">
+            <li>${calle.nombre}</li>
         </c:forEach>
-    </p>
-    <p><strong>Nombre del estudiante:</strong> ${reserva.estudiante.nombre} ${reserva.estudiante.apellido}</p>
+    </ul>
     <p><strong>Ubicacion del conductor:</strong></p>
     <p id="coordenadas-conductor">Esperando ubicación del conductor...</p>
 
-        <button id="add-waypoint" style="align-items: center; display: block;" onclick="habilitarAgregarParada()">Establecer Parada</button>
 
-    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem">
-        <a href="javascript:history.back();" class="tab">Regresar a Reservas</a>
-        <a style="background: #501d1b"
+    <div style="display: flex; justify-content: space-between; align-items: center; margin: 1.5rem 0;">
+        <button id="add-waypoint" style="align-items: center; display: block;" onclick="habilitarAgregarParada()">Establecer Parada</button>
+        <a style="background: #d8b5b5; border: 1px solid #b17c7c"
            href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=cancelarReserva&reservaId=${reserva.id}"
            onclick="return confirm('¿Está seguro de que desea cancelar la reserva?');">
             Cancelar Reserva
         </a>
     </div>
+    <a href="javascript:history.back();" class="tab">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+            <path fill="currentColor" d="m9 18l-6-6l6-6l1.4 1.4L6.8 11H21v2H6.8l3.6 3.6z"/>
+        </svg>
+        <p>Regresar a Reservas</p>
+    </a>
 </div>
 <div>
-    <div id="map"></div>
-   <div>
+   <div id="map"></div>
+   <div id="map-leyenda">
        <div class="map-leyenda-item">
            <img src="${pageContext.request.contextPath}/assets/markerIcon.png">
            <p>Punto de referencia en la ruta</p>
@@ -59,7 +67,7 @@
            <p>Su parada seleccionada</p>
        </div>
        <div class="map-leyenda-item">
-           <img style="filter: invert(1)" src="${pageContext.request.contextPath}/assets/busIcon.png">
+           <img src="${pageContext.request.contextPath}/assets/busIcon.png">
            <p>Polibus</p>
        </div>
    </div>
@@ -68,6 +76,7 @@
 
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
 <script>
     function actualizarUbicacionBus() {
         fetch('${pageContext.request.contextPath}/GestionServlet?action=obtenerUbicacion')
@@ -175,7 +184,7 @@
                 .bindPopup("Su parada está aquí.").openPopup();
 
             agregarParada = false;
-            document.getElementById('add-waypoint').textContent = "Establecer Parada";
+            document.getElementById('add-waypoint').textContent = "Reestablecer Parada";
         }
     });
 

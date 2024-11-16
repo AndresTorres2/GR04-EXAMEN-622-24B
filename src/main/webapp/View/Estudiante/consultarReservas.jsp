@@ -5,102 +5,60 @@
 <html>
 <head>
   <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/index.css">
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/consultarReservas.css">
+
   <title>Consultar Reservas</title>
-  <style>
-    body {
-      background: #100f0f;
-      color: #dcdcdc;
-      font-family: Arial, sans-serif;
-    }
 
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .tabs {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .tab {
-      padding: 15px 30px;
-      margin: 0 5px;
-      background-color: #1c1c1c;
-      border: 1px solid #dcdcdc;
-      color: #dcdcdc;
-      cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-    }
-
-    .tab:hover {
-      background-color: #48578e;
-    }
-
-    h2 {
-      margin-bottom: 20px;
-    }
-
-    .reserva {
-      background-color: #1c1c1c;
-      padding: 20px;
-      border: 1px solid #dcdcdc;
-      margin-bottom: 15px;
-      width: 80%;
-    }
-    a{
-      text-decoration: none;
-      color: #dcdcdc;
-    }
-
-    .botton {
-      text-decoration: none;
-      padding: 10px 20px;
-      background-color: #48578e;
-      color: white;
-      border-radius: 5px;
-      display: inline-block;
-    }
-
-    .botton:hover {
-      background-color: #71a8df;
-    }
-  </style>
 </head>
 <body>
 <div class="container">
   <h1>Consultar Reservas</h1>
 
+  <%
+    String diaSeleccionado = request.getParameter("dia");
+  %>
+
   <div class="tabs">
-    <a class="tab" href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=verReservasDia&dia=1">Lunes</a>
-    <a class="tab" href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=verReservasDia&dia=2">Martes</a>
-    <a class="tab" href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=verReservasDia&dia=3">Miércoles</a>
-    <a class="tab" href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=verReservasDia&dia=4">Jueves</a>
-    <a class="tab" href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=verReservasDia&dia=5">Viernes</a>
+    <a class="tab <%= "1".equals(diaSeleccionado) ? "active" : "" %>"
+       href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=verReservasDia&dia=1">Lunes</a>
+    <a class="tab <%= "2".equals(diaSeleccionado) ? "active" : "" %>"
+       href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=verReservasDia&dia=2">Martes</a>
+    <a class="tab <%= "3".equals(diaSeleccionado) ? "active" : "" %>"
+       href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=verReservasDia&dia=3">Miércoles</a>
+    <a class="tab <%= "4".equals(diaSeleccionado) ? "active" : "" %>"
+       href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=verReservasDia&dia=4">Jueves</a>
+    <a class="tab <%= "5".equals(diaSeleccionado) ? "active" : "" %>"
+       href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=verReservasDia&dia=5">Viernes</a>
   </div>
+
+
+</div>
   <c:set var="diaAnterior" value="" />
-  <c:forEach var="reserva" items="${reservas}">
-    <c:set var="diaReserva">
-      <fmt:formatDate value="${reserva.viaje.fecha}" pattern="EEEE"/>
-    </c:set>
-    <c:if test="${diaReserva  != diaAnterior}">
-      <h2>Reservas para el día: <fmt:formatDate value="${reserva.viaje.fecha}" pattern="EEEE"/></h2>
-      <c:set var="diaAnterior" value="${diaReserva}" />
-    </c:if>
-    <div class="reserva">
-      <a  href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=detalleReserva&reservaId=${reserva.id}">
-        <p><strong>Viaje #${reserva.viaje.id}</strong></p>
-        <p>Fecha de la reserva: <fmt:formatDate value="${reserva.fecha}" pattern="yyyy-MM-dd"/></p>
-        <p>Horario: ${reserva.viaje.horaDeSalida} (${reserva.viaje.jornada})</p>
-        <p>Ruta: Desde ${reserva.viaje.ruta.origen} hasta ${reserva.viaje.ruta.destino}</p>
-        <p>Nombre del estudiante: ${reserva.estudiante.nombre} ${reserva.estudiante.apellido}</p>
-      </a>
-    </div>
-  </c:forEach>
-  <a href="${pageContext.request.contextPath}/View/Estudiante/listarViajes.jsp" class="botton">Regresar a la lista de viajes</a>
+  <div class="card-container">
+    <c:forEach var="reserva" items="${reservas}">
+      <c:set var="diaReserva">
+        <fmt:formatDate value="${reserva.viaje.fecha}" pattern="EEEE"/>
+      </c:set>
+      
+      <div class="card">
+         <div>
+           <p><b>Ruta: </b>${reserva.viaje.ruta.origen} ➜ ${reserva.viaje.ruta.destino}</p>
+           <p><b>Horario:</b> ${reserva.viaje.horaDeSalida} (${reserva.viaje.jornada})</p>
+           <p><strong>Bus:</strong> #${reserva.viaje.bus.busId}</p>
+         </div>
+        <a  href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=detalleReserva&reservaId=${reserva.id}">Ver detalles</a>
+      </div>
+    </c:forEach>
+  </div>
+
+  <a href="${pageContext.request.contextPath}/View/Estudiante/listarViajes.jsp" class="botton">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+      <path fill="currentColor" d="m9 18l-6-6l6-6l1.4 1.4L6.8 11H21v2H6.8l3.6 3.6z"/>
+    </svg>
+  <p>
+    Regresar a la lista de viajes
+  </p></a>
 </div>
 </body>
 </html>
