@@ -280,23 +280,49 @@ public class ReservaController extends HttpServlet {
         LocalDate proximoLunes = hoy.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));
 
 
-        if (hoy.isAfter(proximoLunes)) {
-            proximoLunes = proximoLunes.plusWeeks(1);
+        int diasRestantes;
+
+
+        if (hoy.getDayOfWeek() == DayOfWeek.MONDAY) {
+            diasRestantes = 5;
         }
 
+        else if (hoy.getDayOfWeek() == DayOfWeek.TUESDAY) {
+            diasRestantes = 4;
+        }
 
-        for (int i = 0; i < 5; i++) {
-            LocalDate dia = proximoLunes.plusDays(i);
+        else if (hoy.getDayOfWeek() == DayOfWeek.WEDNESDAY) {
+            diasRestantes = 3;
+        }
 
+        else if (hoy.getDayOfWeek() == DayOfWeek.THURSDAY) {
+            diasRestantes = 2;
+        }
+
+        else if (hoy.getDayOfWeek() == DayOfWeek.FRIDAY) {
+            diasRestantes = 1;  // Solo viernes
+        }
+
+        else {
+            diasRestantes = 5;
+        }
+
+        LocalDate diaInicio = (hoy.getDayOfWeek() == DayOfWeek.SATURDAY || hoy.getDayOfWeek() == DayOfWeek.SUNDAY) ? proximoLunes : hoy;
+        for (int i = 0; i < diasRestantes; i++) {
+            LocalDate dia = diaInicio.plusDays(i);
 
             if (dia.isAfter(hoy) || dia.isEqual(hoy)) {
                 diasSemana.add(dia);
                 System.out.println(dia);
             }
         }
-
         return diasSemana;
     }
+
+
+
+
+
 
 
 
