@@ -7,48 +7,22 @@
 
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/index.css">
     <title>Compartir Ubicación del Conductor</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
     <style>
         body{
             display: flex;
-            gap: 1.5rem;
-        }
-        .button-group {
-            display: flex;
-            gap: 0.75rem;
-        }
-        .card-container {
-            display: flex;
-            flex-direction: column;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            width: 100%;
-        }
-        .card {
-            display: flex;
-            width: 100%;
-            box-sizing: border-box;
-            justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #222222;
-            padding: 2rem 0;
-        }
-        .card-container .card:last-child {
-            border-bottom: none;
-        }
-        .card h3 {
-            margin: 0 0 10px 0;
-        }
-        .card p {
-            margin: 5px 0;
+            height: 100vh;
+            gap: 1.5rem;
+            justify-content: space-between;
+
         }
     </style>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"/>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
 </head>
 <body>
-<div class="card-container">
-    <div class="card">
+    <div>
         <div>
             <h3>Viaje Programado</h3>
             <p><strong>Fecha:</strong> ${viaje.fecha}</p>
@@ -58,14 +32,19 @@
             <p><strong>Asientos Ocupados:</strong> ${viaje.asientosOcupados}</p>
             <p><strong>Ruta:</strong> ${viaje.ruta.origen} ➔ ${viaje.ruta.destino}</p>
         </div>
+        <div class="button-group">
+            <a class="menu-item blue-button" href="javascript:void(0)"  onclick="iniciarCompartirUbicacion(${viaje.id})">Compartir Ubicación</a>
+            <a href="${pageContext.request.contextPath}/GestionServlet?action=notificarPasajeros&viajeId=${viaje.id}">Notificar Pasajeros</a>
+            <a href="${pageContext.request.contextPath}/ViajeServlet?ruta=verPasajeros&viajeId=${viaje.id}">Ver listado de Pasajeros</a>
+        </div>
+        <a style="margin-top: 2.5rem" href="javascript:history.back();">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                <path fill="currentColor" d="m9 18l-6-6l6-6l1.4 1.4L6.8 11H21v2H6.8l3.6 3.6z"/>
+            </svg>
+            <p>
+                Regresar
+            </p></a>
     </div>
-    <div class="button-group">
-        <a class="menu-item" href="javascript:void(0)"  onclick="iniciarCompartirUbicacion(${viaje.id})">Iniciar y Compartir Ubicación</a>
-        <a href="${pageContext.request.contextPath}/GestionServlet?action=notificarPasajeros&viajeId=${viaje.id}">Notificar Pasajeros</a>
-        <a href="${pageContext.request.contextPath}/ViajeServlet?ruta=verPasajeros&viajeId=${viaje.id}">Ver listado de Pasajeros</a>
-    </div>
-    <a href="javascript:history.back();" class="menu-item">Regresar</a>
-</div>
 <div id="map"></div>
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
@@ -126,9 +105,6 @@
                     }
                 } else {
                     const [latitud, longitud] = data.split(",");
-                    document.getElementById('coordenadas-conductor').textContent =
-                        "Latitud: " + latitud + ", Longitud: " + longitud;
-
                     if (busMarker) {
                         map.removeLayer(busMarker);
                     }

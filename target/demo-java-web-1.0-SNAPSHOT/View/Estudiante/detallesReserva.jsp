@@ -83,6 +83,35 @@
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script>
+    function actualizarUbicacionBus() {
+        fetch('${pageContext.request.contextPath}/GestionServlet?action=obtenerUbicacion')
+            .then(response => response.text())
+            .then(data => {
+                if (data === "Ubicación no disponible") {
+                    document.getElementById('coordenadas-conductor').textContent = data;
+                    if (busMarker) {
+                        map.removeLayer(busMarker);
+                        busMarker = null;
+                    }
+                } else {
+                    const [latitud, longitud] = data.split(",");
+                    document.getElementById('coordenadas-conductor').textContent =
+                        "Latitud: " + latitud + ", Longitud: " + longitud;
+
+                    if (busMarker) {
+                        map.removeLayer(busMarker);
+                    }
+
+                    busMarker = L.marker([latitud, longitud], {icon: busIcon}).addTo(map);
+                    map.setView([latitud, longitud], 13);
+                }
+            })
+            .catch(error => console.error("Error al obtener la ubicación:", error));
+    }
+
+    setInterval(actualizarUbicacionBus, 5000);
+</script>
+<script>
     var map = L.map('map').setView([-0.210194, -78.489326], 13);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -147,7 +176,6 @@
             .catch(error => console.error("Error al guardar la parada:", error));
     }
 
-    // Función para obtener la parada actualizada
     function obtenerParadaActualizada() {
         fetch('${pageContext.request.contextPath}/ReservarAsientoServlet?action=mostrarParadasDeReserva&reservaId=' + reservaId + '&timestamp=' + new Date().getTime())
             .then(response => response.json())
