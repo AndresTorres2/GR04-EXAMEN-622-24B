@@ -42,7 +42,7 @@
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin: 1.5rem 0;">
         <button id="add-waypoint" style="align-items: center; display: block;" onclick="habilitarAgregarParada()">Establecer Parada</button>
-        <a style="background: #d8b5b5; border: 1px solid #b17c7c"
+        <a class="red-button"
            href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=cancelarReserva&reservaId=${reserva.id}"
            onclick="return confirm('¿Está seguro de que desea cancelar la reserva?');">
             Cancelar Reserva

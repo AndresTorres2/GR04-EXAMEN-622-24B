@@ -1,0 +1,50 @@
+input {
+    text-align: left !important;
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px var(--white-200) inset !important;
+    -webkit-text-fill-color: var(--black) !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px var(--white-200) inset !important;
+    -webkit-text-fill-color: var(--black) !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+
+input[type="text"], input[type="number"], input[type="password"], input[type="email"] {
+    all:unset;
+    border-bottom: 1px var(--black) solid;
+    justify-content: normal;
+}
+
+form{
+    margin: 2rem auto;
+    background: var(--white-200);
+    border-radius: 12px;
+    border: 1px var(--white-300) solid;
+    padding: 3.25rem 5rem 4.25rem 5rem;
+    width: fit-content;
+}
+.form-section label{
+    width: 120px;
+}
+.form-section{
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    margin-top: 1.5rem;
+}
+
+form input[type="submit"]{
+    margin: 2rem auto 0 auto;
+}
+
+form + a{
+    margin: 1.5rem 0;
+}

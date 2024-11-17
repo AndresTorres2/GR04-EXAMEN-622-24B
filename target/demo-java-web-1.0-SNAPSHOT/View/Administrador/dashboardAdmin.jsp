@@ -5,80 +5,25 @@
 <head>
   <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/epn.png">
   <title>Menu Administrador - PoliBus</title>
-  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/indexAdministrador.css">
-<style>
-.dashboard-container {
-  width: 80%;
-  margin: auto;
-  padding: 2rem;
-  border-radius: 12px;
-  backdrop-filter: blur(8px);
-  border: 1px solid #7e7e7e;
-  text-align: center;
-}
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/dashboardAdmin.css">
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/index.css">
 
-.menu {
-  display: flex;
-  justify-content: space-around;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.menu-item {
-  background-color: #48578e;
-  padding: 15px 20px;
-  width: 18%;
-  text-align: center;
-  border-radius: 8px;
-  color: white;
-  text-decoration: none;
-  font-size: 18px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  cursor: pointer;
-  border: 1px solid transparent;
-  margin-top: 50px;
-}
-
-.menu-item:hover {
-  background-color: #71a8df;
-  border: 1px solid #7e7e7e;
-  transform: scale(1.05);
-}
-
-.logout-button {
-  background-color: #a94442;
-  padding: 15px 20px;
-  text-align: center;
-  width: 15%;
-  border-radius: 8px;
-  color: white;
-  text-decoration: none;
-  font-size: 16px;
-  margin-top: 150px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  cursor: pointer;
-  display: inline-block;
-  border: 1px solid transparent;
-}
-
-.logout-button:hover {
-  background-color: #d9534f;
-  border: 1px solid #7e7e7e;
-  transform: scale(1.05);
-}
-</style>
 </head>
 <body>
-<div class="dashboard-container">
-  <h1>Menu Administrador - PoliBus</h1>
-  <div class="menu">
-    <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionConductores">Gestion de Conductores</a>
-    <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionBuses">Gestion de Buses</a>
-    <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionRutas">Gestion de Rutas</a>
-    <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionViajes">Gestion de Viajes</a>
-    <a class="menu-item" href="${pageContext.request.contextPath}/GestionServlet?action=gestionReservas">Gestion de Reservas</a>
-  </div>
-  <a class="logout-button" href="${pageContext.request.contextPath}/GestionServlet?action=cerrarSesion">Cerrar Sesión</a>
+<div style="width: 100%; margin-left: -4rem; display: flex; align-items: center; justify-content: space-between; background-color: var(--dark-blue); padding: 2rem 4rem;">
+  <img style="width: 182px; height: 100px" src="${pageContext.request.contextPath}/assets/epnlogo.svg" alt="epn logo">
+    <a href="${pageContext.request.contextPath}/GestionServlet?action=cerrarSesion">
+      <p>Cerrar Sesión</p>
+      <svg viewBox="0 0 24 24" height="16" width="16"><path fill="currentColor" d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h6q.425 0 .713.288T12 4t-.288.713T11 5H5v14h6q.425 0 .713.288T12 20t-.288.713T11 21zm12.175-8H10q-.425 0-.712-.288T9 12t.288-.712T10 11h7.175L15.3 9.125q-.275-.275-.275-.675t.275-.7t.7-.313t.725.288L20.3 11.3q.3.3.3.7t-.3.7l-3.575 3.575q-.3.3-.712.288t-.713-.313q-.275-.3-.262-.712t.287-.688z"></path></svg>
+    </a>
 </div>
+  <h1>Dashboard Administrador</h1>
+  <div class="menu">
+    <a href="${pageContext.request.contextPath}/GestionServlet?action=gestionConductores">Gestión de Conductores</a>
+    <a href="${pageContext.request.contextPath}/GestionServlet?action=gestionBuses">Gestión de Buses</a>
+    <a href="${pageContext.request.contextPath}/GestionServlet?action=gestionRutas">Gestión de Rutas</a>
+    <a href="${pageContext.request.contextPath}/GestionServlet?action=gestionViajes">Gestión de Viajes</a>
+    <a href="${pageContext.request.contextPath}/GestionServlet?action=gestionReservas">Gestión de Reservas</a>
+  </div>
 </body>
 </html>

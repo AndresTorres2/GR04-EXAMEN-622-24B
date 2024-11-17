@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 Created-By: IntelliJ IDEA
-Built-By: Asus
-Build-Jdk: JetBrains Runtime 17.0.12
+Built-By: USER
+Build-Jdk: Oracle OpenJDK 22.0.1
 
