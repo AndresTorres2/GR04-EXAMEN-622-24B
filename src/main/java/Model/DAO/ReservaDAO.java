@@ -4,6 +4,7 @@ import Model.Entity.*;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.*;
 
 public class ReservaDAO extends GenericDAO {
@@ -17,6 +18,7 @@ public class ReservaDAO extends GenericDAO {
 
 
     public void guardarReserva(Reserva reserva, Viaje viaje) {
+
         executeInTransaction(() -> {
             em.persist(reserva);
             actualizarAsientosOcupados(viaje, 1);
@@ -90,7 +92,7 @@ public class ReservaDAO extends GenericDAO {
 
 
 
-    public List<Reserva> obtenerReservasPorDia(int diaSeleccionado, Usuario usuario) {
+    public List<Reserva> obtenerReservasPorDia(int diaSeleccionado, Estudiante usuario) {
         List<Reserva> reservasFiltradas = new ArrayList<>();
         for (Reserva  reserva : obtenerReservasPorEstudianteId(usuario.getId()))
         {
@@ -190,6 +192,20 @@ public class ReservaDAO extends GenericDAO {
         }
         return existe;
     }
+    public List<Reserva> obtenerReservasPorDiaYFechas(List<LocalDate> fechas, Estudiante estudiante,int diaSeleccionado) {
+        List<Reserva> reservasList = new ArrayList<>();
+
+        // Filtrar reservas por las fechas pasadas
+        for (Reserva reserva : obtenerReservasPorDia(diaSeleccionado,estudiante)) {
+            if (fechas.contains(reserva.getViaje().getFecha().toLocalDate())) {
+                reservasList.add(reserva);
+                System.out.println("Reserva: " + reserva + ", Fecha: " + reserva.getViaje().getFecha().toLocalDate());
+            }
+        }
+
+        return reservasList;
+    }
+
 
 
 

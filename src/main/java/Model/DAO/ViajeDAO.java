@@ -7,6 +7,7 @@ import jakarta.persistence.Query;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -121,7 +122,7 @@ public class ViajeDAO extends GenericDAO{
         List<Object[]> resultList = new ArrayList<>();
         try {
             String sql = "SELECT DISTINCT v.horaDeSalida, r.origen, r.destino, (SELECT GROUP_CONCAT(v2.id)  " +
-                    "FROM Viajes v2 WHERE v2.rutaId = v.rutaId AND v2.jornada = :jornada ) AS idViajes " +
+                    "FROM Viajes v2 WHERE v2.rutaId = v.rutaId AND v2.jornada = :jornada AND v2.horaDeSalida = v.horaDeSalida ) AS idViajes " +
                     "FROM Viajes v " +
                     "JOIN Rutas r ON v.rutaId = r.id " +
                     "WHERE v.jornada = :jornada " +
@@ -222,6 +223,22 @@ public class ViajeDAO extends GenericDAO{
             e.printStackTrace();
             return new ArrayList<>();
         }
+    }
+
+
+    public List<Viaje> obtenerViajesPorIdsYFechas(String idsViajes, List<LocalDate> fechas) {
+        List<Viaje> viajesList = new ArrayList<>();
+
+        for (Integer idViaje : convertirCadenaAListaDeIds(idsViajes)) {
+            Viaje viaje = obtenerViajePorCodigo(idViaje);
+            System.out.println("Viaje encontrado POR FUERA - Fecha: " + viaje.getFecha() +"formato:" +viaje.getFecha().getClass().getName());
+            if (viaje != null && fechas.contains(viaje.getFecha().toLocalDate())) {
+                System.out.println("Viaje encontrado - Fecha: " + viaje.getFecha().toLocalDate());
+                viajesList.add(viaje);
+            }
+        }
+
+        return viajesList;
     }
 
 

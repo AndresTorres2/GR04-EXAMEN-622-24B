@@ -16,7 +16,23 @@
     <c:if test="${not empty error}">
         <p style="color: red;">${error}</p>
     </c:if>
+    <c:if test="${empty viajesList}">
+        <p>Por el momento no existen viajes para la Semana.</p>
+        <div style="display: flex; justify-content: space-between; margin-top: 1.5rem">
+            <div>
+                <a href="${pageContext.request.contextPath}/ViajeServlet?ruta=seleccionarJornada&jornada">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="m9 18l-6-6l6-6l1.4 1.4L6.8 11H21v2H6.8l3.6 3.6z"/>
+                    </svg>
+                    <p>
+                        Volver a los detalles del viaje
+                    </p>
+                </a>
+            </div>
+        </div>
+    </c:if>
 
+<c:if test="${not empty viajesList}">
     <form action="${pageContext.request.contextPath}/ReservarAsientoServlet?action=guardarReserva" method="post" >
         <table>
             <thead>
@@ -62,7 +78,7 @@
             <button type="submit">Realizar Reserva</button>
         </div>
     </form>
-
+</c:if>
 
 </div>
 </body>
