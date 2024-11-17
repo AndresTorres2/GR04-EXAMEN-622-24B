@@ -8,14 +8,16 @@ import jakarta.persistence.*;
 public class ParadaEstudiante implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
-    @Column(name = "id")
-    private int id;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "ubicacionId", nullable = false)
+    private Ubicacion ubicacion;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "ubicacionId", nullable = false)
-    private Ubicacion ubicacion;
+    @JoinColumn(name = "estudianteId", nullable = false) // Estudiante es una entidad, no un String
+    private Estudiante estudiante;
 
     @Id
     @ManyToOne
@@ -25,33 +27,33 @@ public class ParadaEstudiante implements Serializable {
     public ParadaEstudiante() {
     }
 
-    public ParadaEstudiante(int estudianteId, Ubicacion ubicacion, Viaje viaje) {
-        this.id = estudianteId;
+    public ParadaEstudiante(Estudiante estudiante, Ubicacion ubicacion, Viaje viaje) {
+        this.estudiante = estudiante;
         this.ubicacion = ubicacion;
         this.viaje = viaje;
     }
 
-    public void setEstudianteId(int estudianteId) {
-        this.id = estudianteId;
+    public Estudiante getEstudiante() {
+        return estudiante;
     }
 
-    public void setUbicacion(Ubicacion ubicacion) {
-        this.ubicacion = ubicacion;
-    }
-
-    public void setViaje(Viaje viaje) {
-        this.viaje = viaje;
-    }
-
-    public int getEstudianteId() {
-        return id;
+    public void setEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
     }
 
     public Ubicacion getUbicacion() {
         return ubicacion;
     }
 
+    public void setUbicacion(Ubicacion ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
     public Viaje getViaje() {
         return viaje;
+    }
+
+    public void setViaje(Viaje viaje) {
+        this.viaje = viaje;
     }
 }

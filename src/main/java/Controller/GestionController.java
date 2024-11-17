@@ -10,7 +10,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
@@ -29,6 +31,8 @@ public class GestionController extends HttpServlet {
     ConductorDAO conductorDAO;
     ReservaDAO reservaDAO;
     EstudianteDAO estudianteDAO;
+    ParadaEstudianteDAO paradaEstudianteDAO;
+    UbicacionDAO ubicacionDAO;
 
     @Override
     public void init() throws ServletException {
@@ -42,6 +46,8 @@ public class GestionController extends HttpServlet {
         reservaDAO = new ReservaDAO();
         estudianteDAO = new EstudianteDAO();
         emailDAO = new EmailDAO();
+        paradaEstudianteDAO = new ParadaEstudianteDAO();
+        ubicacionDAO = new UbicacionDAO();
     }
 
     @Override
@@ -180,10 +186,69 @@ public class GestionController extends HttpServlet {
             case "cerrarSesion":
                 cerrarSesion(req, resp);
                 break;
+            case "gestionarParada":
+                gestionarParada(req, resp);
+                break;
             default:
                 break;
         }
     }
+
+    public void gestionarParada(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            StringBuilder json = new StringBuilder();
+            String line;
+            BufferedReader reader = req.getReader();
+            while ((line = reader.readLine()) != null) {
+                json.append(line);
+            }
+
+            JSONObject jsonObject = new JSONObject(json.toString());
+            double latitud = jsonObject.getDouble("latitud");
+            double longitud = jsonObject.getDouble("longitud");
+            int viajeId = jsonObject.getInt("viajeId");
+            int estudianteId = jsonObject.getInt("estudianteId");
+
+            if (viajeId == 0 || latitud == 0.0 || longitud == 0.0) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Faltan parámetros necesarios.");
+                return;
+            }
+
+            Viaje viaje = viajeDAO.obtenerViajeEnDB(viajeId);
+            if (viaje == null) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Viaje no encontrado.");
+                return;
+            }
+
+            Estudiante estudiante = estudianteDAO.obtenerEstudiantePorId(estudianteId);
+            if (estudiante == null) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Estudiante no encontrado.");
+                return;
+            }
+
+            Ubicacion nuevaUbicacion = new Ubicacion(0, latitud, longitud);
+
+            ubicacionDAO.agregarUbicacion(nuevaUbicacion);
+
+            Ubicacion ubicacionPersistida = ubicacionDAO.obtenerUbicacionPorId(nuevaUbicacion.getId());
+
+            ParadaEstudiante nuevaParada = new ParadaEstudiante(estudiante, ubicacionPersistida, viaje);
+
+            ParadaEstudianteDAO paradaEstudianteDAO = new ParadaEstudianteDAO();
+            paradaEstudianteDAO.crearParada(nuevaParada);
+
+            resp.setContentType("application/json");
+            resp.getWriter().write("{\"success\": true}");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al gestionar la parada.");
+        }
+    }
+
+
+
+
     public void mostrarFormActualizarConductor(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String conductorId = req.getParameter("conductorId");
         req.setAttribute("conductor",conductorDAO.obtenerConductorDb(conductorId));

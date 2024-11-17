@@ -2,52 +2,42 @@ package Model.DAO;
 
 import Model.Entity.ParadaEstudiante;
 import Model.Entity.Viaje;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceException;
 import java.util.List;
 
 public class ParadaEstudianteDAO extends GenericDAO {
 
-    public void guardarParadaEstudiante(ParadaEstudiante paradaEstudiante) {
+    public ParadaEstudiante obtenerParadaPorViaje(Viaje viaje) {
         try {
-            executeInTransaction(() -> em.persist(paradaEstudiante));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public List<ParadaEstudiante> obtenerParadasEstudiantesPorViaje(Viaje viaje) {
-        List<ParadaEstudiante> paradasEstudiantes = null;
-        try {
-            paradasEstudiantes = em.createQuery(
-                            "SELECT p FROM ParadaEstudiante p WHERE p.viaje = :viaje", ParadaEstudiante.class)
+            String query = "SELECT p FROM ParadaEstudiante p WHERE p.viaje = :viaje";
+            return em.createQuery(query, ParadaEstudiante.class)
                     .setParameter("viaje", viaje)
-                    .getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return paradasEstudiantes;
-    }
-
-    public void eliminarParadaEstudiante(ParadaEstudiante paradaEstudiante) {
-        try {
-            executeInTransaction(() -> em.remove(em.contains(paradaEstudiante) ? paradaEstudiante : em.merge(paradaEstudiante)));
-        } catch (PersistenceException e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            throw new RuntimeException("No se puede eliminar la parada del estudiante porque tiene dependencias asociadas.", e);
-        } catch (Exception e) {
-            rollbackTransaction();
-            e.printStackTrace();
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
         }
     }
 
-    public void actualizarParadaEstudiante(ParadaEstudiante paradaEstudiante) {
+    public void crearParada(ParadaEstudiante parada) {
+        executeInTransaction(() -> {
+            em.persist(parada);
+        });
+    }
+
+
+    public void actualizarParada(ParadaEstudiante parada) {
         try {
-            executeInTransaction(() -> em.merge(paradaEstudiante));
+            em.getTransaction().begin();
+            em.merge(parada);
+            em.getTransaction().commit();
         } catch (Exception e) {
-            rollbackTransaction();
+            em.getTransaction().rollback();
             e.printStackTrace();
+        } finally {
+            em.close();
         }
     }
 

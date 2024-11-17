@@ -183,10 +183,50 @@
             paradaMarker = L.marker([e.latlng.lat, e.latlng.lng], { icon: paradaIcon }).addTo(map)
                 .bindPopup("Su parada está aquí.").openPopup();
 
+            const latitud = e.latlng.lat;
+            const longitud = e.latlng.lng;
+            const viajeId = ${reserva.viaje.id};
+            const estudianteId = ${reserva.estudiante.id};
+
+            console.log(latitud)
+            console.log(longitud)
+            console.log(viajeId)
+            console.log(estudianteId)
+
+            if (latitud && longitud && viajeId && estudianteId) {
+                fetch('${pageContext.request.contextPath}/GestionServlet?action=gestionarParada', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        latitud: latitud,
+                        longitud: longitud,
+                        viajeId: viajeId,
+                        estudianteId: estudianteId
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Parada agregada correctamente.");
+                        } else {
+                            alert("Hubo un error al agregar la parada.");
+                        }
+                    })
+                    .catch(error => console.error("Error al guardar la parada:", error));
+            } else {
+                alert("Datos inválidos: latitud, longitud o viajeId faltantes.");
+            }
+
             agregarParada = false;
             document.getElementById('add-waypoint').textContent = "Reestablecer Parada";
         }
     });
+
+
+
+
 
 </script>
 
