@@ -9,15 +9,13 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.TextStyle;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @WebServlet(name = "ReservarAsientoServlet", value = "/ReservarAsientoServlet")
@@ -76,8 +74,20 @@ public class ReservaController extends HttpServlet {
     private void mostrarFormularioReserva(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        session.setAttribute("viajesList", viajeDAO.obtenerViajesPorIds(request.getParameter("idsViaje")));
-        request.setAttribute("viajesList", viajeDAO.obtenerViajesPorIds(request.getParameter("idsViaje")));
+        LocalDate today = LocalDate.now();
+        List<LocalDate> diasSemana = obtenerDiasProximaSemana(today);
+        String idsViajes = request.getParameter("idsViaje");
+        List<Viaje> viajesDeEstaSemana = viajeDAO.obtenerViajesPorIdsYFechas(idsViajes, diasSemana);
+        if (viajesDeEstaSemana.isEmpty()) {
+            System.out.println("No se encontraron viajes para los IDs y fechas especificadas.");
+        } else {
+            System.out.println("Viajes encontrados para la próxima semana:");
+            for (Viaje viaje : viajesDeEstaSemana) {
+                System.out.println(viaje);
+            }
+        }
+        session.setAttribute("viajesList",viajesDeEstaSemana);
+        request.setAttribute("viajesList", viajesDeEstaSemana);
         request.getRequestDispatcher("/View/Estudiante/reservarAsiento.jsp").forward(request, response);
 
 
@@ -100,6 +110,20 @@ public class ReservaController extends HttpServlet {
         Estudiante estudiante = estudianteDAO.obtenerEstudiantePorId(estudianteId);
         List<Viaje> listaViajes = viajeDAO.obtenerListaDeViajes(viajesIdsSeleccionados);
         for (Viaje viaje : listaViajes) {
+            if (viaje.getAsientosOcupados() == viaje.getBus().getCapacidad()) {
+                java.sql.Date sqlDate = viaje.getFecha();
+                LocalDate localDate = sqlDate.toLocalDate();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", new Locale("es", "ES"));
+                String fecha = localDate.format(formatter);
+
+                request.setAttribute("error", "El viaje del " + fecha + " está completo. Por favor elija otro viaje.");
+                request.setAttribute("viajesList", viajesList);
+                request.getRequestDispatcher("/View/Estudiante/reservarAsiento.jsp").forward(request, response);
+                return;
+            }
+
+
+
             if (reservaDAO.existeReserva(estudiante.getId(), viaje.getId())) {
                 java.sql.Date sqlDate = viaje.getFecha();
                 LocalDate localDate = sqlDate.toLocalDate();
@@ -122,7 +146,12 @@ public class ReservaController extends HttpServlet {
     private void verReservasDia(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Estudiante estudiante = (Estudiante) session.getAttribute("usuario");
-        request.setAttribute("reservas", reservaDAO.obtenerReservasPorDia(Integer.parseInt(request.getParameter("dia")),estudiante));
+        LocalDate hoy = LocalDate.now();
+
+
+        List<LocalDate> diasSemana = obtenerDiasDeSemana(hoy);
+        List<Reserva> reservas = reservaDAO.obtenerReservasPorDiaYFechas(diasSemana, estudiante,Integer.parseInt(request.getParameter("dia")));
+        request.setAttribute("reservas",reservas);
         request.getRequestDispatcher("/View/Estudiante/consultarReservas.jsp").forward(request, response);
     }
 
@@ -227,5 +256,74 @@ public class ReservaController extends HttpServlet {
             }
         }
     }
+
+    private List<LocalDate> obtenerDiasProximaSemana(LocalDate hoy) {
+        List<LocalDate> diasSemana = new ArrayList<>();
+
+        // Encontrar el próximo lunes
+        LocalDate proximoLunes = hoy.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+
+        // Agregar los días de lunes a viernes de la próxima semana
+        for (int i = 0; i < 5; i++) { // 5 días laborales
+            diasSemana.add(proximoLunes.plusDays(i));
+        }
+        System.out.println("Días de la próxima semana (lunes a viernes):");
+        for (LocalDate dia : diasSemana) {
+            System.out.println(dia);
+        }
+        return diasSemana;
+    }
+    private List<LocalDate> obtenerDiasDeSemana(LocalDate hoy) {
+        List<LocalDate> diasSemana = new ArrayList<>();
+
+
+        LocalDate proximoLunes = hoy.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));
+
+
+        int diasRestantes;
+
+
+        if (hoy.getDayOfWeek() == DayOfWeek.MONDAY) {
+            diasRestantes = 5;
+        }
+
+        else if (hoy.getDayOfWeek() == DayOfWeek.TUESDAY) {
+            diasRestantes = 4;
+        }
+
+        else if (hoy.getDayOfWeek() == DayOfWeek.WEDNESDAY) {
+            diasRestantes = 3;
+        }
+
+        else if (hoy.getDayOfWeek() == DayOfWeek.THURSDAY) {
+            diasRestantes = 2;
+        }
+
+        else if (hoy.getDayOfWeek() == DayOfWeek.FRIDAY) {
+            diasRestantes = 1;  // Solo viernes
+        }
+
+        else {
+            diasRestantes = 5;
+        }
+
+        LocalDate diaInicio = (hoy.getDayOfWeek() == DayOfWeek.SATURDAY || hoy.getDayOfWeek() == DayOfWeek.SUNDAY) ? proximoLunes : hoy;
+        for (int i = 0; i < diasRestantes; i++) {
+            LocalDate dia = diaInicio.plusDays(i);
+
+            if (dia.isAfter(hoy) || dia.isEqual(hoy)) {
+                diasSemana.add(dia);
+                System.out.println(dia);
+            }
+        }
+        return diasSemana;
+    }
+
+
+
+
+
+
+
 
 }
