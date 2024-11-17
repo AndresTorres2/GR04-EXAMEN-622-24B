@@ -1,4 +1,5 @@
 package Model.DAO;
+import Model.Entity.Administrador;
 import Model.Entity.Usuario;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +70,17 @@ public class UsuarioDAO extends GenericDAO{
         return tipoUsuario;
     }
 
+    public void guardarUsuarioDb(Administrador usuario) {
+        try {
+            beginTransaction();
+            em.persist(usuario);
+            commitTransaction();
+        } catch (Exception e) {
+            rollbackTransaction();
+            e.printStackTrace();
+        }
+    }
+
 
    /* public Usuario buscarUsuarioPorEmail(String email) {
         for (Usuario usuario : usuarios.values()) {
@@ -78,6 +90,21 @@ public class UsuarioDAO extends GenericDAO{
         }
         return null;
     }*/
+
+    public void eliminarAdministradorEnDB(int id) {
+        try {
+            beginTransaction();
+            Administrador administrador = em.find(Administrador.class, id);
+            if (administrador != null) {
+                em.remove(administrador);
+            }
+            commitTransaction();
+        } catch (Exception e) {
+            rollbackTransaction();
+            e.printStackTrace();
+        }
+    }
+
 
 
 }
