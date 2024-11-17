@@ -206,36 +206,32 @@ public class GestionController extends HttpServlet {
             JSONObject jsonObject = new JSONObject(json.toString());
             double latitud = jsonObject.getDouble("latitud");
             double longitud = jsonObject.getDouble("longitud");
-            int viajeId = jsonObject.getInt("viajeId");
-            int estudianteId = jsonObject.getInt("estudianteId");
+            int reservaId = jsonObject.getInt("reservaId");
 
-            if (viajeId == 0 || latitud == 0.0 || longitud == 0.0) {
+            if (reservaId == 0 || latitud == 0.0 || longitud == 0.0) {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Faltan parámetros necesarios.");
                 return;
             }
 
-            Viaje viaje = viajeDAO.obtenerViajeEnDB(viajeId);
-            if (viaje == null) {
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Viaje no encontrado.");
-                return;
-            }
-
-            Estudiante estudiante = estudianteDAO.obtenerEstudiantePorId(estudianteId);
-            if (estudiante == null) {
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Estudiante no encontrado.");
+            Reserva reserva = reservaDAO.obtenerReservaPorId(reservaId);
+            if (reserva == null) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Reserva no encontrada.");
                 return;
             }
 
             Ubicacion nuevaUbicacion = new Ubicacion(0, latitud, longitud);
-
             ubicacionDAO.agregarUbicacion(nuevaUbicacion);
 
-            Ubicacion ubicacionPersistida = ubicacionDAO.obtenerUbicacionPorId(nuevaUbicacion.getId());
+            Ubicacion ubicacionPersistida = ubicacionDAO.reatacharUbicacion(nuevaUbicacion);
+            ParadaEstudiante paradaExistente = paradaEstudianteDAO.obtenerParadaPorReserva(reserva);
 
-            ParadaEstudiante nuevaParada = new ParadaEstudiante(estudiante, ubicacionPersistida, viaje);
-
-            ParadaEstudianteDAO paradaEstudianteDAO = new ParadaEstudianteDAO();
-            paradaEstudianteDAO.crearParada(nuevaParada);
+            if (paradaExistente != null) {
+                paradaExistente.setUbicacion(ubicacionPersistida);
+                paradaEstudianteDAO.actualizarParada(paradaExistente);
+            } else {
+                ParadaEstudiante nuevaParada = new ParadaEstudiante(ubicacionPersistida, reserva);
+                paradaEstudianteDAO.crearParada(nuevaParada);
+            }
 
             resp.setContentType("application/json");
             resp.getWriter().write("{\"success\": true}");
@@ -245,6 +241,7 @@ public class GestionController extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al gestionar la parada.");
         }
     }
+
 
 
 

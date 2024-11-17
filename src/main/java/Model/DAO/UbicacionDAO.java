@@ -24,7 +24,6 @@ public class UbicacionDAO extends GenericDAO {
             beginTransaction();
             TypedQuery<Ubicacion> query = em.createQuery("SELECT u FROM Ubicacion u WHERE u.id = :ubicacionId", Ubicacion.class);
             query.setParameter("ubicacionId", id);
-
             ubicacion = query.getSingleResult();
             commitTransaction();
         } catch (Exception e) {
@@ -65,5 +64,18 @@ public class UbicacionDAO extends GenericDAO {
             rollbackTransaction();
             e.printStackTrace();
         }
+    }
+
+    public Ubicacion reatacharUbicacion(Ubicacion ubicacion) {
+        Ubicacion managedUbicacion = null;
+        try {
+            beginTransaction();
+            managedUbicacion = em.merge(ubicacion);
+            commitTransaction();
+        } catch (Exception e) {
+            rollbackTransaction();
+            e.printStackTrace();
+        }
+        return managedUbicacion;
     }
 }

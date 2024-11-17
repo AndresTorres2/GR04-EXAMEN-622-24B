@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setHeader("Expires", "0");
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -76,25 +82,6 @@
 
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-
-<script>
-    function actualizarUbicacionBus() {
-        fetch('${pageContext.request.contextPath}/GestionServlet?action=obtenerUbicacion')
-            .then(response => response.text())
-            .then(data => {
-                if (data === "Ubicación no disponible") {
-                    document.getElementById('coordenadas-conductor').textContent = data;
-                } else {
-                    const [latitud, longitud] = data.split(",");
-                    document.getElementById('coordenadas-conductor').textContent =
-                        "Latitud: " + latitud + ", Longitud: " + longitud;
-                }
-            })
-            .catch(error => console.error("Error al obtener la ubicación:", error));
-    }
-
-    setInterval(actualizarUbicacionBus, 5000);
-</script>
 <script>
     var map = L.map('map').setView([-0.210194, -78.489326], 13);
 
@@ -103,8 +90,6 @@
     }).addTo(map);
 
     var waypoints = [];
-    var waypointAvailable = false;
-
     <c:forEach var="calle" items="${callesYCoordenadas}">
     var latitud = ${calle[2]};
     var longitud = ${calle[3]};
@@ -121,10 +106,6 @@
         editable: false,
     }).addTo(map);
 
-    routingControl.getPlan().on('click', function (e) {
-        e.preventDefault();
-    });
-
     routingControl.route();
 
     var paradaIcon = L.icon({
@@ -140,83 +121,76 @@
     var busMarker;
     var paradaMarker;
     var agregarParada = false;
+    const reservaId = ${reserva.id};
 
-    function actualizarUbicacionBus() {
-        fetch('${pageContext.request.contextPath}/GestionServlet?action=obtenerUbicacion')
-            .then(response => response.text())
+    function actualizarParada(latitud, longitud) {
+        fetch('${pageContext.request.contextPath}/GestionServlet?action=gestionarParada', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                latitud: latitud,
+                longitud: longitud,
+                reservaId: reservaId,
+            })
+        })
+            .then(response => response.json())
             .then(data => {
-                if (data === "Ubicación no disponible") {
-                    document.getElementById('coordenadas-conductor').textContent = data;
-                    if (busMarker) {
-                        map.removeLayer(busMarker);
-                        busMarker = null;
-                    }
+                if (data.success) {
+                    alert("Parada establecida correctamente.");
+                    obtenerParadaActualizada();
                 } else {
-                    const [latitud, longitud] = data.split(",");
-                    document.getElementById('coordenadas-conductor').textContent =
-                        "Latitud: " + latitud + ", Longitud: " + longitud;
-
-                    if (busMarker) {
-                        map.removeLayer(busMarker);
-                    }
-
-                    busMarker = L.marker([latitud, longitud], { icon: busIcon }).addTo(map);
-                    map.setView([latitud, longitud], 13);
+                    alert("Hubo un error al agregar la parada.");
                 }
             })
-            .catch(error => console.error("Error al obtener la ubicación:", error));
+            .catch(error => console.error("Error al guardar la parada:", error));
     }
 
-    setInterval(actualizarUbicacionBus, 5000);
+    // Función para obtener la parada actualizada
+    function obtenerParadaActualizada() {
+        fetch('${pageContext.request.contextPath}/ReservarAsientoServlet?action=mostrarParadasDeReserva&reservaId=' + reservaId + '&timestamp=' + new Date().getTime())
+            .then(response => response.json())
+            .then(data => {
+                if (data.latitud && data.longitud) {
+                    if (paradaMarker) {
+                        map.removeLayer(paradaMarker);
+                    }
 
-    function habilitarAgregarParada() {
-        agregarParada = true;
-        document.getElementById('add-waypoint').textContent = "Haga clic en el mapa para agregar una parada";
+                    paradaMarker = L.marker([data.latitud, data.longitud], { icon: paradaIcon }).addTo(map)
+                        .bindPopup("Parada asignada a esta reserva.")
+                        .openPopup();
+
+                    console.log("Nueva parada: "+data.latitud+" CON "+data.longitud);
+                } else {
+                    console.error("No se encontró la parada para esta reserva.");
+                }
+            })
+            .catch(error => console.error("Error al obtener la parada actualizada:", error));
     }
 
+    // Obtener la parada al cargar el mapa
+    obtenerParadaActualizada();
+
+    // Manejar el clic en el mapa para agregar la parada
     map.on('click', function (e) {
         if (agregarParada) {
             if (paradaMarker) {
                 map.removeLayer(paradaMarker);
             }
 
+            // Crear el marcador para la nueva parada
             paradaMarker = L.marker([e.latlng.lat, e.latlng.lng], { icon: paradaIcon }).addTo(map)
                 .bindPopup("Su parada está aquí.").openPopup();
 
+            // Obtener las coordenadas y actualizar la parada en el backend
             const latitud = e.latlng.lat;
             const longitud = e.latlng.lng;
-            const viajeId = ${reserva.viaje.id};
-            const estudianteId = ${reserva.estudiante.id};
 
-            console.log(latitud)
-            console.log(longitud)
-            console.log(viajeId)
-            console.log(estudianteId)
-
-            if (latitud && longitud && viajeId && estudianteId) {
-                fetch('${pageContext.request.contextPath}/GestionServlet?action=gestionarParada', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        latitud: latitud,
-                        longitud: longitud,
-                        viajeId: viajeId,
-                        estudianteId: estudianteId
-                    })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert("Parada agregada correctamente.");
-                        } else {
-                            alert("Hubo un error al agregar la parada.");
-                        }
-                    })
-                    .catch(error => console.error("Error al guardar la parada:", error));
+            if (latitud && longitud) {
+                actualizarParada(latitud, longitud); // Actualizar parada y obtener la última parada
             } else {
-                alert("Datos inválidos: latitud, longitud o viajeId faltantes.");
+                alert("Datos inválidos: latitud o longitud faltantes.");
             }
 
             agregarParada = false;
@@ -224,11 +198,16 @@
         }
     });
 
-
-
-
+    // Función para habilitar el agregado de parada
+    function habilitarAgregarParada() {
+        agregarParada = true;
+        document.getElementById('add-waypoint').textContent = "Haga clic en el mapa para agregar una parada";
+    }
 
 </script>
+
+
+
 
 </body>
 </html>

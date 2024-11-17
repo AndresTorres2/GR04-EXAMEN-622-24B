@@ -6,6 +6,7 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -21,11 +22,11 @@ import java.time.format.DateTimeFormatter;
 @WebServlet(name = "ReservarAsientoServlet", value = "/ReservarAsientoServlet")
 public class ReservaController extends HttpServlet {
     private ReservaDAO reservaDAO;
-
     private EstudianteDAO estudianteDAO;
     private ViajeDAO viajeDAO;
     private CalleDAO calleDAO;
     private  EmailDAO emailDAO;
+    private ParadaEstudianteDAO paradaEstudianteDAO;
     HttpSession session;
 
     public void init() {
@@ -34,6 +35,7 @@ public class ReservaController extends HttpServlet {
         estudianteDAO = new EstudianteDAO();
         viajeDAO = new ViajeDAO();
         calleDAO = new CalleDAO();
+        paradaEstudianteDAO = new ParadaEstudianteDAO();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -66,11 +68,35 @@ public class ReservaController extends HttpServlet {
             case "cancelarReserva":
                 cancelarReserva(request, response);
                 break;
+            case "mostrarParadasDeReserva":
+                mostrarParadasDeReserva(request, response);
+                break;
             default:
                 break;
         }
     }
+    private void mostrarParadasDeReserva(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int reservaId = Integer.parseInt(request.getParameter("reservaId"));
+        Reserva reserva =  reservaDAO.obtenerReservaPorId(reservaId);
 
+        ParadaEstudiante paradaEstudiante = paradaEstudianteDAO.obtenerParadaPorReserva(reserva);
+
+        if (paradaEstudiante != null) {
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("latitud", paradaEstudiante.getUbicacion().getLatitud());
+            jsonResponse.put("longitud", paradaEstudiante.getUbicacion().getLongitud());
+            System.out.println("----------- mostrarParadasDeReserva -------------");
+            System.out.println(paradaEstudiante);
+            System.out.println(jsonResponse);
+            System.out.println("----------------------");
+
+            response.setContentType("application/json");
+            response.getWriter().write(jsonResponse.toString());
+        } else {
+            response.setContentType("application/json");
+            response.getWriter().write("{\"success\": false, \"message\": \"No se encontró la parada.\"}");
+        }
+    }
     private void mostrarFormularioReserva(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         HttpSession session = request.getSession();
@@ -111,7 +137,7 @@ public class ReservaController extends HttpServlet {
         List<Viaje> listaViajes = viajeDAO.obtenerListaDeViajes(viajesIdsSeleccionados);
         for (Viaje viaje : listaViajes) {
             if (viaje.getAsientosOcupados() == viaje.getBus().getCapacidad()) {
-                java.sql.Date sqlDate = viaje.getFecha();
+                Date sqlDate = viaje.getFecha();
                 LocalDate localDate = sqlDate.toLocalDate();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", new Locale("es", "ES"));
                 String fecha = localDate.format(formatter);
@@ -125,7 +151,7 @@ public class ReservaController extends HttpServlet {
 
 
             if (reservaDAO.existeReserva(estudiante.getId(), viaje.getId())) {
-                java.sql.Date sqlDate = viaje.getFecha();
+                Date sqlDate = viaje.getFecha();
                 LocalDate localDate = sqlDate.toLocalDate();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", new Locale("es", "ES"));
                 String dia = localDate.format(formatter);
@@ -196,7 +222,7 @@ public class ReservaController extends HttpServlet {
 
 
             for (Viaje viaje : listaViajes) {
-                java.sql.Date sqlDate = viaje.getFecha();
+                Date sqlDate = viaje.getFecha();
                 LocalDate localDate = sqlDate.toLocalDate();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", new Locale("es", "ES"));
                 String dia = localDate.format(formatter);
@@ -231,7 +257,7 @@ public class ReservaController extends HttpServlet {
             mensaje.append("Estimado/a ").append(estudiante.getNombre()).append(",\n\n");
             mensaje.append("Le informamos que su reserva ha sido cancelada con exito  para el siguiente viaje:\n\n");
 
-            java.sql.Date sqlDate = viaje.getFecha();
+            Date sqlDate = viaje.getFecha();
             LocalDate localDate = sqlDate.toLocalDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", new Locale("es", "ES"));
             String dia = localDate.format(formatter);

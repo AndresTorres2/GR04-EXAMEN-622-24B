@@ -4,41 +4,39 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "paradasEstudiante")
+@Table(name = "paradas_estudiantes")
 public class ParadaEstudiante implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private int id;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "ubicacionId", nullable = false)
     private Ubicacion ubicacion;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "estudianteId", nullable = false) // Estudiante es una entidad, no un String
-    private Estudiante estudiante;
-
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "viajeId", nullable = false)
-    private Viaje viaje;
+    @JoinColumn(name = "reservaId", nullable = false)
+    private Reserva reserva;
 
     public ParadaEstudiante() {
     }
 
-    public ParadaEstudiante(Estudiante estudiante, Ubicacion ubicacion, Viaje viaje) {
-        this.estudiante = estudiante;
+    public ParadaEstudiante(Ubicacion ubicacion, Reserva reserva) {
         this.ubicacion = ubicacion;
-        this.viaje = viaje;
+        this.reserva = reserva;
     }
 
-    public Estudiante getEstudiante() {
-        return estudiante;
+    // Getters y setters
+    public int getId() {
+        return id;
     }
 
-    public void setEstudiante(Estudiante estudiante) {
-        this.estudiante = estudiante;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Ubicacion getUbicacion() {
@@ -49,11 +47,20 @@ public class ParadaEstudiante implements Serializable {
         this.ubicacion = ubicacion;
     }
 
-    public Viaje getViaje() {
-        return viaje;
+    public Reserva getReserva() {
+        return reserva;
     }
 
-    public void setViaje(Viaje viaje) {
-        this.viaje = viaje;
+    public void setReserva(Reserva reserva) {
+        this.reserva = reserva;
+    }
+
+    @Override
+    public String toString() {
+        return "ParadaEstudiante{" +
+                "id=" + id +
+                ", ubicacion=" + ubicacion +
+                ", reserva=" + reserva +
+                '}';
     }
 }
