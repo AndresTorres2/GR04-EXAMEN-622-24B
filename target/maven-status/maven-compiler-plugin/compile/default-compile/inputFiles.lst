@@ -11,6 +11,7 @@ C:\Users\tandr\OneDrive\Documentos\GitHub\Prueba-Agiles\src\main\java\Model\Enti
 C:\Users\tandr\OneDrive\Documentos\GitHub\Prueba-Agiles\src\main\java\Model\Entity\Conductor.java
 C:\Users\tandr\OneDrive\Documentos\GitHub\Prueba-Agiles\src\main\java\Model\Entity\Reserva.java
 C:\Users\tandr\OneDrive\Documentos\GitHub\Prueba-Agiles\src\main\java\Model\DAO\ConductorDAO.java
+C:\Users\tandr\OneDrive\Documentos\GitHub\Prueba-Agiles\src\main\java\Model\DAO\UbicacionDAO.java
 C:\Users\tandr\OneDrive\Documentos\GitHub\Prueba-Agiles\src\main\java\Model\Entity\Ruta.java
 C:\Users\tandr\OneDrive\Documentos\GitHub\Prueba-Agiles\src\main\java\Model\Entity\Administrador.java
 C:\Users\tandr\OneDrive\Documentos\GitHub\Prueba-Agiles\src\main\java\Model\DAO\EmailDAO.java
@@ -21,5 +22,6 @@ C:\Users\tandr\OneDrive\Documentos\GitHub\Prueba-Agiles\src\main\java\Model\Enti
 C:\Users\tandr\OneDrive\Documentos\GitHub\Prueba-Agiles\src\main\java\Model\DAO\BusDAO.java
 C:\Users\tandr\OneDrive\Documentos\GitHub\Prueba-Agiles\src\main\java\Model\Entity\Usuario.java
 C:\Users\tandr\OneDrive\Documentos\GitHub\Prueba-Agiles\src\main\java\Model\DAO\RutaDAO.java
+C:\Users\tandr\OneDrive\Documentos\GitHub\Prueba-Agiles\src\main\java\Model\DAO\ParadaEstudianteDAO.java
 C:\Users\tandr\OneDrive\Documentos\GitHub\Prueba-Agiles\src\main\java\Model\Entity\Ubicacion.java
 C:\Users\tandr\OneDrive\Documentos\GitHub\Prueba-Agiles\src\main\java\Model\Entity\Estudiante.java

@@ -4,6 +4,7 @@ Model\DAO\ViajeDAO.class
 Model\Entity\Bus.class
 Model\Entity\Calle.class
 Model\DAO\GenericDAO.class
+Model\DAO\UbicacionDAO.class
 Model\Entity\Estudiante.class
 Controller\ViajeController.class
 Model\DAO\BusDAO.class
@@ -20,6 +21,7 @@ Model\Entity\Ubicacion.class
 Controller\ReservaController.class
 Model\DAO\RutaDAO.class
 Model\DAO\EstudianteDAO.class
+Model\DAO\ParadaEstudianteDAO.class
 Model\Entity\Conductor.class
 Model\DAO\ReservaDAO.class
 Model\DAO\UsuarioDAO.class
