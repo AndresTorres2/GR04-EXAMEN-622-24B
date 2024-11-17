@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-<%
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    response.setHeader("Pragma", "no-cache");
-    response.setHeader("Expires", "0");
+<% response.setHeader("Cache-Control","no-cache");
+    response.setHeader("Pragma","no-cache");
+    response.setDateHeader ("Expires", -1);
+    response.setHeader("Cache-Control","no-store"); //HTTP 1.1
 %>
 
 <!DOCTYPE html>
@@ -47,7 +47,7 @@
 
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin: 1.5rem 0;">
-        <button id="add-waypoint" style="align-items: center; display: block;" onclick="habilitarAgregarParada()">Establecer Parada</button>
+
         <a class="red-button"
            href="${pageContext.request.contextPath}/ReservarAsientoServlet?action=cancelarReserva&reservaId=${reserva.id}"
            onclick="return confirm('¿Está seguro de que desea cancelar la reserva?');">
@@ -67,10 +67,6 @@
        <div class="map-leyenda-item">
            <img src="${pageContext.request.contextPath}/assets/markerIcon.png">
            <p>Punto de referencia en la ruta</p>
-       </div>
-       <div class="map-leyenda-item">
-           <img src="${pageContext.request.contextPath}/assets/paradaIcon.png">
-           <p>Su parada seleccionada</p>
        </div>
        <div class="map-leyenda-item">
            <img src="${pageContext.request.contextPath}/assets/busIcon.png">
