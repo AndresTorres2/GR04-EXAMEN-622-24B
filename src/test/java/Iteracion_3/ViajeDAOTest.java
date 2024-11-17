@@ -43,8 +43,6 @@ public class ViajeDAOTest {
             Viaje viaje = new Viaje(0, bus, Date.valueOf("2024-12-12"), Time.valueOf("10:00:00"), ruta, "matutino", 20 + i, null);
             viajeDAO.crearViajeEnDB(viaje);
             viajes.add(viaje);
-            viajeDAO.crearViajeEnDB(viaje);
-            viajes.add(viaje);
         }
     }
     @Test
@@ -52,8 +50,10 @@ public class ViajeDAOTest {
         List<Viaje> viajesObtenidos = viajeDAO.obtenerTodosLosViajes();
 
         System.out.println(viajesObtenidos.size());
-
+        System.out.println("Viajes esperados: " + viajes.size());
+        System.out.println("Viajes obtenidos: " + viajesObtenidos.size());
         assertTrue(viajesObtenidos.size() >= viajes.size());
+
     }
     @Test
     public void  given_ViajeExists_when_DeleteViaje_then_ViajeIsDeleted() {
