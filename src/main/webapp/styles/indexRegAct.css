@@ -66,12 +66,10 @@ button.button:hover {
   background-color: #71a8df;
   transform: scale(1.05);
 }
-
 .button-container {
   display: flex;
   justify-content: flex-end;
 }
-
 a.button {
   text-align: center;
   text-decoration: none;
@@ -89,8 +87,6 @@ a.button:hover {
   background-color: #71a8df;
   transform: scale(1.05);
 }
-
-
 /* Estilo general para el formulario */
 .styled-form {
   max-width: 400px;
@@ -103,7 +99,6 @@ a.button:hover {
   display: flex;
   flex-direction: column;
 }
-
 /* Estilo de las etiquetas */
 .styled-form label {
   display: block;
@@ -111,7 +106,6 @@ a.button:hover {
   color: #333;
   font-weight: bold;
 }
-
 /* Estilo de los campos de entrada */
 .styled-form input[type="date"],
 .styled-form input[type="time"],
@@ -128,18 +122,12 @@ a.button:hover {
   box-sizing: border-box;
   font-size: 16px;
 }
-
-/* Forzar color negro en las opciones de Select2 */
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
-  color: black !important; /* Color negro para las etiquetas seleccionadas */
+  color: black !important;
 }
-
-/* Estilo de las opciones en el menú desplegable */
 .select2-container--default .select2-results__option {
-  color: black !important; /* Color negro para el texto de cada opción */
+  color: black !important;
 }
-
-
 table {
   width: 100%;
   border-collapse: collapse;
@@ -148,37 +136,30 @@ table {
   overflow: hidden;
   margin-top: 1rem;
 }
-
 thead {
   background-color: #48578e;
   color: white;
 }
-
 th, td {
   padding: 0.75rem 1rem;
   border: 1px solid #3a3a3a;
   text-align: left;
   font-size: 14px;
 }
-
 tbody tr {
   transition: background-color 0.2s ease;
 }
-
 tbody tr:nth-child(even) {
   background-color: rgba(255, 255, 255, 0.05);
 }
-
 tbody tr:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
-
 td a {
   color: #71a8df;
   text-decoration: none;
   font-weight: bold;
 }
-
 td a:hover {
   color: #d3d3d3;
   text-decoration: underline;
