@@ -8,10 +8,7 @@ import org.hibernate.exception.ConstraintViolationException;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class ViajeDAO extends GenericDAO{
     public ViajeDAO() {
@@ -120,28 +117,53 @@ public class ViajeDAO extends GenericDAO{
 
     public List<Object[]> listarViajesPorJornada(String jornada) {
         List<Object[]> resultList = new ArrayList<>();
+        List<Object[]> processedList = new ArrayList<>();
         try {
-            String sql = "SELECT DISTINCT v.horaDeSalida, r.origen, r.destino, (SELECT GROUP_CONCAT(v2.id)  " +
-                    "FROM Viajes v2 WHERE v2.rutaId = v.rutaId AND v2.jornada = :jornada AND v2.horaDeSalida = v.horaDeSalida ) AS idViajes " +
+            String sql = "SELECT DISTINCT v.horaDeSalida, r.origen, r.destino, v2.id " +
                     "FROM Viajes v " +
                     "JOIN Rutas r ON v.rutaId = r.id " +
+                    "JOIN Viajes v2 ON v2.rutaId = v.rutaId " +
+                    "               AND v2.jornada = :jornada " +
+                    "               AND v2.horaDeSalida = v.horaDeSalida " +
                     "WHERE v.jornada = :jornada " +
                     "AND v.rutaId IN ( " +
                     "    SELECT DISTINCT rutaId " +
                     "    FROM Viajes " +
                     "    WHERE jornada = :jornada " +
                     ") " +
-                    "ORDER BY r.origen, r.destino;";
+                    "ORDER BY r.origen, r.destino, v.horaDeSalida, v2.id";
 
             Query query = em.createNativeQuery(sql);
             query.setParameter("jornada", jornada);
 
             resultList = query.getResultList();
+
+            // Proceso para concatenar IDs manualmente
+            Map<String, List<String>> groupedData = new LinkedHashMap<>();
+            for (Object[] row : resultList) {
+                String key = row[0] + "|" + row[1] + "|" + row[2]; // horaDeSalida|origen|destino
+                String idViaje = row[3].toString();
+
+                groupedData.computeIfAbsent(key, k -> new ArrayList<>()).add(idViaje);
+            }
+
+            // Convertir el mapa agrupado en la lista final
+            for (Map.Entry<String, List<String>> entry : groupedData.entrySet()) {
+                String[] keyParts = entry.getKey().split("\\|");
+                String horaDeSalida = keyParts[0];
+                String origen = keyParts[1];
+                String destino = keyParts[2];
+                String concatenatedIds = String.join(",", entry.getValue());
+
+                processedList.add(new Object[]{horaDeSalida, origen, destino, concatenatedIds});
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return resultList;
+        return processedList;
     }
+
 
     public Viaje obtenerViajePorCodigo(int codigo) {
         try {
@@ -218,7 +240,13 @@ public class ViajeDAO extends GenericDAO{
             String sql = "SELECT v FROM Viaje v WHERE v.conductor.id = :idConductor";
             Query query = em.createQuery(sql, Viaje.class);
             query.setParameter("idConductor", idConductor);
-            return query.getResultList();
+            List<Viaje> viajes = query.getResultList();
+
+            for (Viaje viaje : viajes) {
+                em.refresh(viaje);
+            }
+
+            return viajes;
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();

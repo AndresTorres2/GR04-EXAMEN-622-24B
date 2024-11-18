@@ -311,7 +311,7 @@ public class GestionController extends HttpServlet {
         }
     }
 
-    private void notificarPasajeros(HttpServletRequest req, HttpServletResponse resp) throws MessagingException {
+    private void notificarPasajeros(HttpServletRequest req, HttpServletResponse resp) throws MessagingException, ServletException, IOException {
         int viajeId = Integer.parseInt(req.getParameter("viajeId"));
 
         Viaje viaje = viajeDAO.obtenerViajePorCodigo(viajeId);
@@ -338,7 +338,13 @@ public class GestionController extends HttpServlet {
             System.out.println("Correo enviado a: " + email);
         }
 
-        System.out.println("Notificaciones enviadas a los pasajeros.");
+        List<Object[]> callesYCoordenadas = calleDAO.obtenerCallesYCoordenadasPorRutaId(viaje.getRuta().getId());
+
+        req.setAttribute("viaje", viaje);
+        req.setAttribute("callesYCoordenadas", callesYCoordenadas);
+
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/View/Conductor/viajesConductorDetalles.jsp");
+        dispatcher.forward(req, resp);
     }
 
 

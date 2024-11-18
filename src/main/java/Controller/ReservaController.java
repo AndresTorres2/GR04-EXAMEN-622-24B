@@ -101,7 +101,7 @@ public class ReservaController extends HttpServlet {
 
         HttpSession session = request.getSession();
         LocalDate today = LocalDate.now();
-        List<LocalDate> diasSemana = obtenerDiasProximaSemana(today);
+        List<LocalDate> diasSemana = obtenerDiasDeSemana(today);
         String idsViajes = request.getParameter("idsViaje");
         List<Viaje> viajesDeEstaSemana = viajeDAO.obtenerViajesPorIdsYFechas(idsViajes, diasSemana);
         if (viajesDeEstaSemana.isEmpty()) {
