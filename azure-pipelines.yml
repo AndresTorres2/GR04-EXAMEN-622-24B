@@ -1,0 +1,30 @@
+trigger:
+- main 
+
+pool:
+  vmImage: 'ubuntu-latest'  
+
+steps:
+# Paso 1: Configurar Java
+- task: UseJavaVersion@1
+  inputs:
+    version: '17'  
+    jdkArchitecture: 'x64'
+
+# Paso 2: Instalar Maven
+- task: Maven@3
+  inputs:
+    mavenVersionOption: 'Default'  
+    mavenPomFile: 'pom.xml'        
+    options: '-B'                  
+    goals: 'clean compile'        
+
+# Paso 3: Ejecutar pruebas
+- task: Maven@3
+  inputs:
+    mavenVersionOption: 'Default'
+    mavenPomFile: 'pom.xml'
+    options: '-B'
+    goals: 'test'
+
+
