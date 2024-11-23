@@ -2,10 +2,23 @@ trigger:
 - main  # Cambia "main" si usas otra rama como "master" o "develop"
 
 pool:
-  vmImage: 'windows-latest'    
+  vmImage: 'windows-latest'  # Usamos Windows en lugar de Ubuntu
 
 steps:
-# Paso 1: Ejecutar las pruebas con Maven
+# Paso 1: Instalar Java (JDK 17)
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '17'  # Especifica la versión de Java que necesitas
+    jdkArchitecture: 'x64'  # Arquitectura de Java, puede ser x86 o x64
+
+# Paso 2: Instalar Maven
+- task: Maven@3
+  inputs:
+    mavenVersionOption: 'Default'  # Utiliza la versión predeterminada de Maven
+    mavenPomFile: 'pom.xml'        # Ruta al archivo pom.xml
+    goals: 'clean compile'         # Realiza la compilación
+
+# Paso 3: Ejecutar las pruebas con Maven
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'  # Asegúrate de que el pom.xml esté en la raíz
