@@ -1,30 +1,24 @@
 trigger:
-- main 
+- main  # Cambia "main" si usas otra rama como "master" o "develop"
 
 pool:
   vmImage: 'ubuntu-latest'  
 
 steps:
-# Paso 1: Configurar Java
-- task: UseJavaVersion@1
+- task: JavaToolInstaller@0
   inputs:
-    version: '17'  
-    jdkArchitecture: 'x64'
+    versionSpec: '17'  # Especifica la versión de Java que necesitas
+    jdkArchitecture: 'x64'  # Arquitectura de Java, puede ser x86 o x64
 
-# Paso 2: Instalar Maven
-- task: Maven@3
-  inputs:
-    mavenVersionOption: 'Default'  
-    mavenPomFile: 'pom.xml'        
-    options: '-B'                  
-    goals: 'clean compile'        
-
-# Paso 3: Ejecutar pruebas
 - task: Maven@3
   inputs:
     mavenVersionOption: 'Default'
     mavenPomFile: 'pom.xml'
-    options: '-B'
-    goals: 'test'
+    goals: 'clean compile'
 
-
+# Paso 2: Ejecutar Maven
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'    # Asegúrate de que el pom.xml esté en la raíz
+    options: '-B'             # Habilita modo batch para Maven
+    goals: 'clean test'       # Combina compile y test en un solo paso
