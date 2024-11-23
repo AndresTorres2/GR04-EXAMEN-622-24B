@@ -2,7 +2,7 @@ trigger:
 - main  # Cambia "main" si usas otra rama como "master" o "develop"
 
 pool:
-  vmImage: 'ubuntu-latest'  
+  vmImage: 'windows-latest'    
 
 steps:
 - task: JavaToolInstaller@0
