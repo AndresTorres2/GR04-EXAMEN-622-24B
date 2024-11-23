@@ -5,20 +5,9 @@ pool:
   vmImage: 'windows-latest'    
 
 steps:
-- task: JavaToolInstaller@0
-  inputs:
-    versionSpec: '17'  # Especifica la versión de Java que necesitas
-    jdkArchitecture: 'x64'  # Arquitectura de Java, puede ser x86 o x64
-
+# Paso 1: Ejecutar las pruebas con Maven
 - task: Maven@3
   inputs:
-    mavenVersionOption: 'Default'
-    mavenPomFile: 'pom.xml'
-    goals: 'clean compile'
-
-# Paso 2: Ejecutar Maven
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'    # Asegúrate de que el pom.xml esté en la raíz
-    options: '-B'             # Habilita modo batch para Maven
-    goals: 'clean test'       # Combina compile y test en un solo paso
+    mavenPomFile: 'pom.xml'  # Asegúrate de que el pom.xml esté en la raíz
+    options: '-B'            # Modo batch para Maven
+    goals: 'clean test'      # Ejecuta las pruebas
